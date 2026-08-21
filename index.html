@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Localhost Unified Analytics & Exam Suite</title>
+  <title>Analytics & Exam Suite Hub - SattikMohanta</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://unpkg.com/lucide@latest"></script>
   <style>
@@ -19,29 +19,29 @@
         <i data-lucide="layers" class="w-5 h-5"></i>
       </div>
       <div>
-        <h1 class="font-bold text-sm leading-tight text-white">Analytics & Prep Engine Hub</h1>
-        <p class="text-[10px] text-slate-400">Localhost Unified Gateway</p>
+        <h1 class="font-bold text-sm leading-tight text-white">Analytics & Exam Suite Hub</h1>
+        <p class="text-[10px] text-slate-400">Unified Access Gateway</p>
       </div>
     </div>
 
     <!-- App Switcher Tabs -->
     <div class="flex items-center gap-1.5 bg-slate-950 p-1 rounded-xl border border-slate-800 text-xs font-semibold">
-      <button onclick="loadApp('ecba.html', this)" class="app-tab-btn active px-3 py-1.5 rounded-lg bg-blue-600 text-white flex items-center space-x-2 transition">
+      <button onclick="loadApp('./ecba/', this)" class="app-tab-btn active px-3 py-1.5 rounded-lg bg-blue-600 text-white flex items-center space-x-2 transition">
         <i data-lucide="award" class="w-3.5 h-3.5"></i>
         <span>IIBA® ECBA™ Prep</span>
       </button>
-      <button onclick="loadApp('sql.html', this)" class="app-tab-btn px-3 py-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 flex items-center space-x-2 transition">
+      <button onclick="loadApp('./sql/', this)" class="app-tab-btn px-3 py-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 flex items-center space-x-2 transition">
         <i data-lucide="database" class="w-3.5 h-3.5"></i>
         <span>SQL Mastery Suite</span>
       </button>
-      <button onclick="loadApp('powerbi.html', this)" class="app-tab-btn px-3 py-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 flex items-center space-x-2 transition">
+      <button onclick="loadApp('./powerbi/', this)" class="app-tab-btn px-3 py-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 flex items-center space-x-2 transition">
         <i data-lucide="bar-chart-2" class="w-3.5 h-3.5"></i>
         <span>Power BI PL-300 Engine</span>
       </button>
     </div>
 
     <div class="flex items-center space-x-2">
-      <a id="open-new-tab" href="ecba.html" target="_blank" class="px-2.5 py-1.5 bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs rounded-lg flex items-center space-x-1.5 transition">
+      <a id="open-new-tab" href="./ecba/" target="_blank" class="px-2.5 py-1.5 bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs rounded-lg flex items-center space-x-1.5 transition">
         <i data-lucide="external-link" class="w-3.5 h-3.5"></i>
         <span class="hidden sm:inline">Open App in New Tab</span>
       </a>
@@ -50,7 +50,7 @@
 
   <!-- Frame Viewport -->
   <main class="flex-1 w-full h-full bg-slate-950 relative">
-    <iframe id="portal-frame" src="ecba.html" class="w-full h-full"></iframe>
+    <iframe id="portal-frame" src="./ecba/" class="w-full h-full"></iframe>
   </main>
 
   <script>
