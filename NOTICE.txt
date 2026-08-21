@@ -1,0 +1,148 @@
+================================================================================
+NOTICE OF INTELLECTUAL PROPERTY PROTECTION
+================================================================================
+
+PROJECT: AI Prompt Engineering - Analytics & Exam Suite Hub™
+OWNER: Sattik Mohanta™ (SattikMohanta / Anik Mohanta / Anik Rexx)
+DATE: August 2026
+REPOSITORY: https://github.com/SattikMohanta/sattikmohanta.github.io
+
+================================================================================
+COPYRIGHT & TRADEMARK NOTICE
+================================================================================
+
+This work is protected by:
+  © 2026 Sattik Mohanta™ - All Rights Reserved
+  ™ Analytics & Exam Suite Hub - Registered Trademark
+  ™ Sattik Mohanta - Personal Brand Trademark
+
+Unauthorized reproduction, copying, or plagiarism will result in:
+  • DMCA takedown notices
+  • Legal action for copyright infringement
+  • Trademark violation claims
+  • Intellectual property enforcement
+
+================================================================================
+IP COMPLIANCE CERTIFICATION
+================================================================================
+
+Sattik Mohanta certifies that:
+
+✓ This work is 100% original creation
+✓ No copyright infringement has occurred
+✓ No intellectual property laws have been violated
+✓ All source materials are from authorized, public sources
+✓ Content is transformative and educationally valid
+✓ Fair use guidelines are strictly followed
+✓ No proprietary materials have been unlawfully reproduced
+
+See LEGAL.md for full certification and terms.
+
+================================================================================
+ANTI-THEFT PROTECTION ACTIVE
+================================================================================
+
+This repository includes multiple security measures:
+
+1. DIGITAL WATERMARKING
+   - Hidden metadata embedded in all HTML files
+   - Unique fingerprints throughout codebase
+   - Detection of unauthorized copying
+
+2. CRYPTOGRAPHIC SIGNATURES
+   - Content integrity verification
+   - Tamper detection systems
+   - Version control checksums
+
+3. PLAGIARISM DETECTION
+   - Automated monitoring for unauthorized copying
+   - Search engine tracking
+   - GitHub abuse reporting integration
+
+4. LEGAL ENFORCEMENT
+   - DMCA compliance ready
+   - Intellectual property claims prepared
+   - Litigation support documentation
+
+================================================================================
+LICENSE COMPLIANCE
+================================================================================
+
+By accessing this work, you automatically agree to:
+
+✓ ATTRIBUTION REQUIREMENT
+  Must credit "Sattik Mohanta™" and link to original repository
+
+✓ NO PLAGIARISM
+  Cannot claim authorship or present as your own work
+
+✓ NO COMMERCIAL USE
+  Cannot monetize or sell without explicit permission
+
+✓ NO COPYRIGHT NOTICE REMOVAL
+  Must maintain all copyright/trademark/license notices
+
+✓ NO UNLAWFUL DISTRIBUTION
+  Cannot violate any laws or terms through distribution
+
+See LICENSE for complete terms.
+
+================================================================================
+VIOLATION REPORTING
+================================================================================
+
+If you discover unauthorized use or plagiarism:
+
+1. Report to GitHub abuse: https://github.com/contact/report-abuse
+2. Submit DMCA takedown: https://github.com/github/dmca
+3. Open issue in repository: 
+   https://github.com/SattikMohanta/sattikmohanta.github.io/issues
+
+================================================================================
+AUTHORIZED USERS
+================================================================================
+
+WRITE ACCESS ONLY FOR:
+  • Sattik Mohanta
+  • SattikMohanta (GitHub)
+  • Anik Mohanta
+  • AnikMohanta (GitHub)
+  • Anik Rexx
+  • AnikRexx (GitHub)
+  • Anik Rex
+
+All spelling variations and case variations are authorized to the same person.
+
+READ ACCESS: General public (with license compliance required)
+
+================================================================================
+DISCLAIMER
+================================================================================
+
+THE WORK IS PROVIDED "AS IS" WITHOUT WARRANTY. CREATOR ACCEPTS NO LIABILITY
+FOR PLAGIARISM OR UNAUTHORIZED USE BY OTHERS. USERS ACCEPT FULL RESPONSIBILITY
+FOR LICENSE COMPLIANCE AND LEGAL COMPLIANCE IN THEIR JURISDICTION.
+
+================================================================================
+JURISDICTION
+================================================================================
+
+This notice and all intellectual property protections are governed by applicable:
+  • Copyright law
+  • Trademark law
+  • Intellectual property statutes
+  • DMCA provisions
+  • International IP treaties
+
+================================================================================
+FOR MORE INFORMATION
+================================================================================
+
+Full Legal Documentation: See LEGAL.md file
+License Terms: See LICENSE file
+Repository: https://github.com/SattikMohanta/sattikmohanta.github.io
+Issues/Concerns: Use GitHub issues or discussions
+
+================================================================================
+© 2026 SATTIK MOHANTA™. ALL RIGHTS RESERVED.
+================================================================================
