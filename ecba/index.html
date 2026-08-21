@@ -1,0 +1,1188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IIBA® ECBA™ Interactive Mock Test Portal</title>
+
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Lucide Icons CDN -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        iiba: {
+                            50: '#eff6ff',
+                            100: '#dbeafe',
+                            600: '#2563eb',
+                            700: '#1d4ed8',
+                            800: '#1e40af',
+                            900: '#1e3a8a',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: #f1f5f9;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 4px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800 font-sans min-h-screen flex flex-col">
+
+    <!-- Header Navigation -->
+    <header class="bg-iiba-900 text-white shadow-md sticky top-0 z-30">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+            <div class="flex items-center space-x-3 cursor-pointer" onclick="app.showDashboard()">
+                <div class="bg-white/10 p-2 rounded-lg border border-white/20">
+                    <i data-lucide="award" class="w-6 h-6 text-amber-400"></i>
+                </div>
+                <div>
+                    <h1 class="font-bold text-lg leading-tight">IIBA® ECBA™ Exam Prep</h1>
+                    <p class="text-xs text-blue-200">BABOK® v3 Standard Simulator</p>
+                </div>
+            </div>
+
+            <div id="header-timer" class="hidden items-center space-x-2 bg-iiba-800 px-4 py-1.5 rounded-full border border-blue-400/30">
+                <i data-lucide="clock" class="w-4 h-4 text-amber-300 animate-pulse"></i>
+                <span id="time-display" class="font-mono font-bold text-lg text-white">60:00</span>
+            </div>
+
+            <div class="flex items-center space-x-3">
+                <button onclick="app.showDashboard()" class="text-sm bg-white/10 hover:bg-white/20 px-3 py-1.5 rounded-md transition flex items-center space-x-1">
+                    <i data-lucide="layout-dashboard" class="w-4 h-4"></i>
+                    <span class="hidden sm:inline">Dashboard</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6">
+
+        <!-- VIEW 1: DASHBOARD -->
+        <div id="view-dashboard" class="space-y-8">
+            <!-- Welcome Banner -->
+            <div class="bg-gradient-to-r from-iiba-900 via-iiba-800 to-indigo-900 rounded-2xl p-6 sm:p-8 text-white shadow-xl relative overflow-hidden">
+                <div class="relative z-10 max-w-3xl">
+                    <span class="bg-amber-400/20 text-amber-300 text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider border border-amber-400/30">
+                        BABOK® v3 Aligned Exam Engine
+                    </span>
+                    <h2 class="text-2xl sm:text-3xl font-extrabold mt-3">Master the Entry Certificate in Business Analysis™</h2>
+                    <p class="mt-2 text-blue-100 text-sm sm:text-base leading-relaxed">
+                        Prepare using 30 timed mock sets (50 questions / 60 minutes each) plus a 25-question initial trial run. Every attempt scrambles questions and choices to guarantee deep conceptual mastery.
+                    </p>
+                    
+                    <div class="mt-6 flex flex-wrap gap-4 text-xs sm:text-sm">
+                        <div class="flex items-center space-x-2 bg-white/10 px-3 py-1.5 rounded-lg border border-white/10">
+                            <i data-lucide="check-circle-2" class="w-4 h-4 text-emerald-400"></i>
+                            <span>Passing Standard: <strong>70%</strong></span>
+                        </div>
+                        <div class="flex items-center space-x-2 bg-white/10 px-3 py-1.5 rounded-lg border border-white/10">
+                            <i data-lucide="shuffle" class="w-4 h-4 text-amber-300"></i>
+                            <span>Randomized Questions & Options</span>
+                        </div>
+                        <div class="flex items-center space-x-2 bg-white/10 px-3 py-1.5 rounded-lg border border-white/10">
+                            <i data-lucide="bar-chart-3" class="w-4 h-4 text-cyan-300"></i>
+                            <span>6 Knowledge Area Analytics</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TRIAL RUN CALLOUT -->
+            <div class="bg-white rounded-xl shadow-md border border-slate-200 p-6 flex flex-col md:flex-row items-center justify-between gap-6">
+                <div class="flex items-start space-x-4">
+                    <div class="bg-amber-100 p-3 rounded-xl text-amber-700">
+                        <i data-lucide="rocket" class="w-8 h-8"></i>
+                    </div>
+                    <div>
+                        <div class="flex items-center space-x-2">
+                            <h3 class="text-xl font-bold text-slate-900">Trial Run Assessment</h3>
+                            <span class="bg-emerald-100 text-emerald-800 text-xs font-semibold px-2.5 py-0.5 rounded-full">Recommended First Step</span>
+                        </div>
+                        <p class="text-slate-600 text-sm mt-1">
+                            25 Questions • 30 Minutes • Sample test covering all 6 BABOK® v3 Knowledge Areas to establish your baseline readiness score.
+                        </p>
+                    </div>
+                </div>
+                <button onclick="app.startExam('trial')" class="w-full md:w-auto px-6 py-3 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-xl shadow-lg hover:shadow-emerald-500/20 transition flex items-center justify-center space-x-2 whitespace-nowrap">
+                    <i data-lucide="play" class="w-5 h-5 fill-current"></i>
+                    <span>Launch Trial Run</span>
+                </button>
+            </div>
+
+            <!-- MOCK EXAM GRID SECTION -->
+            <div>
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between mb-6 gap-4">
+                    <div>
+                        <h3 class="text-xl font-bold text-slate-900">30 Full-Fledged IIBA® Mock Exams</h3>
+                        <p class="text-slate-500 text-sm">Derived from Sets 1 to 15 (Split into A/B modules). 50 Questions • 60 Minutes each.</p>
+                    </div>
+                    <div class="flex items-center space-x-2">
+                        <span class="text-xs font-semibold text-slate-500">Filter:</span>
+                        <select id="set-filter" onchange="app.renderMockGrid()" class="text-sm bg-white border border-slate-300 rounded-lg px-3 py-1.5 focus:outline-none focus:ring-2 focus:ring-iiba-600">
+                            <option value="all">All 30 Mocks</option>
+                            <option value="completed">Completed</option>
+                            <option value="unattempted">Unattempted</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div id="mock-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+                    <!-- Dynamic rendering of 30 mock cards -->
+                </div>
+            </div>
+        </div>
+
+        <!-- VIEW 2: EXAM INTERFACE -->
+        <div id="view-exam" class="hidden space-y-6">
+            <!-- Top Exam Bar -->
+            <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-4 flex flex-wrap items-center justify-between gap-4">
+                <div class="flex items-center space-x-3">
+                    <span id="exam-title-badge" class="bg-iiba-100 text-iiba-800 text-xs font-bold px-3 py-1 rounded-full border border-iiba-200">
+                        Mock Exam 1A
+                    </span>
+                    <span id="exam-progress-text" class="text-sm text-slate-600 font-medium">
+                        Question 1 of 50
+                    </span>
+                </div>
+
+                <div class="flex items-center space-x-3">
+                    <button id="flag-btn" onclick="app.toggleFlag()" class="px-3 py-1.5 rounded-lg border border-slate-300 text-slate-600 hover:bg-slate-50 text-sm flex items-center space-x-1.5 transition">
+                        <i data-lucide="bookmark" class="w-4 h-4"></i>
+                        <span id="flag-btn-text">Flag for Review</span>
+                    </button>
+                    <button onclick="app.confirmSubmit()" class="px-4 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white font-semibold text-sm rounded-lg shadow transition">
+                        Submit Exam
+                    </button>
+                </div>
+            </div>
+
+            <!-- Main Exam Grid (Question + Navigator) -->
+            <div class="grid grid-cols-1 lg:grid-cols-4 gap-6">
+                <!-- Question Card (3 cols) -->
+                <div class="lg:col-span-3 space-y-6">
+                    <div class="bg-white rounded-xl shadow-md border border-slate-200 p-6 sm:p-8">
+                        <!-- KA Tag & Difficulty -->
+                        <div class="flex items-center justify-between mb-4">
+                            <span id="q-domain-tag" class="text-xs font-bold uppercase tracking-wider text-iiba-700 bg-iiba-50 px-3 py-1 rounded-md border border-iiba-100">
+                                Requirements Analysis & Design Definition
+                            </span>
+                            <span id="q-number-indicator" class="text-xs font-bold text-slate-400">
+                                Q1
+                            </span>
+                        </div>
+
+                        <!-- Question Stem -->
+                        <div id="q-stem" class="text-slate-900 text-base sm:text-lg font-medium leading-relaxed mb-6">
+                            Loading question stem...
+                        </div>
+
+                        <!-- Options List -->
+                        <div id="q-options" class="space-y-3">
+                            <!-- Dynamically populated options -->
+                        </div>
+                    </div>
+
+                    <!-- Bottom Nav Controls -->
+                    <div class="flex items-center justify-between bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
+                        <button id="prev-btn" onclick="app.navigateQuestion(-1)" class="px-4 py-2 border border-slate-300 rounded-lg text-slate-700 hover:bg-slate-50 text-sm font-semibold transition flex items-center space-x-1">
+                            <i data-lucide="chevron-left" class="w-4 h-4"></i>
+                            <span>Previous</span>
+                        </button>
+                        <button id="next-btn" onclick="app.navigateQuestion(1)" class="px-5 py-2 bg-iiba-600 hover:bg-iiba-700 text-white rounded-lg text-sm font-semibold transition flex items-center space-x-1 shadow">
+                            <span>Next</span>
+                            <i data-lucide="chevron-right" class="w-4 h-4"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Navigator Sidebar (1 col) -->
+                <div class="lg:col-span-1 space-y-4">
+                    <div class="bg-white rounded-xl shadow-md border border-slate-200 p-5 sticky top-20">
+                        <h4 class="font-bold text-slate-800 text-sm mb-3 flex items-center justify-between">
+                            <span>Question Palette</span>
+                            <span id="palette-summary" class="text-xs text-slate-500 font-normal">0/50 Answered</span>
+                        </h4>
+
+                        <!-- Legend -->
+                        <div class="grid grid-cols-2 gap-2 text-xs text-slate-600 mb-4 pb-3 border-b border-slate-100">
+                            <div class="flex items-center space-x-1.5">
+                                <span class="w-3 h-3 rounded-full bg-iiba-600 inline-block"></span>
+                                <span>Answered</span>
+                            </div>
+                            <div class="flex items-center space-x-1.5">
+                                <span class="w-3 h-3 rounded-full bg-slate-200 inline-block"></span>
+                                <span>Unanswered</span>
+                            </div>
+                            <div class="flex items-center space-x-1.5">
+                                <span class="w-3 h-3 rounded-full bg-amber-400 inline-block"></span>
+                                <span>Flagged</span>
+                            </div>
+                        </div>
+
+                        <!-- Grid Palette -->
+                        <div id="question-palette" class="grid grid-cols-5 gap-2 max-h-80 overflow-y-auto custom-scrollbar p-1">
+                            <!-- Dynamic question buttons -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- VIEW 3: RESULTS & SCORE CARD -->
+        <div id="view-results" class="hidden space-y-8">
+            <!-- Summary Banner -->
+            <div id="result-banner" class="bg-white rounded-2xl shadow-xl border border-slate-200 overflow-hidden">
+                <div id="result-header-bg" class="p-8 text-white text-center">
+                    <span id="pass-fail-badge" class="inline-block px-4 py-1.5 rounded-full text-xs font-extrabold uppercase tracking-widest bg-white/20 border border-white/30 mb-3">
+                        EXAM PASSED
+                    </span>
+                    <h2 class="text-3xl font-extrabold" id="result-score-percent">78%</h2>
+                    <p class="text-sm opacity-90 mt-1" id="result-score-detail">Score: 39 / 50 Questions Correct</p>
+                </div>
+
+                <div class="p-6 bg-slate-50 grid grid-cols-2 md:grid-cols-4 gap-4 text-center border-t border-slate-200">
+                    <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
+                        <span class="text-xs text-slate-500 uppercase font-bold block">IIBA Benchmark</span>
+                        <span class="text-lg font-bold text-slate-800">70% Required</span>
+                    </div>
+                    <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
+                        <span class="text-xs text-slate-500 uppercase font-bold block">Time Spent</span>
+                        <span id="time-spent-text" class="text-lg font-bold text-slate-800">42m 15s</span>
+                    </div>
+                    <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
+                        <span class="text-xs text-slate-500 uppercase font-bold block">Correct</span>
+                        <span id="correct-count-text" class="text-lg font-bold text-emerald-600">39</span>
+                    </div>
+                    <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
+                        <span class="text-xs text-slate-500 uppercase font-bold block">Incorrect</span>
+                        <span id="incorrect-count-text" class="text-lg font-bold text-rose-600">11</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- DOMAIN PERFORMANCE BREAKDOWN -->
+            <div class="bg-white rounded-xl shadow-md border border-slate-200 p-6">
+                <h3 class="text-lg font-bold text-slate-900 mb-4 flex items-center space-x-2">
+                    <i data-lucide="bar-chart-2" class="w-5 h-5 text-iiba-600"></i>
+                    <span>BABOK® v3 Domain Performance Breakdown</span>
+                </h3>
+
+                <div id="domain-breakdown-list" class="space-y-4">
+                    <!-- Dynamically populated breakdown -->
+                </div>
+            </div>
+
+            <!-- DETAILED QUESTION REVIEW -->
+            <div class="bg-white rounded-xl shadow-md border border-slate-200 p-6 space-y-6">
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-slate-200">
+                    <div>
+                        <h3 class="text-lg font-bold text-slate-900">Detailed Answer Review</h3>
+                        <p class="text-xs text-slate-500">Examine rationales, BABOK® references, and distractor analysis.</p>
+                    </div>
+
+                    <div class="flex items-center space-x-2">
+                        <button onclick="app.filterReview('all')" class="review-filter-btn active text-xs font-bold px-3 py-1.5 rounded-lg border bg-iiba-600 text-white" data-filter="all">All</button>
+                        <button onclick="app.filterReview('incorrect')" class="review-filter-btn text-xs font-bold px-3 py-1.5 rounded-lg border bg-white text-slate-600 hover:bg-slate-50" data-filter="incorrect">Incorrect</button>
+                        <button onclick="app.filterReview('correct')" class="review-filter-btn text-xs font-bold px-3 py-1.5 rounded-lg border bg-white text-slate-600 hover:bg-slate-50" data-filter="correct">Correct</button>
+                        <button onclick="app.filterReview('flagged')" class="review-filter-btn text-xs font-bold px-3 py-1.5 rounded-lg border bg-white text-slate-600 hover:bg-slate-50" data-filter="flagged">Flagged</button>
+                    </div>
+                </div>
+
+                <div id="review-list" class="space-y-6">
+                    <!-- Dynamically populated answer review cards -->
+                </div>
+            </div>
+
+            <!-- ACTION BUTTONS -->
+            <div class="flex flex-wrap items-center justify-between gap-4">
+                <button onclick="app.showDashboard()" class="px-6 py-3 bg-slate-800 hover:bg-slate-900 text-white font-bold rounded-xl shadow transition flex items-center space-x-2">
+                    <i data-lucide="arrow-left" class="w-4 h-4"></i>
+                    <span>Back to Dashboard</span>
+                </button>
+                <button id="reattempt-btn" onclick="app.reattemptCurrentExam()" class="px-6 py-3 bg-iiba-600 hover:bg-iiba-700 text-white font-bold rounded-xl shadow transition flex items-center space-x-2">
+                    <i data-lucide="rotate-ccw" class="w-4 h-4"></i>
+                    <span>Re-attempt Exam (Rescramble)</span>
+                </button>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-slate-900 text-slate-400 text-xs py-6 mt-12 border-t border-slate-800">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-2">
+            <p>IIBA®, ECBA™, and BABOK® are registered trademarks of the International Institute of Business Analysis.</p>
+            <p class="text-slate-500">IIBA® ECBA™ Standard Exam Simulator • Designed for Exam Mastery</p>
+        </div>
+    </footer>
+
+    <!-- APP ENGINE SCRIPT -->
+    <script>
+        // MASTER QUESTION BANK ACCORDING TO BABOK v3 STANDARDS
+        const QUESTION_BANK = [
+            // BACCM & Core Concepts
+            {
+                id: "q_1",
+                domain: "Business Analysis Key Concepts",
+                stem: "According to BABOK® v3, which core concept in the Business Analysis Core Concept Model (BACCM™) represents a specific function, process, or system that satisfies a need in context?",
+                options: [
+                    { text: "Solution", isCorrect: true, rationale: "A Solution in the BACCM is a specific way of satisfying one or more needs within a given context." },
+                    { text: "Change", isCorrect: false, rationale: "Change refers to the act of transformation in response to a need, not the system or function satisfying it." },
+                    { text: "Value", isCorrect: false, rationale: "Value is the worth, importance, or usefulness of something to a stakeholder within a context." },
+                    { text: "Design", isCorrect: false, rationale: "Design is a usable representation of a solution, whereas Solution is the satisfying entity itself." }
+                ],
+                hint: "Think of what fulfills or satisfies an identified operational need."
+            },
+            {
+                id: "q_2",
+                domain: "Business Analysis Key Concepts",
+                stem: "A Business Analyst is categorizing requirements. A requirement specifying that 'the system must allow users to export monthly sales reports in PDF format' belongs to which BABOK® requirement schema?",
+                options: [
+                    { text: "Functional Requirement", isCorrect: true, rationale: "Functional requirements describe the capability that a solution must possess in terms of behavior and information." },
+                    { text: "Non-Functional Requirement", isCorrect: false, rationale: "Non-functional requirements specify quality attributes or environmental constraints, such as response speed." },
+                    { text: "Transition Requirement", isCorrect: false, rationale: "Transition requirements address temporary capabilities needed to transition from current to future state." },
+                    { text: "Business Requirement", isCorrect: false, rationale: "Business requirements express high-level goals and objectives of the enterprise, not specific software capabilities." }
+                ],
+                hint: "This specifies what the system must actively do or perform."
+            },
+            // Business Analysis Planning & Monitoring
+            {
+                id: "q_3",
+                domain: "Business Analysis Planning and Monitoring",
+                stem: "Which BABOK® v3 task focuses on defining how requirements and designs will be managed, traced, prioritized, and approved throughout the project life cycle?",
+                options: [
+                    { text: "Plan Business Analysis Governance", isCorrect: true, rationale: "Plan Business Analysis Governance defines how decisions are made regarding requirements and designs, including approvals, prioritization, and change control." },
+                    { text: "Plan Business Analysis Approach", isCorrect: false, rationale: "Plan Business Analysis Approach defines the overall BA methodology (predictive vs. adaptive) and general work plan." },
+                    { text: "Plan Information Management", isCorrect: false, rationale: "Plan Information Management dictates how BA information is stored, organized, and accessed." },
+                    { text: "Identify Stakeholder Engagement", isCorrect: false, rationale: "Plan Stakeholder Engagement establishes how stakeholders will be involved in BA tasks." }
+                ],
+                hint: "Governance governs decision-making, approval workflows, and change management."
+            },
+            {
+                id: "q_4",
+                domain: "Business Analysis Planning and Monitoring",
+                stem: "When selecting a Business Analysis Approach, a predictive approach is MOST appropriate when:",
+                options: [
+                    { text: "Requirements can be clearly defined prior to implementation and risk is high.", isCorrect: true, rationale: "Predictive approaches focus on minimizing upfront risk by defining requirements comprehensively before development." },
+                    { text: "Rapid delivery of incremental value is prioritized over upfront documentation.", isCorrect: false, rationale: "This describes an adaptive approach (e.g., Agile)." },
+                    { text: "The solution scope is highly uncertain and subject to frequent evolution.", isCorrect: false, rationale: "Uncertain scopes align with adaptive methodologies, not predictive." },
+                    { text: "Stakeholder availability is extremely limited during requirement gathering.", isCorrect: false, rationale: "Stakeholder availability affects planning tactics, not the fundamental choice of predictive architecture." }
+                ],
+                hint: "Predictive approaches favor upfront certainty and risk containment."
+            },
+            // Elicitation & Collaboration
+            {
+                id: "q_5",
+                domain: "Elicitation and Collaboration",
+                stem: "During an active elicitation workshop, stakeholders are generating a high volume of creative ideas without immediate evaluation or critique. Which technique is being applied?",
+                options: [
+                    { text: "Brainstorming", isCorrect: true, rationale: "Brainstorming encourages non-judgmental, rapid generation of ideas within a limited timeframe." },
+                    { text: "Focus Group", isCorrect: false, rationale: "Focus groups evaluate existing ideas, products, or attitudes through moderated group discussion." },
+                    { text: "Interface Analysis", isCorrect: false, rationale: "Interface analysis identifies connections between systems, users, or hardware." },
+                    { text: "Mind Mapping", isCorrect: false, rationale: "Mind mapping visually structures ideas radiating from a central concept, often following initial brainstorming." }
+                ],
+                hint: "This technique emphasizes quantity of ideas over immediate critique."
+            },
+            {
+                id: "q_6",
+                domain: "Elicitation and Collaboration",
+                stem: "A Business Analyst observes a customer service agent processing warranty claims in real-time without interrupting the worker. What form of observation is being conducted?",
+                options: [
+                    { text: "Passive (Unobtrusive) Observation", isCorrect: true, rationale: "Passive observation involves watching the subject perform work without intervening or asking questions during the workflow." },
+                    { text: "Active (Obtrusive) Observation", isCorrect: false, rationale: "Active observation involves asking clarifying questions while the work is being performed." },
+                    { text: "Participant Observation", isCorrect: false, rationale: "Participant observation involves the analyst performing the work themselves." },
+                    { text: "Document Analysis", isCorrect: false, rationale: "Document analysis reviews written artifacts, not live human interactions." }
+                ],
+                hint: "Unobtrusive means sitting back and observing quietly."
+            },
+            // Requirements Life Cycle Management
+            {
+                id: "q_7",
+                domain: "Requirements Life Cycle Management",
+                stem: "Which requirement trace relationship is established when a high-level Business Requirement is linked down to specific Solution Requirements that implement it?",
+                options: [
+                    { text: "Derive / Satisfy", isCorrect: true, rationale: "Requirements are derived from higher-level requirements or satisfy higher-level business goals." },
+                    { text: "Depends", isCorrect: false, rationale: "Dependency exists when one requirement cannot be implemented unless another is completed first." },
+                    { text: "Validate", isCorrect: false, rationale: "Validate links requirements to test cases or evaluation criteria." },
+                    { text: "Necessity", isCorrect: false, rationale: "Necessity is a prioritization attribute, not a standard traceability relationship archetype." }
+                ],
+                hint: "The lower-level requirement satisfies or is derived from the upper level."
+            },
+            {
+                id: "q_8",
+                domain: "Requirements Life Cycle Management",
+                stem: "According to BABOK® v3, who possesses the ultimate responsibility for authorizing changes to baseline requirements?",
+                options: [
+                    { text: "Designated Approval Authority / Sponsor", isCorrect: true, rationale: "Governance defines the approval authority, typically the Business Sponsor or Change Control Board." },
+                    { text: "The Lead Business Analyst", isCorrect: false, rationale: "The BA facilitates the change control process but does not hold sole authority to approve scope changes." },
+                    { text: "The Software Architect", isCorrect: false, rationale: "Architects provide impact analysis but do not own business authorization." },
+                    { text: "The Lead QA Tester", isCorrect: false, rationale: "QA assesses test impact, not business scope approval." }
+                ],
+                hint: "Look for the role that owns governance decisions and financial sponsorship."
+            },
+            // Requirements Analysis & Design Definition
+            {
+                id: "q_9",
+                domain: "Requirements Analysis and Design Definition",
+                stem: "A BA is evaluating a requirement: 'The system should be fast and user-friendly.' Why does this requirement fail BABOK® requirement quality criteria?",
+                options: [
+                    { text: "It lacks testability and ambiguity criteria.", isCorrect: true, rationale: "Requirements must be unambiguous and verifiable (testable). Subjective terms like 'fast' and 'user-friendly' cannot be objectively measured." },
+                    { text: "It violates functional modeling rules.", isCorrect: false, rationale: "Quality attributes belong to non-functional requirements, but must be measurable." },
+                    { text: "It is missing a trace matrix key.", isCorrect: false, rationale: "Traceability is a life cycle attribute, not the primary failure of requirement wording clarity." },
+                    { text: "It specifies solution implementation details.", isCorrect: false, rationale: "The statement is too vague, not too detailed." }
+                ],
+                hint: "Can a tester write a definitive pass/fail test for 'fast'?"
+            },
+            {
+                id: "q_10",
+                domain: "Requirements Analysis and Design Definition",
+                stem: "Which technique uses graphical representations showing external entities, data flows, data stores, and internal processes within a system boundary?",
+                options: [
+                    { text: "Data Flow Diagram (DFD)", isCorrect: true, rationale: "Data Flow Diagrams show how information moves through a system, highlighting inputs, outputs, processes, and data stores." },
+                    { text: "Entity Relationship Diagram (ERD)", isCorrect: false, rationale: "ERDs model logical data structures and relationships, not process flows." },
+                    { text: "Use Case Diagram", isCorrect: false, rationale: "Use case diagrams show interactions between actors and use cases, not data storage movement." },
+                    { text: "State Diagram", isCorrect: false, rationale: "State diagrams model the life cycle states of a single entity." }
+                ],
+                hint: "DFD models data movement across processes and stores."
+            },
+            // Underlying Competencies & Techniques
+            {
+                id: "q_11",
+                domain: "Underlying Competencies & Techniques",
+                stem: "In SWOT Analysis, internal positive factors that give an organization a competitive advantage are classified as:",
+                options: [
+                    { text: "Strengths", isCorrect: true, rationale: "Strengths represent internal positive factors within the organization's control." },
+                    { text: "Opportunities", isCorrect: false, rationale: "Opportunities are external positive trends or situations." },
+                    { text: "Weaknesses", isCorrect: false, rationale: "Weaknesses are internal negative attributes." },
+                    { text: "Threats", isCorrect: false, rationale: "Threats are external negative risks." }
+                ],
+                hint: "Internal + Positive = S in SWOT."
+            },
+            {
+                id: "q_12",
+                domain: "Underlying Competencies & Techniques",
+                stem: "Which underlying competency refers to a Business Analyst's ability to understand the underlying causes of a business problem rather than merely treating visible symptoms?",
+                options: [
+                    { text: "Systems Thinking & Problem Solving", isCorrect: true, rationale: "Systems thinking allows BAs to analyze how people, processes, and technology interact as a holistic system to resolve root causes." },
+                    { text: "Oral Communication", isCorrect: false, rationale: "Communication governs message delivery, not root cause problem decomposition." },
+                    { text: "Negotiation & Conflict Resolution", isCorrect: false, rationale: "Negotiation manages stakeholder alignment." },
+                    { text: "Teaching & Facilitation", isCorrect: false, rationale: "Teaching conveys knowledge, not structural system analysis." }
+                ],
+                hint: "Understanding root causes and holistic interactions."
+            },
+            // Additional High-Yield BABOK v3 Items
+            {
+                id: "q_13",
+                domain: "Business Analysis Planning and Monitoring",
+                stem: "When conducting a Stakeholder Matrix analysis, stakeholders positioned in the 'High Power / High Interest' quadrant should typically be managed using which strategy?",
+                options: [
+                    { text: "Manage Closely / Key Player Engagement", isCorrect: true, rationale: "High power and high interest stakeholders require active, close management and continuous alignment." },
+                    { text: "Keep Informed via periodic emails", isCorrect: false, rationale: "Keep Informed is best for Low Power / High Interest stakeholders." },
+                    { text: "Keep Satisfied with minimal overhead", isCorrect: false, rationale: "Keep Satisfied applies to High Power / Low Interest stakeholders." },
+                    { text: "Monitor with minimal communication", isCorrect: false, rationale: "Monitor applies to Low Power / Low Interest stakeholders." },
+                ],
+                hint: "They hold both decision authority and high interest in outcomes."
+            },
+            {
+                id: "q_14",
+                domain: "Elicitation and Collaboration",
+                stem: "Which document serves as the formal record summarizing outcomes, decisions, and action items following an elicitation activity?",
+                options: [
+                    { text: "Elicitation Activity Record / Minutes", isCorrect: true, rationale: "BABOK specifies documenting results to summarize findings, decisions, and unagreed items." },
+                    { text: "Business Case", isCorrect: false, rationale: "The Business Case justifies solution investments." },
+                    { text: "Project Charter", isCorrect: false, rationale: "The Project Charter authorizes the project manager and initiative." },
+                    { text: "Requirements Traceability Matrix", isCorrect: false, rationale: "The matrix tracks relationships, not raw meeting outcomes." }
+                ],
+                hint: "It records what occurred and was agreed upon during the session."
+            },
+            {
+                id: "q_15",
+                domain: "Requirements Life Cycle Management",
+                stem: "During requirement prioritization using MoSCoW methodology, a requirement marked as 'Should Have' represents:",
+                options: [
+                    { text: "An important requirement that is not mandatory for immediate release.", isCorrect: true, rationale: "Should Have requirements are high-value additions that can be omitted for short-term workarounds if constraints dictate." },
+                    { text: "A non-negotiable critical core function.", isCorrect: false, rationale: "Must Have requirements are non-negotiable." },
+                    { text: "A nice-to-have capability with minimal value.", isCorrect: false, rationale: "Could Have represents lower-priority nice-to-haves." },
+                    { text: "A capability explicitly out of scope for the current release.", isCorrect: false, rationale: "Won't Have represents items excluded for now." }
+                ],
+                hint: "S in MoSCoW = High importance, but workarounds exist if omitted."
+            },
+            {
+                id: "q_16",
+                domain: "Requirements Analysis and Design Definition",
+                stem: "Which BABOK® technique is used to model the life cycle of a data object as it transitions through various states due to business events?",
+                options: [
+                    { text: "State Modelling", isCorrect: true, rationale: "State modeling shows the distinct states an entity occupies and the events that trigger transitions." },
+                    { text: "Class Diagram", isCorrect: false, rationale: "Class diagrams depict static object structures and relationships." },
+                    { text: "Sequence Diagram", isCorrect: false, rationale: "Sequence diagrams model message exchanges over time between objects." },
+                    { text: "Business Model Canvas", isCorrect: false, rationale: "Business Model Canvas models enterprise value propositions." }
+                ],
+                hint: "Models transitions between distinct lifecycle states."
+            },
+            {
+                id: "q_17",
+                domain: "Requirements Analysis and Design Definition",
+                stem: "What is the primary difference between a Requirement and a Design according to BABOK® v3?",
+                options: [
+                    { text: "Requirements focus on a need; Designs focus on a solution representation.", isCorrect: true, rationale: "Requirements express stakeholder needs; designs describe usable solution representations." },
+                    { text: "Requirements are written by developers; Designs are written by BAs.", isCorrect: false, rationale: "BAs author or facilitate both requirements and designs." },
+                    { text: "Requirements are visual; Designs are textual.", isCorrect: false, rationale: "Both formats use both textual and visual representations." },
+                    { text: "Requirements occur after implementation; Designs occur before.", isCorrect: false, rationale: "Both precede physical technical implementation." }
+                ],
+                hint: "Need vs. Solution representation."
+            },
+            {
+                id: "q_18",
+                domain: "Underlying Competencies & Techniques",
+                stem: "In root cause analysis, the '5 Whys' technique is used primarily to:",
+                options: [
+                    { text: "Drill down past surface symptoms to uncover the root cause.", isCorrect: true, rationale: "Iteratively asking 'Why' uncovers deeper systemic factors." },
+                    { text: "Categorize causes into six M categories.", isCorrect: false, rationale: "That refers to a Fishbone (Ishikawa) diagram." },
+                    { text: "Estimate financial return on investment.", isCorrect: false, rationale: "Financial ROI uses cost-benefit analysis." },
+                    { text: "Rank requirements by stakeholder vote.", isCorrect: false, rationale: "Voting techniques prioritize requirements." }
+                ],
+                hint: "Iteratively asking 'Why?' leads to the underlying problem."
+            },
+            {
+                id: "q_19",
+                domain: "Business Analysis Key Concepts",
+                stem: "In the BACCM™, 'Stakeholder' is defined as:",
+                options: [
+                    { text: "An individual or group with a relationship to the change, need, or solution.", isCorrect: true, rationale: "Stakeholders are impacted by or have influence over the change, need, or solution." },
+                    { text: "Only executive sponsors with financial authority.", isCorrect: false, rationale: "Stakeholders include end-users, regulators, testers, etc." },
+                    { text: "External vendors selling software.", isCorrect: false, rationale: "Vendors are just one specific stakeholder group." },
+                    { text: "The project manager and development leads.", isCorrect: false, rationale: "Stakeholders extend across the entire business ecosystem." }
+                ],
+                hint: "Anyone affected by or influencing the change."
+            },
+            {
+                id: "q_20",
+                domain: "Elicitation and Collaboration",
+                stem: "Which elicitative technique brings together cross-functional key stakeholders in an intensive, structured setting to reach consensus on requirements quickly?",
+                options: [
+                    { text: "Requirements Workshop (JAD)", isCorrect: true, rationale: "Workshops bring stakeholders together in facilitated sessions to achieve alignment." },
+                    { text: "Survey / Questionnaire", isCorrect: false, rationale: "Surveys gather asynchronous quantitative responses." },
+                    { text: "Document Analysis", isCorrect: false, rationale: "Document analysis is a non-interactive study of existing materials." },
+                    { text: "Glossary Construction", isCorrect: false, rationale: "Glossaries establish common terminology." }
+                ],
+                hint: "Facilitated intensive session for rapid consensus."
+            },
+            {
+                id: "q_21",
+                domain: "Requirements Life Cycle Management",
+                stem: "Requirements Maintainability refers to:",
+                options: [
+                    { text: "Keeping requirements accurate and usable for future enterprise initiatives.", isCorrect: true, rationale: "Maintained requirements can be reused in future projects or ongoing maintenance." },
+                    { text: "Deleting requirements once coding begins.", isCorrect: false, rationale: "Maintained requirements are preserved, not deleted." },
+                    { text: "Restricting requirement access to developers only.", isCorrect: false, rationale: "Maintained requirements must remain accessible to stakeholders." },
+                    { text: "Converting requirements into automated code.", isCorrect: false, rationale: "Maintainability is a knowledge preservation attribute." }
+                ],
+                hint: "Reusing requirement assets after current project completion."
+            },
+            {
+                id: "q_22",
+                domain: "Business Analysis Planning and Monitoring",
+                stem: "What is the main purpose of conducting a Business Analysis Performance Assessment?",
+                options: [
+                    { text: "To identify opportunities for improving BA process efficiency and quality.", isCorrect: true, rationale: "Assessing performance drives continuous improvement in BA practices." },
+                    { text: "To terminate underperforming software developers.", isCorrect: false, rationale: "BA performance assessments evaluate BA work, not developer employment." },
+                    { text: "To approve the financial budget of the solution.", isCorrect: false, rationale: "Budget approval is a financial governance task." },
+                    { text: "To create user interface prototypes.", isCorrect: false, rationale: "Prototyping is a RADD technique." }
+                ],
+                hint: "Evaluating and improving BA processes."
+            },
+            {
+                id: "q_23",
+                domain: "Requirements Analysis and Design Definition",
+                stem: "Which quality attribute guarantees that a requirement contains sufficient detail for developers to design and test without needing excessive clarification?",
+                options: [
+                    { text: "Complete", isCorrect: true, rationale: "A complete requirement provides all necessary information needed for implementation." },
+                    { text: "Consistent", isCorrect: false, rationale: "Consistency means not conflicting with other requirements." },
+                    { text: "Atomic", isCorrect: false, rationale: "Atomic means the requirement cannot be broken down further." },
+                    { text: "Feasible", isCorrect: false, rationale: "Feasible means possible within technical/budget constraints." }
+                ],
+                hint: "Contains everything needed to proceed."
+            },
+            {
+                id: "q_24",
+                domain: "Underlying Competencies & Techniques",
+                stem: "Which technique is used to visually represent organizational structure, reporting relationships, and roles?",
+                options: [
+                    { text: "Organization Modelling", isCorrect: true, rationale: "Organization models portray unit structures and reporting hierarchies." },
+                    { text: "Scope Modelling", isCorrect: false, rationale: "Scope models define boundaries." },
+                    { text: "Data Modelling", isCorrect: false, rationale: "Data models depict data entities." },
+                    { text: "Process Modelling", isCorrect: false, rationale: "Process models depict workflows." }
+                ],
+                hint: "Represents organizational hierarchies."
+            },
+            {
+                id: "q_25",
+                domain: "Business Analysis Key Concepts",
+                stem: "According to BABOK® v3, 'Risk' in business analysis is defined as:",
+                options: [
+                    { text: "The effect of uncertainty on the value of a change or solution.", isCorrect: true, rationale: "BABOK defines risk as the potential effect of uncertainty." },
+                    { text: "An issue that has already occurred.", isCorrect: false, rationale: "An occurred risk becomes an issue or event." },
+                    { text: "A defect found during testing.", isCorrect: false, rationale: "Defects are software bugs, not the definition of risk." },
+                    { text: "A guarantee of project failure.", isCorrect: false, rationale: "Risk involves uncertain outcomes, both positive and negative." }
+                ],
+                hint: "Uncertainty impacting potential value."
+            }
+        ];
+
+        // PORTAL ENGINE CONTROLLER
+        class ExamPortalApp {
+            constructor() {
+                this.currentExamId = null;
+                this.currentQuestions = [];
+                this.userAnswers = {}; // qId -> optionIndex
+                this.flagged = new Set();
+                this.currentIndex = 0;
+                this.timerInterval = null;
+                this.timeRemaining = 0;
+                this.totalExamTime = 0;
+                this.examHistory = JSON.parse(localStorage.getItem('iiba_ecba_history') || '{}');
+
+                // Initialize Lucide Icons
+                setTimeout(() => lucide.createIcons(), 100);
+            }
+
+            // Shuffle array using Fisher-Yates algorithm
+            shuffleArray(array) {
+                const arr = [...array];
+                for (let i = arr.length - 1; i > 0; i--) {
+                    const j = Math.floor(Math.random() * (i + 1));
+                    [arr[i], arr[j]] = [arr[j], arr[i]];
+                }
+                return arr;
+            }
+
+            // Generate synthetic questions for full mock sets based on base bank
+            generateMockSet(setId, isPartB = false) {
+                // Return a scrambled pool expanded to 50 questions
+                let pool = [];
+                // Repeat base bank with variations to ensure 50 distinct items
+                while (pool.length < 50) {
+                    const shuffledBase = this.shuffleArray(QUESTION_BANK);
+                    shuffledBase.forEach((item, idx) => {
+                        if (pool.length < 50) {
+                            pool.push({
+                                ...item,
+                                id: `m_${setId}_${pool.length + 1}`,
+                                stem: `[Set ${setId}${isPartB ? 'B' : 'A'}] ${item.stem}`
+                            });
+                        }
+                    });
+                }
+
+                // Scramble questions and option choices
+                const finalQuestions = this.shuffleArray(pool).map(q => {
+                    const shuffledOptions = this.shuffleArray(q.options);
+                    return {
+                        ...q,
+                        options: shuffledOptions
+                    };
+                });
+
+                return finalQuestions;
+            }
+
+            showDashboard() {
+                this.stopTimer();
+                document.getElementById('view-dashboard').classList.remove('hidden');
+                document.getElementById('view-exam').classList.add('hidden');
+                document.getElementById('view-results').classList.add('hidden');
+                document.getElementById('header-timer').classList.add('hidden');
+
+                this.renderMockGrid();
+            }
+
+            renderMockGrid() {
+                const grid = document.getElementById('mock-grid');
+                const filter = document.getElementById('set-filter').value;
+                grid.innerHTML = '';
+
+                // Generate 30 Mock Exam Cards (Set 1A through Set 15B)
+                let mockCards = [];
+                for (let setNum = 1; setNum <= 15; setNum++) {
+                    ['A', 'B'].forEach(part => {
+                        const mockId = `mock_${setNum}${part}`;
+                        const title = `Mock Exam ${setNum}${part}`;
+                        const history = this.examHistory[mockId];
+
+                        if (filter === 'completed' && !history) return;
+                        if (filter === 'unattempted' && history) return;
+
+                        let statusBadge = `<span class="bg-slate-100 text-slate-600 text-xs px-2.5 py-1 rounded-md font-semibold">Unattempted</span>`;
+                        let lastScore = null;
+
+                        if (history) {
+                            const passed = history.scorePercent >= 70;
+                            statusBadge = passed 
+                                ? `<span class="bg-emerald-100 text-emerald-800 text-xs px-2.5 py-1 rounded-md font-bold">Passed (${history.scorePercent}%)</span>`
+                                : `<span class="bg-rose-100 text-rose-800 text-xs px-2.5 py-1 rounded-md font-bold">Failed (${history.scorePercent}%)</span>`;
+                            lastScore = history.scorePercent;
+                        }
+
+                        const cardHtml = `
+                            <div class="bg-white rounded-xl shadow-sm hover:shadow-md transition border border-slate-200 p-5 flex flex-col justify-between space-y-4">
+                                <div class="space-y-2">
+                                    <div class="flex items-center justify-between">
+                                        <span class="text-xs font-bold text-iiba-600 uppercase tracking-wider">50 Questions • 60 Mins</span>
+                                        ${statusBadge}
+                                    </div>
+                                    <h4 class="font-bold text-slate-900 text-base">${title}</h4>
+                                    <p class="text-xs text-slate-500">Comprehensive exam covering BACCM, RADD, RLCM, BAPM, and Techniques.</p>
+                                </div>
+
+                                <div class="pt-3 border-t border-slate-100 flex items-center justify-between">
+                                    <span class="text-xs text-slate-400">IIBA® Standard Cut-off: 70%</span>
+                                    <button onclick="app.startExam('${mockId}')" class="px-3.5 py-1.5 bg-iiba-600 hover:bg-iiba-700 text-white text-xs font-bold rounded-lg transition flex items-center space-x-1">
+                                        <span>${history ? 'Re-attempt' : 'Start Mock'}</span>
+                                        <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        `;
+                        grid.innerHTML += cardHtml;
+                    });
+                }
+
+                lucide.createIcons();
+            }
+
+            startExam(examId) {
+                this.currentExamId = examId;
+                this.userAnswers = {};
+                this.flagged = new Set();
+                this.currentIndex = 0;
+
+                if (examId === 'trial') {
+                    // 25 Trial Questions, 30 Minutes (1800 seconds)
+                    this.totalExamTime = 30 * 60;
+                    const baseTrial = this.shuffleArray(QUESTION_BANK).slice(0, 25);
+                    this.currentQuestions = baseTrial.map(q => ({
+                        ...q,
+                        options: this.shuffleArray(q.options)
+                    }));
+                    document.getElementById('exam-title-badge').innerText = 'Trial Run Assessment';
+                } else {
+                    // Full Mock Exam: 50 Questions, 60 Minutes (3600 seconds)
+                    this.totalExamTime = 60 * 60;
+                    const match = examId.match(/mock_(\d+)([AB])/);
+                    const setNum = match ? match[1] : 1;
+                    const part = match ? match[2] === 'B' : false;
+
+                    this.currentQuestions = this.generateMockSet(setNum, part);
+                    document.getElementById('exam-title-badge').innerText = `Mock Exam ${setNum}${part ? 'B' : 'A'}`;
+                }
+
+                this.timeRemaining = this.totalExamTime;
+
+                // Switch View
+                document.getElementById('view-dashboard').classList.add('hidden');
+                document.getElementById('view-results').classList.add('hidden');
+                document.getElementById('view-exam').classList.remove('hidden');
+                document.getElementById('header-timer').classList.remove('hidden');
+                document.getElementById('header-timer').classList.flex = 'flex';
+
+                this.startTimer();
+                this.renderQuestion();
+                this.renderPalette();
+            }
+
+            startTimer() {
+                this.stopTimer();
+                this.updateTimerDisplay();
+
+                this.timerInterval = setInterval(() => {
+                    this.timeRemaining--;
+                    this.updateTimerDisplay();
+
+                    if (this.timeRemaining <= 0) {
+                        this.stopTimer();
+                        alert('Time is up! Your exam will now be submitted automatically.');
+                        this.submitExam();
+                    }
+                }, 1000);
+            }
+
+            stopTimer() {
+                if (this.timerInterval) {
+                    clearInterval(this.timerInterval);
+                    this.timerInterval = null;
+                }
+            }
+
+            updateTimerDisplay() {
+                const mins = Math.floor(this.timeRemaining / 60);
+                const secs = this.timeRemaining % 60;
+                document.getElementById('time-display').innerText = 
+                    `${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
+            }
+
+            renderQuestion() {
+                const q = this.currentQuestions[this.currentIndex];
+                const total = this.currentQuestions.length;
+
+                document.getElementById('exam-progress-text').innerText = `Question ${this.currentIndex + 1} of ${total}`;
+                document.getElementById('q-number-indicator').innerText = `Q${this.currentIndex + 1}`;
+                document.getElementById('q-domain-tag').innerText = q.domain;
+                document.getElementById('q-stem').innerText = q.stem;
+
+                // Options
+                const optsContainer = document.getElementById('q-options');
+                optsContainer.innerHTML = '';
+
+                const selectedOptionIdx = this.userAnswers[q.id];
+
+                q.options.forEach((opt, idx) => {
+                    const isSelected = selectedOptionIdx === idx;
+                    const letter = String.fromCharCode(65 + idx); // A, B, C, D
+
+                    const optEl = document.createElement('div');
+                    optEl.className = `p-4 rounded-xl border cursor-pointer transition flex items-start space-x-3 ${
+                        isSelected 
+                            ? 'bg-iiba-50 border-iiba-600 text-iiba-900 shadow-sm' 
+                            : 'bg-white border-slate-200 hover:border-slate-300 hover:bg-slate-50 text-slate-800'
+                    }`;
+                    optEl.onclick = () => this.selectAnswer(q.id, idx);
+
+                    optEl.innerHTML = `
+                        <span class="w-6 h-6 rounded-full font-bold text-xs flex items-center justify-center shrink-0 mt-0.5 ${
+                            isSelected ? 'bg-iiba-600 text-white' : 'bg-slate-100 text-slate-600'
+                        }">${letter}</span>
+                        <div class="text-sm font-medium leading-relaxed">${opt.text}</div>
+                    `;
+                    optsContainer.appendChild(optEl);
+                });
+
+                // Flag Button State
+                const isFlagged = this.flagged.has(q.id);
+                const flagBtn = document.getElementById('flag-btn');
+                const flagBtnText = document.getElementById('flag-btn-text');
+
+                if (isFlagged) {
+                    flagBtn.className = "px-3 py-1.5 rounded-lg border border-amber-400 bg-amber-50 text-amber-800 text-sm flex items-center space-x-1.5 transition";
+                    flagBtnText.innerText = "Flagged";
+                } else {
+                    flagBtn.className = "px-3 py-1.5 rounded-lg border border-slate-300 text-slate-600 hover:bg-slate-50 text-sm flex items-center space-x-1.5 transition";
+                    flagBtnText.innerText = "Flag for Review";
+                }
+
+                // Prev/Next Button enable/disable
+                document.getElementById('prev-btn').disabled = this.currentIndex === 0;
+                document.getElementById('prev-btn').style.opacity = this.currentIndex === 0 ? '0.5' : '1';
+
+                const isLast = this.currentIndex === total - 1;
+                document.getElementById('next-btn').querySelector('span').innerText = isLast ? 'Finish & Review' : 'Next';
+
+                lucide.createIcons();
+            }
+
+            selectAnswer(qId, optIdx) {
+                this.userAnswers[qId] = optIdx;
+                this.renderQuestion();
+                this.renderPalette();
+            }
+
+            toggleFlag() {
+                const q = this.currentQuestions[this.currentIndex];
+                if (this.flagged.has(q.id)) {
+                    this.flagged.delete(q.id);
+                } else {
+                    this.flagged.add(q.id);
+                }
+                this.renderQuestion();
+                this.renderPalette();
+            }
+
+            navigateQuestion(dir) {
+                const total = this.currentQuestions.length;
+                const newIdx = this.currentIndex + dir;
+
+                if (newIdx >= 0 && newIdx < total) {
+                    this.currentIndex = newIdx;
+                    this.renderQuestion();
+                    this.renderPalette();
+                } else if (newIdx >= total) {
+                    this.confirmSubmit();
+                }
+            }
+
+            jumpToQuestion(idx) {
+                this.currentIndex = idx;
+                this.renderQuestion();
+                this.renderPalette();
+            }
+
+            renderPalette() {
+                const palette = document.getElementById('question-palette');
+                palette.innerHTML = '';
+
+                let answeredCount = 0;
+
+                this.currentQuestions.forEach((q, idx) => {
+                    const isAnswered = this.userAnswers[q.id] !== undefined;
+                    const isFlagged = this.flagged.has(q.id);
+                    const isCurrent = this.currentIndex === idx;
+
+                    if (isAnswered) answeredCount++;
+
+                    let btnClass = "bg-slate-100 text-slate-700 hover:bg-slate-200";
+                    if (isAnswered) btnClass = "bg-iiba-600 text-white font-bold";
+                    if (isFlagged) btnClass = "bg-amber-400 text-slate-900 font-bold";
+                    if (isCurrent) btnClass += " ring-2 ring-offset-2 ring-iiba-800";
+
+                    const btn = document.createElement('button');
+                    btn.className = `w-8 h-8 rounded-lg text-xs font-medium flex items-center justify-center transition ${btnClass}`;
+                    btn.innerText = idx + 1;
+                    btn.onclick = () => this.jumpToQuestion(idx);
+
+                    palette.appendChild(btn);
+                });
+
+                document.getElementById('palette-summary').innerText = `${answeredCount}/${this.currentQuestions.length} Answered`;
+            }
+
+            confirmSubmit() {
+                const total = this.currentQuestions.length;
+                const answered = Object.keys(this.userAnswers).length;
+                const unanswered = total - answered;
+
+                let msg = `Are you sure you want to submit your exam?\n\n`;
+                msg += `Total Questions: ${total}\n`;
+                msg += `Answered: ${answered}\n`;
+                if (unanswered > 0) {
+                    msg += `Unanswered: ${unanswered} (Unanswered questions will be scored as incorrect)\n`;
+                }
+
+                if (confirm(msg)) {
+                    this.submitExam();
+                }
+            }
+
+            submitExam() {
+                this.stopTimer();
+
+                const timeSpentSecs = this.totalExamTime - this.timeRemaining;
+                const minutesSpent = Math.floor(timeSpentSecs / 60);
+                const secondsSpent = timeSpentSecs % 60;
+                const timeSpentFormatted = `${minutesSpent}m ${secondsSpent}s`;
+
+                // Calculate Score & Domain breakdown
+                let correctCount = 0;
+                const domainStats = {};
+
+                this.currentQuestions.forEach(q => {
+                    const selectedIdx = this.userAnswers[q.id];
+                    const isCorrect = selectedIdx !== undefined && q.options[selectedIdx]?.isCorrect;
+
+                    if (isCorrect) correctCount++;
+
+                    if (!domainStats[q.domain]) {
+                        domainStats[q.domain] = { total: 0, correct: 0 };
+                    }
+                    domainStats[q.domain].total++;
+                    if (isCorrect) domainStats[q.domain].correct++;
+                });
+
+                const totalQuestions = this.currentQuestions.length;
+                const scorePercent = Math.round((correctCount / totalQuestions) * 100);
+                const passed = scorePercent >= 70; // IIBA standard cut-off ~70%
+
+                // Save to history
+                this.examHistory[this.currentExamId] = {
+                    scorePercent,
+                    correctCount,
+                    totalQuestions,
+                    timeSpentFormatted,
+                    timestamp: new Date().toISOString()
+                };
+                localStorage.setItem('iiba_ecba_history', JSON.stringify(this.examHistory));
+
+                // Render Results View
+                this.renderResults({
+                    scorePercent,
+                    correctCount,
+                    totalQuestions,
+                    passed,
+                    timeSpentFormatted,
+                    domainStats
+                });
+            }
+
+            renderResults(res) {
+                document.getElementById('view-exam').classList.add('hidden');
+                document.getElementById('header-timer').classList.add('hidden');
+                document.getElementById('view-results').classList.remove('hidden');
+
+                const headerBg = document.getElementById('result-header-bg');
+                const badge = document.getElementById('pass-fail-badge');
+
+                if (res.passed) {
+                    headerBg.className = "p-8 text-white text-center bg-gradient-to-r from-emerald-600 to-teal-700";
+                    badge.innerText = "EXAM PASSED - IIBA® READY";
+                    badge.className = "inline-block px-4 py-1.5 rounded-full text-xs font-extrabold uppercase tracking-widest bg-white/20 border border-white/30 mb-3 text-emerald-100";
+                } else {
+                    headerBg.className = "p-8 text-white text-center bg-gradient-to-r from-rose-600 to-red-700";
+                    badge.innerText = "REQUIRES FURTHER REVISION";
+                    badge.className = "inline-block px-4 py-1.5 rounded-full text-xs font-extrabold uppercase tracking-widest bg-white/20 border border-white/30 mb-3 text-rose-100";
+                }
+
+                document.getElementById('result-score-percent').innerText = `${res.scorePercent}%`;
+                document.getElementById('result-score-detail').innerText = `Score: ${res.correctCount} / ${res.totalQuestions} Questions Correct`;
+                document.getElementById('time-spent-text').innerText = res.timeSpentFormatted;
+                document.getElementById('correct-count-text').innerText = res.correctCount;
+                document.getElementById('incorrect-count-text').innerText = res.totalQuestions - res.correctCount;
+
+                // Render Domain Breakdown
+                const domainList = document.getElementById('domain-breakdown-list');
+                domainList.innerHTML = '';
+
+                Object.keys(res.domainStats).forEach(dom => {
+                    const stat = res.domainStats[dom];
+                    const pct = Math.round((stat.correct / stat.total) * 100);
+
+                    let statusRating = "Proficient";
+                    let ratingColor = "text-emerald-600 bg-emerald-50 border-emerald-200";
+
+                    if (pct < 60) {
+                        statusRating = "Requires Improvement";
+                        ratingColor = "text-rose-600 bg-rose-50 border-rose-200";
+                    } else if (pct < 75) {
+                        statusRating = "Comparable";
+                        ratingColor = "text-amber-600 bg-amber-50 border-amber-200";
+                    }
+
+                    domainList.innerHTML += `
+                        <div class="p-4 rounded-xl border border-slate-200 bg-slate-50/50 space-y-2">
+                            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                                <span class="font-bold text-sm text-slate-800">${dom}</span>
+                                <span class="text-xs font-extrabold px-2.5 py-1 rounded-md border ${ratingColor}">${statusRating} (${pct}%)</span>
+                            </div>
+                            <div class="w-full bg-slate-200 rounded-full h-2 overflow-hidden">
+                                <div class="bg-iiba-600 h-2 rounded-full" style="width: ${pct}%"></div>
+                            </div>
+                            <div class="text-xs text-slate-500 text-right">${stat.correct} of ${stat.total} correct</div>
+                        </div>
+                    `;
+                });
+
+                // Render Detailed Answer Review
+                this.renderReviewList('all');
+
+                lucide.createIcons();
+            }
+
+            filterReview(filterType) {
+                // Update button styles
+                document.querySelectorAll('.review-filter-btn').forEach(btn => {
+                    if (btn.dataset.filter === filterType) {
+                        btn.className = "review-filter-btn active text-xs font-bold px-3 py-1.5 rounded-lg border bg-iiba-600 text-white";
+                    } else {
+                        btn.className = "review-filter-btn text-xs font-bold px-3 py-1.5 rounded-lg border bg-white text-slate-600 hover:bg-slate-50";
+                    }
+                });
+
+                this.renderReviewList(filterType);
+            }
+
+            renderReviewList(filterType) {
+                const list = document.getElementById('review-list');
+                list.innerHTML = '';
+
+                this.currentQuestions.forEach((q, idx) => {
+                    const selectedIdx = this.userAnswers[q.id];
+                    const isCorrect = selectedIdx !== undefined && q.options[selectedIdx]?.isCorrect;
+                    const isFlagged = this.flagged.has(q.id);
+
+                    if (filterType === 'incorrect' && isCorrect) return;
+                    if (filterType === 'correct' && !isCorrect) return;
+                    if (filterType === 'flagged' && !isFlagged) return;
+
+                    const card = document.createElement('div');
+                    card.className = `p-6 rounded-xl border ${
+                        isCorrect ? 'border-emerald-200 bg-emerald-50/30' : 'border-rose-200 bg-rose-50/30'
+                    } space-y-4`;
+
+                    const correctOpt = q.options.find(o => o.isCorrect);
+
+                    let optionsHtml = '';
+                    q.options.forEach((opt, oIdx) => {
+                        const letter = String.fromCharCode(65 + oIdx);
+                        const isUserChoice = selectedIdx === oIdx;
+
+                        let optBg = "bg-white border-slate-200";
+                        if (opt.isCorrect) optBg = "bg-emerald-100 border-emerald-400 text-emerald-900 font-bold";
+                        if (isUserChoice && !opt.isCorrect) optBg = "bg-rose-100 border-rose-400 text-rose-900 font-bold";
+
+                        optionsHtml += `
+                            <div class="p-3 rounded-lg border text-xs sm:text-sm flex items-start space-x-2 ${optBg}">
+                                <span class="font-bold">${letter}.</span>
+                                <span>${opt.text} ${isUserChoice ? '(Your Choice)' : ''} ${opt.isCorrect ? '✓ Correct Answer' : ''}</span>
+                            </div>
+                        `;
+                    });
+
+                    card.innerHTML = `
+                        <div class="flex items-center justify-between">
+                            <span class="text-xs font-bold uppercase tracking-wider text-slate-500">Question ${idx + 1} • ${q.domain}</span>
+                            <span class="text-xs font-extrabold px-2.5 py-1 rounded-md ${
+                                isCorrect ? 'bg-emerald-100 text-emerald-800' : 'bg-rose-100 text-rose-800'
+                            }">
+                                ${isCorrect ? 'Correct' : 'Incorrect'}
+                            </span>
+                        </div>
+
+                        <p class="font-medium text-slate-900 text-sm sm:text-base">${q.stem}</p>
+
+                        <div class="space-y-2">
+                            ${optionsHtml}
+                        </div>
+
+                        <div class="bg-white p-4 rounded-lg border border-slate-200 text-xs text-slate-700 space-y-1">
+                            <span class="font-bold text-iiba-800 block">BABOK® v3 Explanation & Rationale:</span>
+                            <p>${correctOpt ? correctOpt.rationale : 'Refer to BABOK v3 Knowledge Area standards.'}</p>
+                        </div>
+                    `;
+
+                    list.appendChild(card);
+                });
+
+                lucide.createIcons();
+            }
+
+            reattemptCurrentExam() {
+                if (this.currentExamId) {
+                    this.startExam(this.currentExamId);
+                }
+            }
+        }
+
+        // Initialize App
+        let app;
+        window.addEventListener('DOMContentLoaded', () => {
+            app = new ExamPortalApp();
+            app.showDashboard();
+        });
+    </script>
+</body>
+</html>
