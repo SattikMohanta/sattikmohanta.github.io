@@ -1,0 +1,2497 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Excel Enterprise Master Suite — 8-Domain Platform</title>
+    <script src="https://cdn.tailwindcss.com">
+    </script>
+    <script src="https://unpkg.com/lucide@latest">
+    </script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+        * {
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #020617;
+            color: #f8fafc;
+            overflow: hidden;
+            margin: 0;
+        }
+        .font-mono-code {
+            font-family: 'Fira Code', monospace;
+        }
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: #0f172a;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #3b82f6;
+            border-radius: 4px;
+        }
+        .nav-btn-active {
+            background-color: #059669 !important;
+            color: #fff !important;
+            font-weight: 700;
+            box-shadow: 0 4px 14px rgba(5, 150, 105, 0.35);
+        }
+        .nav-btn-inactive {
+            color: #94a3b8;
+            background: transparent;
+        }
+        .nav-btn-inactive:hover {
+            background: #1e293b;
+            color: #f8fafc;
+        }
+        .subnav-active {
+            background-color: #10b981 !important;
+            color: #022c22 !important;
+            font-weight: 700;
+            border-color: #34d399 !important;
+        }
+        .subnav-inactive {
+            background-color: #1e293b;
+            color: #94a3b8;
+            border-color: #334155;
+        }
+        .subnav-inactive:hover {
+            color: #f8fafc;
+            border-color: #3b82f6;
+            background: #0f172a;
+        }
+        .wrap-break {
+            white-space: pre-wrap !important;
+            word-break: break-word !important;
+            overflow-wrap: anywhere !important;
+        }
+        .excel-grid {
+            border-collapse: collapse;
+            width: 100%;
+            font-family: 'Fira Code', monospace;
+            font-size: 0.72rem;
+        }
+        .excel-grid th,
+        .excel-grid td {
+            border: 1px solid #334155;
+            padding: 6px 8px;
+        }
+        .excel-header {
+            background: #1e293b;
+            color: #94a3b8;
+            font-weight: 600;
+            text-align: center;
+        }
+        .tab-viz-container {
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+        .tab-viz-body {
+            flex: 1;
+            overflow-y: auto;
+            padding-right: 4px;
+        }
+        .dash-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 20px;
+        }
+        @media (min-width: 1024px) {
+            .dash-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+        @media (min-width: 1536px) {
+            .dash-grid {
+                grid-template-columns: repeat(4, 1fr);
+            }
+        }
+        .chart-ref-wrap {
+            background: #0f172a;
+            border: 1px solid #1e293b;
+            border-radius: 8px;
+            padding: 8px 12px;
+            margin-bottom: 12px;
+            display: flex;
+            flex-wrap: nowrap;
+            overflow-x: auto;
+            gap: 6px;
+            max-height: 72px;
+            align-items: center;
+        }
+        .chart-ref-item {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            background: #1e293b;
+            border-radius: 4px;
+            padding: 4px 10px;
+            white-space: nowrap;
+            font-size: 11px;
+            color: #e2e8f0;
+            flex-shrink: 0;
+            border: 1px solid #334155;
+            cursor: pointer;
+            transition: background 0.2s, border-color 0.2s;
+        }
+        .chart-ref-item:hover {
+            background: #2d3a4f;
+            border-color: #10b981;
+        }
+        .chart-ref-item.active {
+            background: #10b981;
+            border-color: #34d399;
+            color: #022c22;
+        }
+        .chart-ref-item .icon {
+            font-size: 16px;
+        }
+        .chart-ref-item .name {
+            font-weight: 500;
+        }
+        .chart-ref-item .use {
+            color: #94a3b8;
+            font-size: 9px;
+            margin-left: 2px;
+        }
+        .chart-ref-item.active .use {
+            color: #065f46;
+        }
+        .viz-preview-bar {
+            height: 80px;
+            display: flex;
+            align-items: flex-end;
+            justify-content: space-around;
+            padding: 0 8px 8px 8px;
+            background: #0f172a;
+            border-radius: 8px;
+            border: 1px solid #1e293b;
+        }
+        .viz-preview-bar .bar {
+            border-radius: 4px 4px 0 0;
+            min-width: 16px;
+            transition: height 0.3s;
+        }
+        .shortcut-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 12px;
+            background: #0f172a;
+            border-radius: 6px;
+            border: 1px solid #1e293b;
+            font-size: 12px;
+            gap: 12px;
+        }
+        .shortcut-row kbd {
+            background: #1e293b;
+            border: 1px solid #334155;
+            padding: 2px 10px;
+            border-radius: 4px;
+            font-family: 'Fira Code', monospace;
+            font-size: 11px;
+            color: #34d399;
+            white-space: nowrap;
+        }
+        .shortcut-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 12px;
+            margin-top: 8px;
+        }
+        @media (max-width: 1024px) {
+            .shortcut-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+        @media (max-width: 640px) {
+            .shortcut-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        .shortcut-card {
+            background: #0f172a;
+            border: 1px solid #1e293b;
+            border-radius: 8px;
+            padding: 12px 16px;
+        }
+        .shortcut-card .cat-title {
+            color: #34d399;
+            font-weight: 600;
+            font-size: 13px;
+            border-bottom: 1px solid #1e293b;
+            padding-bottom: 6px;
+            margin-bottom: 8px;
+        }
+        .shortcut-card .shortcut-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 4px 0;
+            font-size: 12px;
+            border-bottom: 1px solid #1e293b;
+        }
+        .shortcut-card .shortcut-item:last-child {
+            border-bottom: none;
+        }
+        .shortcut-card .action {
+            color: #e2e8f0;
+        }
+        .shortcut-card .keys {
+            font-family: 'Fira Code', monospace;
+            font-size: 11px;
+            color: #60a5fa;
+            white-space: nowrap;
+        }
+        .shortcut-card .keys .sep {
+            color: #475569;
+            margin: 0 4px;
+        }
+        .dataset-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 12px;
+            margin-top: 12px;
+        }
+        .dataset-item {
+            background: #0f172a;
+            border: 1px solid #1e293b;
+            border-radius: 8px;
+            padding: 12px 16px;
+            transition: border-color 0.2s;
+        }
+        .dataset-item:hover {
+            border-color: #10b981;
+        }
+        .dataset-item .name {
+            font-weight: 600;
+            color: #e2e8f0;
+            font-size: 13px;
+        }
+        .dataset-item .name a {
+            color: #34d399;
+            text-decoration: none;
+        }
+        .dataset-item .name a:hover {
+            text-decoration: underline;
+        }
+        .dataset-item .domain {
+            font-size: 11px;
+            color: #94a3b8;
+        }
+
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(4px);
+            z-index: 9999;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 16px;
+        }
+        .modal-overlay.open {
+            display: flex;
+        }
+        .modal-content {
+            background: #0f172a;
+            border: 1px solid #1e293b;
+            border-radius: 16px;
+            max-width: 500px;
+            width: 100%;
+            max-height: 80vh;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.8);
+        }
+        .modal-header {
+            background: #059669;
+            padding: 16px 20px;
+            color: white;
+            font-weight: 700;
+            font-size: 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-radius: 16px 16px 0 0;
+        }
+        .modal-header button {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 24px;
+            cursor: pointer;
+        }
+        .modal-body {
+            padding: 16px 20px;
+            overflow-y: auto;
+            flex: 1;
+            font-size: 14px;
+            color: #e2e8f0;
+            line-height: 1.6;
+        }
+        .modal-body .msg {
+            margin-bottom: 12px;
+            padding: 10px 14px;
+            border-radius: 8px;
+            background: #1e293b;
+        }
+        .modal-body .msg.bot {
+            background: #0f172a;
+            border: 1px solid #1e293b;
+        }
+        .modal-body .msg .label {
+            font-weight: 600;
+            color: #34d399;
+            font-size: 12px;
+            display: block;
+            margin-bottom: 2px;
+        }
+        .modal-footer {
+            padding: 12px 20px;
+            border-top: 1px solid #1e293b;
+            display: flex;
+            gap: 8px;
+        }
+        .modal-footer input {
+            flex: 1;
+            background: #0f172a;
+            border: 1px solid #1e293b;
+            border-radius: 8px;
+            padding: 8px 12px;
+            color: #f8fafc;
+            font-size: 14px;
+            outline: none;
+        }
+        .modal-footer input:focus {
+            border-color: #059669;
+        }
+        .modal-footer button {
+            background: #059669;
+            border: none;
+            border-radius: 8px;
+            padding: 8px 16px;
+            color: white;
+            font-weight: 600;
+            font-size: 14px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        .modal-footer button:hover {
+            background: #10b981;
+        }
+
+        .tab-scrollable {
+            overflow-y: auto !important;
+            max-height: 100% !important;
+            height: 100% !important;
+            padding-right: 4px;
+        }
+        .condensed-container {
+            max-height: 72vh;
+            overflow-y: auto;
+            padding-right: 12px;
+        }
+        .hide-section {
+            display: none !important;
+        }
+        .vba-section {
+            background: #0f172a;
+            border: 1px solid #1e293b;
+            border-radius: 8px;
+            padding: 16px;
+            margin-bottom: 16px;
+        }
+        .vba-section h3 {
+            color: #34d399;
+            font-weight: 700;
+            font-size: 16px;
+            margin-bottom: 8px;
+            border-bottom: 1px solid #1e293b;
+            padding-bottom: 6px;
+        }
+        .vba-section h4 {
+            color: #60a5fa;
+            font-weight: 600;
+            font-size: 14px;
+            margin-top: 12px;
+            margin-bottom: 4px;
+        }
+        .vba-section p,
+        .vba-section li {
+            color: #e2e8f0;
+            font-size: 13px;
+            line-height: 1.6;
+        }
+        .vba-section ul,
+        .vba-section ol {
+            padding-left: 20px;
+            margin: 6px 0;
+        }
+        .vba-section .code-block {
+            background: #020617;
+            border: 1px solid #1e293b;
+            border-radius: 6px;
+            padding: 12px 16px;
+            font-family: 'Fira Code', monospace;
+            font-size: 12px;
+            color: #a5b4fc;
+            overflow-x: auto;
+            white-space: pre-wrap;
+            word-break: break-word;
+            margin: 8px 0;
+        }
+        .vba-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 16px;
+        }
+        @media (min-width: 1024px) {
+            .vba-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+        @media (max-width:768px) {
+            .w-72 {
+                width: 56px;
+            }
+            aside .flex-col .p-4 .min-w-0 h1,
+            aside .flex-col .p-4 .min-w-0 span,
+            aside .flex-col .p-4 .min-w-0 .text-[10px],
+            aside .flex-col .p-4 .flex .min-w-0 h1,
+            aside .flex-col .p-4 .flex .min-w-0 span,
+            aside .flex-col .p-4 .flex .min-w-0 .text-[10px],
+            aside .flex-col .p-3 .min-w-0,
+            aside nav span {
+                display: none;
+            }
+            aside .flex-col .p-4 .flex {
+                justify-content: center;
+            }
+            aside nav .w-full {
+                justify-content: center;
+                padding: 8px 0;
+            }
+            aside nav .w-full i {
+                margin: 0;
+            }
+            aside .p-4.bg-slate-950,
+            aside .p-3.border-t {
+                display: none;
+            }
+            header .flex-wrap .text-xs {
+                font-size: 9px;
+                padding: 4px 8px;
+            }
+            .shortcut-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body class="flex min-h-screen">
+
+    <!-- SIDEBAR -->
+    <aside class="w-72 bg-slate-900 border-r border-slate-800 flex flex-col flex-shrink-0 z-40">
+        <div class="flex flex-col min-w-0">
+            <div class="p-4 border-b border-slate-800 flex items-center space-x-3">
+                <div class="bg-emerald-500 p-2 rounded-lg text-slate-950 flex-shrink-0 shadow-lg shadow-emerald-500/20">
+                    <i data-lucide="file-spreadsheet" class="w-6 h-6"></i>
+                </div>
+                <div class="min-w-0">
+                    <h1 class="font-bold text-sm text-white tracking-tight leading-tight">Excel Master Suite</h1>
+                    <span class="text-[10px] text-emerald-400 font-mono-code">Enterprise • v14.1</span>
+                </div>
+            </div>
+            <div class="p-4 bg-slate-950 border-b border-slate-800 min-w-0">
+                <div class="flex items-center justify-between text-[11px] mb-2 gap-1">
+                    <span class="text-slate-400">Engine:</span>
+                    <span class="font-bold font-mono-code text-emerald-400 text-[10px]">2021 • 2024 • Web</span>
+                </div>
+                <div class="flex items-center space-x-1.5 text-[10px] text-slate-400 mt-1">
+                    <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse flex-shrink-0"></span>
+                    <span>CALC • PQ • DAX • VBA • Stats</span>
+                </div>
+            </div>
+            <nav class="px-2 py-4 space-y-1 text-xs font-medium overflow-y-auto max-h-[calc(100vh-210px)] custom-scrollbar pb-6">
+                <button onclick="switchMainTab('tab-formulas')" id="nav-tab-formulas" class="w-full flex items-center space-x-3 px-3 py-3 rounded-lg nav-btn-active transition text-left">
+                    <i data-lucide="function-square" class="w-4 h-4 flex-shrink-0"></i><span>1. Formulas (L1-L5)</span>
+                </button>
+                <button onclick="switchMainTab('tab-viz')" id="nav-tab-viz" class="w-full flex items-center space-x-3 px-3 py-3 rounded-lg nav-btn-inactive transition text-left">
+                    <i data-lucide="pie-chart" class="w-4 h-4 flex-shrink-0"></i><span>2. BI & Data Viz</span>
+                </button>
+                <button onclick="switchMainTab('tab-dashboards')" id="nav-tab-dashboards" class="w-full flex items-center space-x-3 px-3 py-3 rounded-lg nav-btn-inactive transition text-left">
+                    <i data-lucide="layout-dashboard" class="w-4 h-4 flex-shrink-0"></i><span>3. Executive Dashboards</span>
+                </button>
+                <button onclick="switchMainTab('tab-interview')" id="nav-tab-interview" class="w-full flex items-center space-x-3 px-3 py-3 rounded-lg nav-btn-inactive transition text-left">
+                    <i data-lucide="mic" class="w-4 h-4 flex-shrink-0"></i><span>4. Interview Playbook</span>
+                </button>
+                <button onclick="switchMainTab('tab-testing')" id="nav-tab-testing" class="w-full flex items-center space-x-3 px-3 py-3 rounded-lg nav-btn-inactive transition text-left">
+                    <i data-lucide="award" class="w-4 h-4 flex-shrink-0"></i><span>5. Tests & Cases</span>
+                </button>
+                <button onclick="switchMainTab('tab-datasets')" id="nav-tab-datasets" class="w-full flex items-center space-x-3 px-3 py-3 rounded-lg nav-btn-inactive transition text-left">
+                    <i data-lucide="database" class="w-4 h-4 flex-shrink-0"></i><span>6. Repos & Datasets</span>
+                </button>
+                <button onclick="switchMainTab('tab-cheatsheet')" id="nav-tab-cheatsheet" class="w-full flex items-center space-x-3 px-3 py-3 rounded-lg nav-btn-inactive transition text-left">
+                    <i data-lucide="keyboard" class="w-4 h-4 flex-shrink-0"></i><span>7. Shortcuts • Formulas • VBA</span>
+                </button>
+                <button onclick="switchMainTab('tab-stats')" id="nav-tab-stats" class="w-full flex items-center space-x-3 px-3 py-3 rounded-lg nav-btn-inactive transition text-left">
+                    <i data-lucide="trending-up" class="w-4 h-4 flex-shrink-0"></i><span>8. Statistical ToolPak</span>
+                </button>
+            </nav>
+        </div>
+    </aside>
+
+    <!-- MAIN WORKSPACE -->
+    <div class="flex-1 flex flex-col min-w-0 h-screen overflow-hidden relative">
+        <header class="bg-slate-900 border-b border-slate-800 px-6 py-4 flex flex-wrap items-center justify-between gap-3 flex-shrink-0 z-30 shadow-lg">
+            <div class="flex items-center space-x-3">
+                <span class="text-xs bg-emerald-950 text-emerald-300 border border-emerald-800 px-3 py-1.5 rounded font-mono-code flex items-center space-x-2 shadow-inner">
+                    <span class="w-2 h-2 rounded-full bg-emerald-400"></span>
+                    <span>Validated: <strong>Excel 2021 • 2024 • Web • 365</strong></span>
+                </span>
+            </div>
+            <div class="flex items-center space-x-4">
+                <div id="exam-timer-container" class="hide-section flex items-center space-x-2 bg-rose-950/80 border border-rose-800 text-rose-300 font-mono-code font-bold px-4 py-1.5 rounded-lg text-sm shadow-inner">
+                    <i data-lucide="clock" class="w-4 h-4 animate-pulse"></i>
+                    <span id="exam-timer-display">60:00</span>
+                </div>
+                <button onclick="toggleHelpModal()" class="bg-slate-800 hover:bg-slate-700 text-white p-2 rounded-full transition shadow-md border border-slate-700">
+                    <i data-lucide="help-circle" class="w-5 h-5"></i>
+                </button>
+            </div>
+        </header>
+
+        <main class="flex-1 p-6 overflow-hidden bg-slate-950 relative flex flex-col h-full">
+
+            <!-- TAB 1: FORMULAS -->
+            <section id="tab-formulas" class="tab-view h-full flex flex-col hide-section">
+                <div class="flex flex-col md:flex-row md:items-center justify-between pb-3 border-b border-slate-800 gap-4 mb-4 flex-shrink-0">
+                    <div><h2 class="text-xl font-bold text-white">Universal Formula Architecture</h2><p class="text-xs text-slate-400 mt-1">20 examples per level (100 total). Fully compliant across Excel 2021, 2024, and Web.</p></div>
+                    <div class="flex flex-wrap gap-2 flex-shrink-0" id="formula-lvl-buttons">
+                        <button onclick="switchFormulaLevel(1)" id="btn-f-lvl-1" class="px-4 py-2 rounded-lg text-xs font-semibold subnav-active transition">L1: Lookups</button>
+                        <button onclick="switchFormulaLevel(2)" id="btn-f-lvl-2" class="px-4 py-2 rounded-lg text-xs font-semibold subnav-inactive transition">L2: Dynamic Arrays</button>
+                        <button onclick="switchFormulaLevel(3)" id="btn-f-lvl-3" class="px-4 py-2 rounded-lg text-xs font-semibold subnav-inactive transition">L3: Math & Stats</button>
+                        <button onclick="switchFormulaLevel(4)" id="btn-f-lvl-4" class="px-4 py-2 rounded-lg text-xs font-semibold subnav-inactive transition">L4: Financial</button>
+                        <button onclick="switchFormulaLevel(5)" id="btn-f-lvl-5" class="px-4 py-2 rounded-lg text-xs font-semibold subnav-inactive transition">L5: ETL & Lambda</button>
+                    </div>
+                </div>
+                <div class="flex items-center justify-between bg-slate-900/60 border border-slate-800/80 px-4 py-3 rounded-xl gap-3 text-xs mb-4 flex-shrink-0">
+                    <div class="text-slate-400">Showing <span id="formula-page-range" class="text-emerald-400 font-bold font-mono-code">1 - 20</span> of <span class="text-white font-bold font-mono-code">20</span> examples</div>
+                    <div class="flex items-center space-x-1.5" id="formula-pagination-controls"></div>
+                </div>
+                <div class="condensed-container custom-scrollbar grid grid-cols-1 xl:grid-cols-2 gap-4 flex-1" id="formula-content-mount"></div>
+            </section>
+
+            <!-- TAB 2: VIZ -->
+            <section id="tab-viz" class="tab-view h-full flex flex-col hide-section tab-viz-container">
+                <div class="flex-shrink-0 flex flex-col md:flex-row md:items-center justify-between pb-3 border-b border-slate-800 gap-4 mb-4">
+                    <div><h2 class="text-xl font-bold text-white">Visual Analytics & VBA Macro Library</h2><p class="text-xs text-slate-400 mt-1">20+ visual models + complete VBA reference with 50+ ready-to-use macro examples.</p></div>
+                    <div class="flex flex-wrap gap-2 flex-shrink-0">
+                        <button onclick="switchVizLevel(1)" id="btn-v-lvl-1" class="px-4 py-2 rounded-lg text-xs font-semibold subnav-active transition">L1: Distribution</button>
+                        <button onclick="switchVizLevel(2)" id="btn-v-lvl-2" class="px-4 py-2 rounded-lg text-xs font-semibold subnav-inactive transition">L2: Bridges</button>
+                        <button onclick="switchVizLevel(3)" id="btn-v-lvl-3" class="px-4 py-2 rounded-lg text-xs font-semibold subnav-inactive transition">L3: Slicer</button>
+                        <button onclick="switchVizLevel(4)" id="btn-v-lvl-4" class="px-4 py-2 rounded-lg text-xs font-semibold subnav-inactive transition">L4: Geospatial</button>
+                        <button onclick="switchVizLevel(5)" id="btn-v-lvl-5" class="px-4 py-2 rounded-lg text-xs font-semibold subnav-inactive transition">L5: Sparklines</button>
+                        <button onclick="switchVizLevel(6)" id="btn-v-lvl-6" class="px-4 py-2 rounded-lg text-xs font-semibold subnav-inactive transition">📘 VBA Macro Library</button>
+                    </div>
+                </div>
+                <div class="flex-shrink-0 chart-ref-wrap" id="chartRefWrap">
+                    <div class="chart-ref-item active" data-filter="all" onclick="filterVizCards('all')">
+                        <span class="icon">📋</span><span class="name">All</span>
+                    </div>
+                    <div class="chart-ref-item" data-filter="Distribution" onclick="filterVizCards('Distribution')">
+                        <span class="icon">📊</span><span class="name">Column</span><span class="use">comparisons</span>
+                    </div>
+                    <div class="chart-ref-item" data-filter="Ranking" onclick="filterVizCards('Ranking')">
+                        <span class="icon">📈</span><span class="name">Line</span><span class="use">trends</span>
+                    </div>
+                    <div class="chart-ref-item" data-filter="Process" onclick="filterVizCards('Process')">
+                        <span class="icon">🔻</span><span class="name">Funnel</span><span class="use">conversion</span>
+                    </div>
+                    <div class="chart-ref-item" data-filter="Variance" onclick="filterVizCards('Variance')">
+                        <span class="icon">🌊</span><span class="name">Waterfall</span><span class="use">bridge</span>
+                    </div>
+                    <div class="chart-ref-item" data-filter="Attribution" onclick="filterVizCards('Attribution')">
+                        <span class="icon">📊</span><span class="name">Pareto</span><span class="use">80/20</span>
+                    </div>
+                    <div class="chart-ref-item" data-filter="BI" onclick="filterVizCards('BI')">
+                        <span class="icon">🎛️</span><span class="name">Slicer</span><span class="use">BI</span>
+                    </div>
+                    <div class="chart-ref-item" data-filter="OLAP" onclick="filterVizCards('OLAP')">
+                        <span class="icon">🧊</span><span class="name">Cube</span><span class="use">OLAP</span>
+                    </div>
+                    <div class="chart-ref-item" data-filter="Segmentation" onclick="filterVizCards('Segmentation')">
+                        <span class="icon">🥧</span><span class="name">Donut</span><span class="use">segments</span>
+                    </div>
+                    <div class="chart-ref-item" data-filter="Geographic" onclick="filterVizCards('Geographic')">
+                        <span class="icon">🗺️</span><span class="name">Map</span><span class="use">geospatial</span>
+                    </div>
+                    <div class="chart-ref-item" data-filter="Risk/Return" onclick="filterVizCards('Risk/Return')">
+                        <span class="icon">🫧</span><span class="name">Bubble</span><span class="use">3 vars</span>
+                    </div>
+                    <div class="chart-ref-item" data-filter="Statistical" onclick="filterVizCards('Statistical')">
+                        <span class="icon">📦</span><span class="name">Box</span><span class="use">distribution</span>
+                    </div>
+                    <div class="chart-ref-item" data-filter="Sparklines" onclick="filterVizCards('Sparklines')">
+                        <span class="icon">✨</span><span class="name">Sparkline</span><span class="use">in-cell</span>
+                    </div>
+                    <div class="chart-ref-item" data-filter="Grid" onclick="filterVizCards('Grid')">
+                        <span class="icon">📋</span><span class="name">Multiples</span><span class="use">grid</span>
+                    </div>
+                    <div class="chart-ref-item" data-filter="KPI" onclick="filterVizCards('KPI')">
+                        <span class="icon">🎯</span><span class="name">Gauge</span><span class="use">KPI</span>
+                    </div>
+                    <div class="chart-ref-item" data-filter="Trend" onclick="filterVizCards('Trend')">
+                        <span class="icon">📉</span><span class="name">Envelope</span><span class="use">volatility</span>
+                    </div>
+                </div>
+                <div class="tab-viz-body custom-scrollbar grid grid-cols-1 lg:grid-cols-2 gap-6" id="viz-content-mount"></div>
+            </section>
+
+            <!-- TAB 3: DASHBOARDS -->
+            <section id="tab-dashboards" class="tab-view h-full flex flex-col hide-section">
+                <div class="flex flex-col md:flex-row md:items-center justify-between pb-3 border-b border-slate-800 gap-4 mb-4 flex-shrink-0">
+                    <div><h2 class="text-xl font-bold text-white">Executive Dashboard Models</h2><p class="text-xs text-slate-400 mt-1">50 unique KPI sets – each card shows different metrics.</p></div>
+                    <div class="flex flex-wrap gap-2">
+                        <button onclick="switchDashLevel(1)" id="btn-d-lvl-1" class="px-4 py-2 rounded-lg text-xs font-semibold subnav-active transition">L1: Financial</button>
+                        <button onclick="switchDashLevel(2)" id="btn-d-lvl-2" class="px-4 py-2 rounded-lg text-xs font-semibold subnav-inactive transition">L2: Operations</button>
+                        <button onclick="switchDashLevel(3)" id="btn-d-lvl-3" class="px-4 py-2 rounded-lg text-xs font-semibold subnav-inactive transition">L3: Marketing</button>
+                        <button onclick="switchDashLevel(4)" id="btn-d-lvl-4" class="px-4 py-2 rounded-lg text-xs font-semibold subnav-inactive transition">L4: HR/Supply</button>
+                        <button onclick="switchDashLevel(5)" id="btn-d-lvl-5" class="px-4 py-2 rounded-lg text-xs font-semibold subnav-inactive transition">L5: C-Suite</button>
+                    </div>
+                </div>
+                <div class="flex items-center justify-between bg-slate-900/60 border border-slate-800/80 px-4 py-3 rounded-xl gap-3 text-xs mb-4 flex-shrink-0">
+                    <div class="text-slate-400">Showing <span id="dash-page-range" class="text-emerald-400 font-bold font-mono-code">1 - 9</span> of <span class="text-white font-bold font-mono-code">10</span> dashboards</div>
+                    <div class="flex items-center space-x-1.5" id="dash-pagination-controls"></div>
+                </div>
+                <div class="condensed-container custom-scrollbar flex-1" id="dashboard-content-mount">
+                    <div class="dash-grid" id="dash-grid-inner"></div>
+                </div>
+            </section>
+
+            <!-- TAB 4: INTERVIEW -->
+            <section id="tab-interview" class="tab-view h-full flex flex-col hide-section">
+                <div class="bg-slate-900 border border-slate-800 p-5 rounded-xl flex flex-col md:flex-row md:items-center justify-between gap-4 mb-4 flex-shrink-0 shadow-lg">
+                    <div class="flex items-center space-x-4">
+                        <div class="p-3 bg-emerald-500/20 text-emerald-400 rounded-lg"><i data-lucide="message-square-code" class="w-8 h-8"></i></div>
+                        <div><h2 class="text-xl font-bold text-white">Technical Interview Playbook</h2><p class="text-xs text-slate-400 mt-1">100+ Expert Rules (scaled for performance)</p></div>
+                    </div>
+                    <select id="filter-interview-topic" onchange="AppInt.page=1; AppInt.render();" class="bg-slate-950 border border-slate-700 text-sm rounded-lg px-4 py-2 text-slate-200 shadow-md">
+                        <option value="all">All Domains (100+ Items)</option>
+                        <option value="architecture">Architecture & Modeling</option>
+                        <option value="formulas">Formula Optimization</option>
+                        <option value="quants">Valuation & Quants</option>
+                        <option value="vba">VBA Automation</option>
+                        <option value="behavioral">Think-Aloud Protocols</option>
+                    </select>
+                </div>
+                <div class="flex items-center justify-between bg-slate-900/60 border border-slate-800/80 px-4 py-3 rounded-xl gap-3 text-xs mb-4 flex-shrink-0">
+                    <div class="text-slate-400">Showing Rules <span id="int-page-indicator" class="text-emerald-400 font-bold font-mono-code">1 - 20</span> of <span id="int-total-count" class="text-white font-bold font-mono-code">100</span></div>
+                    <div class="flex items-center space-x-1.5" id="int-pagination-controls"></div>
+                </div>
+                <div class="condensed-container custom-scrollbar space-y-4 flex-1" id="interview-content-mount"></div>
+            </section>
+
+            <!-- TAB 5: TESTING -->
+            <section id="tab-testing" class="tab-view h-full flex flex-col hide-section">
+                <div class="flex flex-col md:flex-row md:items-center justify-between pb-3 border-b border-slate-800 gap-4 mb-4 flex-shrink-0">
+                    <div><h2 class="text-xl font-bold text-white">Assessment & Cases</h2><p class="text-xs text-slate-400 mt-1">Practice, timed exams, and 100+ case studies with storyboards.</p></div>
+                    <div class="flex items-center space-x-2 bg-slate-900 p-1.5 rounded-lg border border-slate-800 shadow-inner">
+                        <button onclick="AppTesting.switchSub('practice')" id="btn-test-sub-practice" class="px-4 py-2 rounded text-sm font-semibold subnav-active transition">Practice</button>
+                        <button onclick="AppTesting.switchSub('timed')" id="btn-test-sub-timed" class="px-4 py-2 rounded text-sm font-semibold subnav-inactive transition">Timed</button>
+                        <button onclick="AppTesting.switchSub('cases')" id="btn-test-sub-cases" class="px-4 py-2 rounded text-sm font-semibold subnav-inactive transition">Cases</button>
+                    </div>
+                </div>
+                <div id="test-view-practice" class="space-y-4 flex-1 flex flex-col min-h-0">
+                    <div class="bg-slate-900 border border-slate-800 p-5 rounded-xl flex justify-between items-center flex-shrink-0 shadow-md">
+                        <select id="practice-set-select" onchange="AppTesting.loadPractice()" class="bg-slate-950 border border-slate-700 text-sm rounded-lg px-4 py-2 text-slate-200 w-72"></select>
+                        <button onclick="AppTesting.gradePractice()" class="px-6 py-2.5 bg-emerald-600 hover:bg-emerald-500 text-white font-bold rounded-lg text-sm transition shadow-lg">Submit</button>
+                    </div>
+                    <div class="condensed-container custom-scrollbar space-y-4 flex-1" id="practice-questions-mount"></div>
+                </div>
+                <div id="test-view-timed" class="hide-section space-y-4 flex-1 flex flex-col min-h-0">
+                    <div id="timed-exam-launcher" class="bg-slate-900 border border-slate-800 p-10 rounded-xl text-center space-y-6 flex-shrink-0 shadow-lg">
+                        <h3 class="text-3xl font-bold text-white">60 Minutes – 50 Questions</h3>
+                        <p class="text-sm text-slate-400 max-w-2xl mx-auto">Auto-scrambled. Passing: 75%.</p>
+                        <div class="pt-4 flex justify-center space-x-4">
+                            <select id="timed-exam-set-select" class="bg-slate-950 border border-slate-700 text-sm rounded-lg px-4 py-3 text-slate-200 w-80"></select>
+                            <button onclick="AppTesting.promptTimed()" class="px-8 py-3 bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold rounded-lg text-sm flex items-center space-x-2 transition shadow-xl shadow-emerald-500/20">
+                                <i data-lucide="play" class="w-5 h-5 fill-current"></i><span>Launch</span>
+                            </button>
+                        </div>
+                    </div>
+                    <div id="timed-exam-active-canvas" class="hide-section space-y-4 flex-1 flex flex-col min-h-0">
+                        <div class="bg-slate-900 border border-slate-800 p-5 rounded-xl flex items-center justify-between flex-shrink-0 shadow-md">
+                            <span class="text-sm font-bold text-emerald-400 uppercase font-mono-code tracking-widest border border-emerald-800 px-3 py-1 rounded bg-emerald-950">Timed Mock Active</span>
+                            <button onclick="AppTesting.submitTimed()" class="px-6 py-2 bg-rose-600 hover:bg-rose-500 text-white font-bold rounded-lg text-sm transition shadow-lg shadow-rose-900">Submit</button>
+                        </div>
+                        <div class="condensed-container custom-scrollbar space-y-4 flex-1" id="timed-exam-questions-mount"></div>
+                    </div>
+                    <div id="timed-exam-results" class="hide-section space-y-4 condensed-container custom-scrollbar flex-1"></div>
+                </div>
+                <div id="test-view-cases" class="hide-section space-y-4 flex-1 flex flex-col min-h-0">
+                    <div class="bg-slate-900 border border-slate-800 p-5 rounded-xl flex justify-between items-center flex-shrink-0 shadow-md">
+                        <div><div class="text-lg font-bold text-white">Case Studies (100+ Scenarios)</div><p class="text-xs text-slate-400 mt-1">Domain‑specific storyboards.</p></div>
+                        <select id="case-study-domain-filter" onchange="AppTesting.cPage=1; AppTesting.renderCases();" class="bg-slate-950 border border-slate-700 text-sm rounded px-4 py-2 text-slate-200 w-72 shadow-inner">
+                            <option value="all">All Domains</option>
+                            <option value="Finance & Valuation">Finance & Valuation</option>
+                            <option value="Retail & Inventory">Retail & Inventory</option>
+                            <option value="SaaS & Product">SaaS & Product</option>
+                            <option value="Logistics & Ops">Logistics & Ops</option>
+                        </select>
+                    </div>
+                    <div class="flex items-center justify-between bg-slate-900/60 border border-slate-800/80 px-4 py-3 rounded-xl gap-3 text-xs flex-shrink-0">
+                        <div class="text-slate-400">Page <span id="case-page-indicator" class="text-emerald-400 font-bold font-mono-code"></span></div>
+                        <div class="flex items-center space-x-1.5" id="case-pagination-controls"></div>
+                    </div>
+                    <div class="condensed-container custom-scrollbar grid grid-cols-1 xl:grid-cols-2 gap-5 flex-1" id="cases-cards-mount"></div>
+                </div>
+            </section>
+
+            <!-- TAB 6: DATASETS -->
+            <section id="tab-datasets" class="tab-view h-full flex flex-col hide-section tab-scrollable">
+                <div class="bg-slate-900 border border-slate-800 p-6 rounded-xl mb-4 flex-shrink-0 shadow-md">
+                    <h2 class="text-xl font-bold text-white mb-3">Curated Open-Source Repositories</h2>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <div class="p-4 bg-slate-950 border border-slate-800 rounded-lg space-y-2 text-sm shadow-inner">
+                            <strong class="text-emerald-400 block mb-2 border-b border-slate-800 pb-2">Tutorials</strong>
+                            <a href="https://excelx.com" target="_blank" class="text-slate-300 hover:text-emerald-400 flex items-center space-x-2"><span>Excel X</span><i data-lucide="external-link" class="w-3.5 h-3.5"></i></a>
+                            <a href="https://www.w3schools.com/excel/" target="_blank" class="text-slate-300 hover:text-emerald-400 flex items-center space-x-2"><span>W3Schools</span><i data-lucide="external-link" class="w-3.5 h-3.5"></i></a>
+                            <a href="https://www.geeksforgeeks.org/excel-tutorial/" target="_blank" class="text-slate-300 hover:text-emerald-400 flex items-center space-x-2"><span>GeeksforGeeks</span><i data-lucide="external-link" class="w-3.5 h-3.5"></i></a>
+                            <a href="https://www.exceldemy.com/" target="_blank" class="text-slate-300 hover:text-emerald-400 flex items-center space-x-2"><span>ExcelDemy</span><i data-lucide="external-link" class="w-3.5 h-3.5"></i></a>
+                            <a href="https://trumpexcel.com/" target="_blank" class="text-slate-300 hover:text-emerald-400 flex items-center space-x-2"><span>Trump Excel</span><i data-lucide="external-link" class="w-3.5 h-3.5"></i></a>
+                            <a href="https://exceljet.net/" target="_blank" class="text-slate-300 hover:text-emerald-400 flex items-center space-x-2"><span>Exceljet</span><i data-lucide="external-link" class="w-3.5 h-3.5"></i></a>
+                        </div>
+                        <div class="p-4 bg-slate-950 border border-slate-800 rounded-lg space-y-2 text-sm shadow-inner">
+                            <strong class="text-emerald-400 block mb-2 border-b border-slate-800 pb-2">Finance & Data</strong>
+                            <a href="https://corporatefinanceinstitute.com/resources/excel/" target="_blank" class="text-slate-300 hover:text-emerald-400 flex items-center space-x-2"><span>CFI</span><i data-lucide="external-link" class="w-3.5 h-3.5"></i></a>
+                            <a href="https://hackernoon.com/" target="_blank" class="text-slate-300 hover:text-emerald-400 flex items-center space-x-2"><span>HackerNoon</span><i data-lucide="external-link" class="w-3.5 h-3.5"></i></a>
+                            <a href="https://www.kaggle.com/datasets" target="_blank" class="text-slate-300 hover:text-emerald-400 flex items-center space-x-2"><span>Kaggle</span><i data-lucide="external-link" class="w-3.5 h-3.5"></i></a>
+                            <a href="https://mode.com/example-gallery" target="_blank" class="text-slate-300 hover:text-emerald-400 flex items-center space-x-2"><span>Mode Analytics</span><i data-lucide="external-link" class="w-3.5 h-3.5"></i></a>
+                            <a href="https://fred.stlouisfed.org" target="_blank" class="text-slate-300 hover:text-emerald-400 flex items-center space-x-2"><span>FRED</span><i data-lucide="external-link" class="w-3.5 h-3.5"></i></a>
+                        </div>
+                        <div class="p-4 bg-slate-950 border border-slate-800 rounded-lg space-y-2 text-sm shadow-inner">
+                            <strong class="text-emerald-400 block mb-2 border-b border-slate-800 pb-2">Govt & Github</strong>
+                            <a href="https://data.gov" target="_blank" class="text-slate-300 hover:text-emerald-400 flex items-center space-x-2"><span>Data.gov</span><i data-lucide="external-link" class="w-3.5 h-3.5"></i></a>
+                            <a href="https://dataful.in/" target="_blank" class="text-slate-300 hover:text-emerald-400 flex items-center space-x-2"><span>Dataful</span><i data-lucide="external-link" class="w-3.5 h-3.5"></i></a>
+                            <a href="https://github.com/microsoft/sql-server-samples" target="_blank" class="text-slate-300 hover:text-emerald-400 flex items-center space-x-2"><span>Microsoft Samples</span><i data-lucide="external-link" class="w-3.5 h-3.5"></i></a>
+                            <a href="https://www.ibm.com/analytics" target="_blank" class="text-slate-300 hover:text-emerald-400 flex items-center space-x-2"><span>IBM Analytics</span><i data-lucide="external-link" class="w-3.5 h-3.5"></i></a>
+                            <a href="https://www.sas.com/en_us/software/excel.html" target="_blank" class="text-slate-300 hover:text-emerald-400 flex items-center space-x-2"><span>SAS Excel</span><i data-lucide="external-link" class="w-3.5 h-3.5"></i></a>
+                        </div>
+                    </div>
+                </div>
+                <div class="bg-slate-900 border border-slate-800 p-6 rounded-xl mb-4 flex-shrink-0 shadow-md">
+                    <h3 class="text-lg font-bold text-white mb-2">📊 Top 50 Enterprise Datasets (Hyperlinked)</h3>
+                    <p class="text-xs text-slate-400 mb-4">Direct links to authoritative sources across multiple domains. Click any dataset name to access the source.</p>
+                    <div class="dataset-list" id="top-datasets-list"></div>
+                </div>
+            </section>
+
+            <!-- TAB 7: CHEATSHEET with Excelsior shortcuts -->
+            <section id="tab-cheatsheet" class="tab-view h-full flex flex-col hide-section">
+                <div class="flex flex-col md:flex-row md:items-center justify-between pb-4 border-b border-slate-800 gap-4 mb-4 flex-shrink-0">
+                    <div><h2 class="text-xl font-bold text-white">Mastery Library — Shortcuts, Formulas, VBA, Macros</h2><p class="text-xs text-slate-400 mt-1">Comprehensive reference with 50+ keyboard shortcuts (Windows & macOS), 100+ formulas, and VBA code.</p></div>
+                    <div class="flex flex-wrap gap-2 bg-slate-900 p-1.5 rounded-lg border border-slate-800 shadow-inner">
+                        <button onclick="AppCheat.switchSub('shortcuts')" id="btn-cheat-sub-shortcuts" class="px-4 py-2 rounded text-sm font-semibold subnav-active transition">Shortcuts</button>
+                        <button onclick="AppCheat.switchSub('formulas')" id="btn-cheat-sub-formulas" class="px-4 py-2 rounded text-sm font-semibold subnav-inactive transition">Formulas</button>
+                        <button onclick="AppCheat.switchSub('vba')" id="btn-cheat-sub-vba" class="px-4 py-2 rounded text-sm font-semibold subnav-inactive transition">VBA</button>
+                        <button onclick="AppCheat.switchSub('macros')" id="btn-cheat-sub-macros" class="px-4 py-2 rounded text-sm font-semibold subnav-inactive transition">Macros</button>
+                    </div>
+                </div>
+                <div id="cheat-pagination-wrapper" class="hidden flex items-center justify-between bg-slate-900/60 border border-slate-800/80 px-4 py-3 rounded-xl gap-3 text-xs mb-4 flex-shrink-0">
+                    <div class="text-slate-400">Page <span id="cheat-page-indicator" class="text-emerald-400 font-bold font-mono-code"></span></div>
+                    <div class="flex items-center space-x-1.5" id="cheat-pagination-controls"></div>
+                </div>
+                <div class="condensed-container custom-scrollbar space-y-4 flex-1" id="cheat-content-mount"></div>
+            </section>
+
+            <!-- TAB 8: STATS -->
+            <section id="tab-stats" class="tab-view h-full flex flex-col hide-section">
+                <div class="bg-slate-900 border border-slate-800 p-6 rounded-xl flex flex-col md:flex-row items-center justify-between mb-4 flex-shrink-0 shadow-lg">
+                    <div><h2 class="text-xl font-bold text-white">Statistical Processes</h2><p class="text-xs text-slate-400 mt-1">Functions, ToolPak, and 100+ examples.</p></div>
+                    <span class="text-xs bg-emerald-950 text-emerald-400 border border-emerald-800 px-4 py-2 rounded-lg font-mono-code font-bold shadow-inner">ToolPak • Solver</span>
+                </div>
+                <div class="flex items-center justify-between bg-slate-900/60 border border-slate-800/80 px-4 py-3 rounded-xl gap-3 text-xs mb-4 flex-shrink-0">
+                    <div class="text-slate-400">Page <span id="stats-page-indicator" class="text-emerald-400 font-bold font-mono-code"></span> of 100 models</div>
+                    <div class="flex items-center space-x-1.5" id="stats-pagination-controls"></div>
+                </div>
+                <div class="condensed-container custom-scrollbar space-y-6 flex-1" id="stats-content-mount"></div>
+            </section>
+
+        </main>
+    </div>
+
+    <!-- HELP MODAL -->
+    <div class="modal-overlay" id="helpModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <span>🤖 Excel Assistant</span>
+                <button onclick="toggleHelpModal()">&times;</button>
+            </div>
+            <div class="modal-body" id="chatBodyModal">
+                <div class="msg bot">
+                    <span class="label">🤖 Assistant</span>
+                    Hi! Ask me about waterfall charts, Pareto, XLOOKUP, or VBA macros.
+                </div>
+            </div>
+            <div class="modal-footer">
+                <input id="chatInputModal" type="text" placeholder="Ask about Excel..." onkeydown="if(event.key==='Enter') sendChatModal()" />
+                <button onclick="sendChatModal()">Send</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL for timed exam confirmation -->
+    <div id="exam-prompt-modal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-slate-900 border-2 border-slate-700 rounded-2xl p-8 max-w-lg w-full shadow-[0_0_50px_rgba(0,0,0,0.8)] space-y-5">
+            <div class="flex items-center space-x-3 text-emerald-400 border-b border-slate-800 pb-4">
+                <i data-lucide="shield-alert" class="w-8 h-8 flex-shrink-0"></i>
+                <h3 class="font-bold text-xl text-white">Initiate Timed Exam</h3>
+            </div>
+            <div class="space-y-3 text-sm text-slate-300">
+                <p>60 minutes, 50 questions, auto-scrambled. Passing: 75%.</p>
+            </div>
+            <div class="flex justify-end space-x-4 pt-4 border-t border-slate-800">
+                <button onclick="AppTesting.closeModal(false)" class="px-5 py-2.5 bg-slate-800 hover:bg-slate-700 text-white rounded-lg text-sm transition">Cancel</button>
+                <button onclick="AppTesting.closeModal(true)" class="px-5 py-2.5 bg-emerald-600 hover:bg-emerald-500 text-white font-bold rounded-lg text-sm transition shadow-lg shadow-emerald-900">Accept</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ========== UTILITIES ==========
+        const UI = {
+            renderPaginated: (data, mountId, pageIndId, pageCtrlId, curPage, itemsPerPage, renderFn, fnName) => {
+                const maxPage = Math.ceil(data.length / itemsPerPage) || 1;
+                if (curPage > maxPage) curPage = 1;
+                const start = (curPage - 1) * itemsPerPage;
+                const slice = data.slice(start, start + itemsPerPage);
+                const mountEl = document.getElementById(mountId);
+                if (mountEl) mountEl.innerHTML = slice.map(renderFn).join('');
+                const indEl = document.getElementById(pageIndId);
+                if (indEl) {
+                    const end = Math.min(start + slice.length, data.length);
+                    indEl.innerText = data.length > 0 ? `${start + 1} - ${end}` : '0 - 0';
+                }
+                let pgs = '';
+                const minP = Math.max(1, curPage - 2);
+                const maxP = Math.min(maxPage, curPage + 2);
+                if (minP > 1) pgs += `<button onclick="${fnName}(1)" class="px-2.5 py-1.5 rounded bg-slate-800 text-slate-300 text-xs hover:bg-slate-700 transition">1</button><span class="text-slate-500 mx-1">...</span>`;
+                for (let p = minP; p <= maxP; p++) {
+                    if (p === curPage) pgs +=
+                        `<button class="px-2.5 py-1.5 rounded bg-emerald-600 text-white font-bold text-xs shadow-md">${p}</button>`;
+                    else pgs +=
+                        `<button onclick="${fnName}(${p})" class="px-2.5 py-1.5 rounded bg-slate-800 text-slate-300 text-xs hover:bg-slate-700 transition">${p}</button>`;
+                }
+                if (maxP < maxPage) pgs +=
+                    `<span class="text-slate-500 mx-1">...</span><button onclick="${fnName}(${maxPage})" class="px-2.5 py-1.5 rounded bg-slate-800 text-slate-300 text-xs hover:bg-slate-700 transition">${maxPage}</button>`;
+                const ctrlEl = document.getElementById(pageCtrlId);
+                if (ctrlEl) ctrlEl.innerHTML = pgs;
+                if (typeof lucide !== 'undefined') lucide.createIcons();
+            },
+            downloadHeavyFile: (name, format, domain) => {
+                let headers, rows;
+                if (domain === 'Finance & Valuation') {
+                    headers = "DealID,Company,EV,EBITDA,Revenue,Debt,Cash\n";
+                    rows = Array.from({ length: 50 }, (_, i) =>
+                        `D${100000+i},Firm_${i},${(Math.random()*5000+500).toFixed(0)},${(Math.random()*800+100).toFixed(0)},${(Math.random()*3000+200).toFixed(0)},${(Math.random()*1500+100).toFixed(0)},${(Math.random()*500+50).toFixed(0)}`
+                    ).join('\n');
+                } else if (domain === 'Retail & Inventory') {
+                    headers = "SKU,Category,UnitsSold,Revenue,COGS,Inventory\n";
+                    rows = Array.from({ length: 50 }, (_, i) =>
+                        `SKU_${i},${['Electronics','Apparel','Food','Home'][i%4]},${Math.floor(Math.random()*5000+500)},${(Math.random()*200000+10000).toFixed(0)},${(Math.random()*120000+5000).toFixed(0)},${Math.floor(Math.random()*2000+100)}`
+                    ).join('\n');
+                } else if (domain === 'SaaS & Product') {
+                    headers = "CustomerID,ARR,MRR,ChurnRate,ACV,Segment\n";
+                    rows = Array.from({ length: 50 }, (_, i) =>
+                        `CUST_${i},${(Math.random()*5000+200).toFixed(0)},${(Math.random()*400+20).toFixed(0)},${(Math.random()*0.1+0.01).toFixed(3)},${(Math.random()*1000+50).toFixed(0)},${['SMB','Mid-Market','Enterprise'][i%3]}`
+                    ).join('\n');
+                } else if (domain === 'Logistics & Ops') {
+                    headers = "RouteID,Origin,Destination,Miles,Cost,DeliveryTime,OnTime\n";
+                    rows = Array.from({ length: 50 }, (_, i) =>
+                        `R${i},${['NYC','LAX','ORD','DFW','ATL'][i%5]},${['LAX','ORD','DFW','ATL','NYC'][(i+2)%5]},${Math.floor(Math.random()*2000+200)},${(Math.random()*5000+300).toFixed(0)},${Math.floor(Math.random()*24+2)},${Math.random()>0.2?'Yes':'No'}`
+                    ).join('\n');
+                } else {
+                    headers = "ID,Value,Category,Status\n";
+                    rows = Array.from({ length: 50 }, (_, i) =>
+                        `ID_${i},${(Math.random()*1000).toFixed(0)},${['A','B','C'][i%3]},${['Active','Pending','Closed'][i%3]}`
+                    ).join('\n');
+                }
+                const blob = new Blob([headers + rows], { type: format === 'csv' ? 'text/csv' :
+                        'application/vnd.ms-excel' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `${name}.${format}`;
+                a.click();
+                URL.revokeObjectURL(url);
+            },
+            formatStr: (s) => s.replace(/\n/g, '<br>')
+        };
+
+        // ========== HELP MODAL ==========
+        function toggleHelpModal() {
+            const modal = document.getElementById('helpModal');
+            modal.classList.toggle('open');
+            if (modal.classList.contains('open')) {
+                document.getElementById('chatInputModal').focus();
+            }
+        }
+
+        function sendChatModal() {
+            const input = document.getElementById('chatInputModal');
+            const msg = input.value.trim();
+            if (!msg) return;
+            const body = document.getElementById('chatBodyModal');
+            body.innerHTML += `<div class="msg"><span class="label">🧑 You</span>${msg}</div>`;
+            let reply = '';
+            const l = msg.toLowerCase();
+            if (l.includes('waterfall')) reply =
+                '📊 Waterfall: 1. Organize baseline, variances, ending total. 2. Insert → Waterfall. 3. Set ending as Total. 4. Format green/red.';
+            else if (l.includes('pareto')) reply =
+                '📊 Pareto: 1. Sort desc. 2. Cumul % =SUM($B$2:B2)/SUM($B$2:$B$N). 3. Combo chart: Columns + Line (secondary). 4. Secondary axis 0-100%.';
+            else if (l.includes('xlookup')) reply =
+                '🔍 XLOOKUP: =XLOOKUP(val, lookup_arr, return_arr, "N/A", 0, 2) → binary search O(log n).';
+            else if (l.includes('histogram')) reply =
+                '📊 Histogram: Use Data Analysis ToolPak → Histogram or Insert → Chart → Histogram. Set bin width.';
+            else if (l.includes('vba') || l.includes('macro')) reply =
+                '📘 VBA: Visual Basic for Applications. Use Alt+F11 to open the VBA editor. Subroutines start with "Sub" and end with "End Sub". Functions return values. Use "Dim" to declare variables. Check the VBA Macro Library tab for 50+ examples!';
+            else reply = 'I\'m not sure. Try asking about Waterfall, Pareto, XLOOKUP, Histogram, or VBA.';
+            body.innerHTML += `<div class="msg bot"><span class="label">🤖 Assistant</span>${reply}</div>`;
+            body.scrollTop = body.scrollHeight;
+            input.value = '';
+        }
+
+        // ========== TAB 1: FORMULAS ==========
+        const AppFormulas = {
+            data: { 1: [], 2: [], 3: [], 4: [], 5: [] },
+            lvl: 1,
+            page: 1,
+            init: () => {
+                const fm = {
+                    1: '=INDEX(Matrix, MATCH(Val1, RowArr, 0), MATCH(Val2, ColArr, 0))',
+                    2: '=SORT(FILTER(Data, (Data[Status]="Active")*(Data[Rev]>50000)), 3, -1)',
+                    3: '=TRIMMEAN(B2:B1000, 0.1) * CHISQ.TEST(Obs, Exp)',
+                    4: '=XIRR(CashFlows, Dates, 0.1) + XNPV(Rate, CF, D)',
+                    5: '=LAMBDA(txt, char, Clean(SUBSTITUTE(txt, char, "")))'
+                };
+                const titles = {
+                    1: ["Sales Matrix", "Employee Hierarchy", "Tax Bracket", "SKU Normalizer", "Fuzzy Vendor",
+                        "Compound Key", "Target Threshold", "Discount Matrix", "Margin Validator", "Exchange Rate"
+                    ],
+                    2: ["Top-10 Array", "Unique Classifier", "2D Reshaper", "Distinct Frequency", "Cohort Spill",
+                        "Pivot Stream", "HSTACK Combiner", "Sorted Engine", "Zero-Suppression", "Category Ranker"
+                    ],
+                    3: ["Outlier Latency", "Chi-Square A/B", "Weighted Moving Avg", "Normal Bounds", "Std Deviation",
+                        "Log Growth", "Exponential Decay", "RMSE", "Correlation Matrix", "Z-Score"
+                    ],
+                    4: ["XIRR", "DCF Unlevered", "EV Bridge", "Bond Convexity", "Debt Amortization", "M&A Accretion",
+                        "LBO Waterfall", "Black-Scholes", "Monte Carlo NPV", "Working Capital"
+                    ],
+                    5: ["Recursive Clean", "Transposer LAMBDA", "Power Query Batch", "DAX Rolling-30D",
+                        "VBA Dispatcher", "DAX Semi-Additive", "M-Code Unpivot", "Power Pivot Calendar",
+                        "VBA Re-Indexer", "Regex Splitter"
+                    ]
+                };
+                for (let l = 1; l <= 5; l++) {
+                    for (let i = 1; i <= 20; i++) {
+                        AppFormulas.data[l].push({
+                            id: i,
+                            title: `${titles[l][(i-1)%10]} #${i}`,
+                            desc: `Excel 2021/2024/Web compliant example.`,
+                            formula: fm[l],
+                            r1: [`ID-${i}-A`, "$" + (1000 + i * 15).toLocaleString(), "OK", (0.12).toFixed(2)],
+                            r2: [`ID-${i}-B`, "$" + (2500 + i * 22).toLocaleString(), "ERR", (0.05).toFixed(2)]
+                        });
+                    }
+                }
+            },
+            renderFn: (d) => `
+                <div class="bg-slate-900 border border-slate-800 rounded-xl p-5 space-y-3 shadow-md">
+                    <div class="flex justify-between"><h4 class="font-bold text-white text-sm">${d.title}</h4><span class="px-2.5 py-1 bg-emerald-950 text-emerald-300 border border-emerald-800 rounded text-[10px] font-bold">L${AppFormulas.lvl}</span></div>
+                    <p class="text-xs text-slate-400">${d.desc}</p>
+                    <pre class="bg-slate-950 p-3 rounded border border-slate-800 font-mono-code text-xs text-emerald-300 overflow-x-auto">${d.formula}</pre>
+                    <table class="excel-grid"><thead><tr class="excel-header"><th>Key</th><th>Revenue</th><th>Flag</th><th>Ratio</th></tr></thead>
+                    <tbody class="text-slate-300 bg-slate-950/50">
+                        <tr><td class="text-center">${d.r1[0]}</td><td class="text-center text-emerald-400">${d.r1[1]}</td><td class="text-center">${d.r1[2]}</td><td class="text-center">${d.r1[3]}</td></tr>
+                        <tr><td class="text-center">${d.r2[0]}</td><td class="text-center text-emerald-400">${d.r2[1]}</td><td class="text-center">${d.r2[2]}</td><td class="text-center">${d.r2[3]}</td></tr>
+                    </tbody></table>
+                </div>
+            `,
+            render: () => {
+                UI.renderPaginated(AppFormulas.data[AppFormulas.lvl], 'formula-content-mount', 'formula-page-range',
+                    'formula-pagination-controls', AppFormulas.page, 20, AppFormulas.renderFn,
+                    'AppFormulas.changePage');
+            },
+            changePage: (p) => { AppFormulas.page = p;
+                AppFormulas.render(); }
+        };
+        let currentFormulaLvl = 1;
+
+        function switchFormulaLevel(lvl) {
+            currentFormulaLvl = lvl;
+            AppFormulas.lvl = lvl;
+            AppFormulas.page = 1;
+            [1, 2, 3, 4, 5].forEach(i => {
+                const btn = document.getElementById(`btn-f-lvl-${i}`);
+                if (btn) btn.className = (i === lvl) ?
+                    "px-4 py-2 rounded-lg text-xs font-semibold subnav-active transition" :
+                    "px-4 py-2 rounded-lg text-xs font-semibold subnav-inactive transition";
+            });
+            AppFormulas.render();
+        }
+
+        // ========== TAB 2: VIZ with filter ==========
+        let vizFilterType = 'all';
+        const AppViz = {
+            data: [{
+                lvl: 1,
+                name: "Normal Distribution",
+                type: "Distribution",
+                steps: ["Generate x -3.5..3.5", "NORM.DIST", "Scatter Smooth", "1-sigma markers"],
+                pattern: [10, 30, 55, 80, 95, 80, 55, 30, 10],
+                sample: [
+                    ["x", "density"],
+                    ["-3", "0.004"],
+                    ["0", "0.399"],
+                    ["3", "0.004"]
+                ]
+            }, {
+                lvl: 1,
+                name: "Pareto 80/20",
+                type: "Ranking",
+                steps: ["Sort desc", "Cumul % =SUM($B$2:B2)/SUM($B$2:$B$N)", "Combo Column+Line",
+                    "Secondary axis 0-100%"
+                ],
+                pattern: [90, 70, 55, 40, 25, 15, 10, 5, 2],
+                sample: [
+                    ["Category", "Revenue"],
+                    ["A", "450"],
+                    ["B", "320"],
+                    ["C", "210"]
+                ]
+            }, {
+                lvl: 1,
+                name: "Box & Whisker",
+                type: "Statistical",
+                steps: ["Select grouped metrics", "Insert → Statistic → Box", "Show outliers",
+                    "Inclusive quartiles"
+                ],
+                pattern: [40, 60, 80, 60, 40, 20, 40, 60, 80],
+                sample: [
+                    ["Group", "Value"],
+                    ["A", "12"],
+                    ["A", "15"],
+                    ["B", "22"]
+                ]
+            }, {
+                lvl: 1,
+                name: "Histogram",
+                type: "Distribution",
+                steps: ["ToolPak or native", "Set bin width", "Overflow bins", "Gap width 0%"],
+                pattern: [30, 70, 100, 85, 60, 40, 20, 10],
+                sample: [
+                    ["Bin", "Freq"],
+                    ["0-10", "5"],
+                    ["10-20", "12"]
+                ]
+            }, {
+                lvl: 1,
+                name: "Funnel",
+                type: "Process",
+                steps: ["Sort desc", "Insert → Hierarchy → Funnel", "Gap 10%"],
+                pattern: [100, 75, 50, 30, 15, 5],
+                sample: [
+                    ["Stage", "Count"],
+                    ["Visitors", "1000"],
+                    ["Leads", "750"]
+                ]
+            }, {
+                lvl: 2,
+                name: "Waterfall Bridge",
+                type: "Variance",
+                steps: ["Base, variances, end", "Insert → Waterfall", "Set end as Total", "Green/Red"],
+                pattern: [60, 80, 70, 90, 100, 70],
+                sample: [
+                    ["Item", "Amount"],
+                    ["Base", "100"],
+                    ["Revenue", "+20"]
+                ]
+            }, {
+                lvl: 2,
+                name: "PVM Variance",
+                type: "Attribution",
+                steps: ["Price, Volume, Mix", "Bridge dataset", "Stepped column", "Connector lines"],
+                pattern: [50, 75, 85, 60, 90, 100],
+                sample: [
+                    ["Driver", "Impact"],
+                    ["Volume", "+15"],
+                    ["Price", "+10"]
+                ]
+            }, {
+                lvl: 2,
+                name: "Bullet Graph",
+                type: "Targeting",
+                steps: ["Bands (Poor, Good, Excellent)", "Stacked bars", "Actual overlay", "Target line"],
+                pattern: [30, 60, 90, 75, 45, 80],
+                sample: [
+                    ["KPI", "Budget", "Actual"],
+                    ["Revenue", "500", "520"]
+                ]
+            }, {
+                lvl: 2,
+                name: "Dual-Axis Combo",
+                type: "Variance",
+                steps: ["Column for Revenue", "Line for Margin %", "Secondary axis"],
+                pattern: [50, 70, 100, 80, 60, 90],
+                sample: [
+                    ["Q", "Rev", "Margin%"],
+                    ["Q1", "400", "12%"]
+                ]
+            }, {
+                lvl: 3,
+                name: "Slicer Pivot",
+                type: "BI",
+                steps: ["Data Model", "PivotChart", "Slicers (Region, Year)", "Report Connections"],
+                pattern: [40, 60, 80, 70, 90, 50],
+                sample: [
+                    ["Region", "Sales"],
+                    ["North", "250"],
+                    ["South", "180"]
+                ]
+            }, {
+                lvl: 3,
+                name: "CUBE Functions",
+                type: "OLAP",
+                steps: ["CUBESET()", "CUBEVALUE()", "Spilled array", "Form controls"],
+                pattern: [30, 50, 70, 90, 60, 40],
+                sample: [
+                    ["Product", "Q1", "Q2"],
+                    ["A", "100", "120"]
+                ]
+            }, {
+                lvl: 3,
+                name: "Top-N Donut",
+                type: "Segmentation",
+                steps: ["RANKX", "Group >N as 'Others'", "Dynamic slices", "Callouts"],
+                pattern: [80, 60, 40, 20, 10, 5],
+                sample: [
+                    ["Customer", "Rev"],
+                    ["Acme", "500"],
+                    ["Globex", "450"]
+                ]
+            }, {
+                lvl: 4,
+                name: "Choropleth Map",
+                type: "Geographic",
+                steps: ["ISO codes", "Insert → Maps", "Color gradient", "Data labels"],
+                pattern: [20, 40, 60, 80, 100, 60, 40, 20],
+                sample: [
+                    ["State", "Sales"],
+                    ["CA", "1200"],
+                    ["TX", "900"]
+                ]
+            }, {
+                lvl: 4,
+                name: "Bubble Matrix",
+                type: "Risk/Return",
+                steps: ["X=Growth, Y=Margin, Size=Revenue", "Scatter Bubble", "Quadrant lines", "Highlight"],
+                pattern: [30, 60, 90, 70, 50, 80, 40, 70],
+                sample: [
+                    ["Product", "Growth", "Margin"],
+                    ["A", "8%", "12%"]
+                ]
+            }, {
+                lvl: 4,
+                name: "Heatmap Correlation",
+                type: "Statistical",
+                steps: ["CORREL", "3-color scale", "Format +0.00", "Square cells"],
+                pattern: [10, 30, 50, 70, 90, 70, 50, 30, 10],
+                sample: [
+                    ["", "A", "B"],
+                    ["A", "1.00", "0.85"]
+                ]
+            }, {
+                lvl: 5,
+                name: "Sparkline Matrix",
+                type: "Sparklines",
+                steps: ["12-month trends", "Insert → Sparklines", "High/Low markers", "Delta KPI"],
+                pattern: [20, 40, 60, 80, 100, 80, 60, 40, 20],
+                sample: [
+                    ["Month", "Trend"],
+                    ["Jan", "100"],
+                    ["Feb", "110"]
+                ]
+            }, {
+                lvl: 5,
+                name: "Small Multiples",
+                type: "Grid",
+                steps: ["4x4 layout", "Lock Y-axis", "Remove labels", "Highlight top"],
+                pattern: [30, 50, 70, 90, 60, 40, 80, 70],
+                sample: [
+                    ["Entity", "Q1", "Q2"],
+                    ["A", "80", "85"]
+                ]
+            }, {
+                lvl: 5,
+                name: "Gauge Dial",
+                type: "KPI",
+                steps: ["Donut (Poor/Target/Stretch)", "Pie needle", "Rotate 270°", "White needle"],
+                pattern: [20, 40, 60, 80, 100, 80, 60, 40, 20],
+                sample: [
+                    ["Metric", "Value", "Target"],
+                    ["KPI", "78", "80"]
+                ]
+            }, {
+                lvl: 5,
+                name: "Bollinger Envelope",
+                type: "Trend",
+                steps: ["SMA", "Bands = SMA +/- 2*STDEV", "Area fill", "Outlier markers"],
+                pattern: [40, 50, 70, 90, 100, 90, 70, 50, 40],
+                sample: [
+                    ["Day", "Price"],
+                    ["1", "100"],
+                    ["2", "102"]
+                ]
+            }]
+        };
+
+        // ========== VBA MACRO LIBRARY (Level 6) ==========
+        const vbaData = {
+            overview: {
+                title: "Overview of VBA in Excel (Object Oriented Programming)",
+                content: `VBA (Visual Basic for Applications) is a programming language developed by Microsoft to extend the capabilities of Microsoft Office applications, including Excel. VBA allows you to automate tasks, create custom functions, and interact with users. It is an object-oriented programming language, meaning it focuses on organizing code around objects like workbooks, worksheets, cells, and charts, which have their own properties, methods, and events. Every object in VBA has properties that you can change and methods that you can apply.`
+            },
+            whatCanBeDone: {
+                title: "What Can Be Done with VBA in Excel?",
+                content: `With VBA, you can automate repetitive tasks, customize Office applications, and extend their capabilities by creating custom functions and add-ins. You can automate formatting, sorting, copy-pasting, remove blank rows, change text to uppercase, and much more. VBA can also be used to perform complex calculations, analyze large amounts of data, or work with external data sources.`
+            },
+            essentialConcepts: {
+                title: "Essential Concepts in Excel VBA Programming",
+                subsections: [{
+                    title: "Subroutine / Functions",
+                    content: `A <strong>Subroutine (Sub)</strong> is a block of code that performs a specific task but does not return a value. A <strong>Function</strong> is similar but returns a value.`,
+                    code: `' Subroutine Example
+        Sub Example()
+            MsgBox "I Love Excel VBA"
+        End Sub
+        
+        ' Function Example
+        Function CalculateCircleArea(Radius As Double) As Double
+            Const Pi As Double = 3.14159265358979
+            CalculateCircleArea = Pi * Radius ^ 2
+        End Function`
+                }, {
+                    title: "Objects, Properties, Methods",
+                    content: `Objects are the building blocks of VBA. <strong>Properties</strong> define characteristics (like color, name). <strong>Methods</strong> are actions you can perform on objects (like Open, Copy).`,
+                    code: `' Object, Property, Method Example
+        Dim ws As Worksheet
+        Set ws = ThisWorkbook.Worksheets("Sheet1")  ' Object
+        ws.Name = "MySheet"                        ' Property
+        ws.Range("A1").Copy                        ' Method`
+                }, {
+                    title: "Message Box and Input Box",
+                    content: `<strong>MsgBox</strong> displays information to the user. <strong>InputBox</strong> captures user input and stores it in a variable.`,
+                    code: `Sub ShowMessageBox()
+            MsgBox "This is a Message Box"
+        End Sub
+        
+        Sub GetUserInput()
+            Dim userInput As String
+            userInput = InputBox("What's your favorite color?")
+            MsgBox "You chose: " & userInput
+        End Sub`
+                }, {
+                    title: "Variables and Constants",
+                    content: `Variables store data that can change. Constants store fixed values that don't change during execution.`,
+                    code: `Sub VariableExample()
+            Dim myVar As String          ' Variable
+            myVar = "some value"
+            Const PI As Double = 3.14159 ' Constant
+        End Sub`
+                }, {
+                    title: "Arrays",
+                    content: `An array is a collection of variables that share the same data type. Arrays allow you to work with multiple values simultaneously.`,
+                    code: `Sub ArrayExample()
+            Dim myArr(1 To 5) As Integer
+            myArr(1) = 10
+            myArr(2) = 20
+            MsgBox myArr(1) & " " & myArr(2)
+        End Sub`
+                }, {
+                    title: "Conditional Statements (If Then Else, Select Case)",
+                    content: `Control the flow of your code by making decisions based on conditions.`,
+                    code: `Sub IfExample()
+            Dim score As Integer
+            score = 85
+            If score >= 90 Then
+                MsgBox "Grade: A"
+            ElseIf score >= 80 Then
+                MsgBox "Grade: B"
+            Else
+                MsgBox "Grade: C"
+            End If
+        End Sub`
+                }, {
+                    title: "Loops (For Next, For Each, Do While, Do Until)",
+                    content: `Loops execute a block of code repeatedly until a condition is met.`,
+                    code: `Sub LoopExamples()
+            ' For Next
+            Dim i As Integer
+            For i = 1 To 5
+                Debug.Print i
+            Next i
+            
+            ' For Each
+            Dim cell As Range
+            For Each cell In Range("A1:A5")
+                MsgBox cell.Value
+            Next cell
+            
+            ' Do While
+            Dim counter As Integer
+            counter = 1
+            Do While counter <= 5
+                MsgBox counter
+                counter = counter + 1
+            Loop
+        End Sub`
+                }, {
+                    title: "Events",
+                    content: `Events are actions that trigger your VBA code to run, such as opening a workbook, selecting a cell, or double-clicking.`,
+                    code: `' This goes in the sheet's code window
+        Private Sub Worksheet_BeforeDoubleClick(ByVal Target As Range, Cancel As Boolean)
+            Dim strRange As String
+            strRange = Target.Cells.Address & "," & _
+                       Target.Cells.EntireColumn.Address & "," & _
+                       Target.Cells.EntireRow.Address
+            Range(strRange).Select
+        End Sub`
+                }, {
+                    title: "Userforms",
+                    content: `Userforms are custom dialog boxes you create to collect user input or build interactive tools.`
+                }]
+            },
+            whereToPut: {
+                title: "Where to Put VBA Code in Excel?",
+                content: `In Excel, VBA code is stored in the VBA Editor. <strong>Module:</strong> For general procedures that can be called from anywhere. <strong>ThisWorkbook:</strong> For events that affect the entire workbook. <strong>Worksheet:</strong> For events that affect a specific worksheet.`
+            },
+            howToRun: {
+                title: "How to Run VBA Codes in Excel",
+                content: `1. Press <strong>Alt + F8</strong> to open the Macro dialog box.<br>2. Select the macro and click <strong>Run</strong>.<br>3. You can also run macros by assigning them to buttons or keyboard shortcuts.<br><br>Ensure your workbook is saved as a <strong>Macro-Enabled Workbook (*.xlsm)</strong> to preserve VBA code.`
+            },
+            recordingMacro: {
+                title: "Recording a Macro (Let Excel Write VBA Code for You)",
+                content: `Recording a macro is a great way to learn VBA. Excel translates your actions into VBA code.<br><br>1. Go to the <strong>Developer</strong> tab and click <strong>Record Macro</strong>.<br>2. Perform the actions you want to automate.<br>3. Click <strong>Stop Recording</strong>.<br>4. View the generated code in the VBA editor to understand how it works.`
+            },
+            debugging: {
+                title: "Debugging Techniques in Excel VBA",
+                content: `<strong>Step Into (F8):</strong> Execute code line by line.<br><strong>Debug.Print:</strong> Print values to the Immediate Window (Ctrl+G).<br><strong>Breakpoints:</strong> Click in the left margin to pause execution.<br><strong>Watch Window:</strong> Monitor the values of variables.`
+            },
+            handlingErrors: {
+                title: "Handling Common Errors in VBA in Excel",
+                content: `<strong>On Error GoTo:</strong> Redirects execution to a label when an error occurs.<br><strong>On Error Resume Next:</strong> Ignores errors and continues (use with caution).`,
+                code: `Sub ErrorHandlingExample()
+            On Error GoTo ErrorHandler
+            Dim ws As Worksheet
+            Set ws = ThisWorkbook.Sheets("NonExistentSheet")
+            MsgBox ws.Name
+            Exit Sub
+        ErrorHandler:
+            MsgBox "Error: " & Err.Description
+        End Sub`
+            },
+            limitations: {
+                title: "Limitations of VBA in Excel",
+                content: `<strong>Performance:</strong> VBA can be slow with large datasets if not optimized.<br><strong>Security:</strong> Macros can be disabled by default.<br><strong>Version Compatibility:</strong> Some features may not work across all Excel versions or on Mac.<br><strong>No Undo:</strong> Actions performed by VBA cannot be undone — always test on a copy.`
+            },
+            bestPractices: {
+                title: "Best Practices When Writing Excel VBA Programming Language",
+                content: `<strong>Use Option Explicit:</strong> Forces variable declaration.<br><strong>Comment Your Code:</strong> Use an apostrophe (') for comments.<br><strong>Avoid Select and Activate:</strong> Directly reference objects instead.<br><strong>Turn Off Screen Updating:</strong> Use Application.ScreenUpdating = False to speed up code.<br><strong>Use Error Handling:</strong> Always include error handling.`,
+                code: `Sub BestPracticeExample()
+            Application.ScreenUpdating = False
+            Dim ws As Worksheet
+            Set ws = ThisWorkbook.Sheets("Data")
+            ws.Range("A1").Value = "Optimized"
+            Application.ScreenUpdating = True
+        End Sub`
+            },
+            otherApps: {
+                title: "Using VBA in Other Microsoft Office Applications",
+                content: `VBA is not limited to Excel. You can automate Word, Outlook, PowerPoint, and Access using similar syntax. For example, you can copy a range from Excel and paste it into an Outlook email body.`
+            },
+            howToLearn: {
+                title: "How to Learn Excel VBA?",
+                content: `<strong>Start with the Macro Recorder:</strong> Record actions and study the generated code.<br><strong>Practice with Small Projects:</strong> Automate simple tasks first.<br><strong>Use Online Resources:</strong> Spreadsheet Planet, Excel Champs, and Zero To Mastery offer excellent tutorials.<br><strong>Join Communities:</strong> Participate in forums like MrExcel.`
+            },
+            howToArticles: {
+                title: "VBA How-to Articles — Ready-to-Use Macro Examples",
+                subsections: [{
+                    title: "Insert Text/Value in a Cell",
+                    code: `Sub InsertTextinCell()
+            Range("A1").Value = "Excel is Awesome"
+        End Sub`
+                }, {
+                    title: "Insert Text/Value using Cells",
+                    code: `Sub InsertTextinCell()
+            Cells(1, 1).Value = "Excel is Awesome"
+        End Sub`
+                }, {
+                    title: "Display Message Box",
+                    code: `Sub ShowMessageBox()
+            MsgBox "This is a Message Box"
+        End Sub`
+                }, {
+                    title: "Apply Color to a Cell",
+                    code: `Sub ApplyColortoCell()
+            Range("A1").Interior.Color = RGB(255, 255, 0)
+        End Sub`
+                }, {
+                    title: "Create a New Worksheet",
+                    code: `Sub AddNewWorksheet()
+            Dim ws As Worksheet
+            Set ws = ThisWorkbook.Sheets.Add(After:=ThisWorkbook.Sheets(ThisWorkbook.Sheets.Count))
+            ws.Name = "NewSheet"
+        End Sub`
+                }, {
+                    title: "Copy and Paste Data",
+                    code: `Sub CopyAndPasteData()
+            Worksheets("Sheet1").Range("A1:A10").Copy
+            Worksheets("Sheet2").Range("B1:B10").PasteSpecial Paste:=xlPasteAll
+            Application.CutCopyMode = False
+        End Sub`
+                }, {
+                    title: "Add Serial Numbers",
+                    code: `Sub AddSerialNumbers()
+            Dim i As Integer
+            On Error GoTo Last
+            i = InputBox("Enter Value", "Enter Serial Numbers")
+            For i = 1 To i
+                ActiveCell.Value = i
+                ActiveCell.Offset(1, 0).Activate
+            Next i
+        Last:
+            Exit Sub
+        End Sub`
+                }, {
+                    title: "Insert Multiple Columns",
+                    code: `Sub InsertMultipleColumns()
+            Dim i As Integer, j As Integer
+            ActiveCell.EntireColumn.Select
+            On Error GoTo Last
+            i = InputBox("Enter number of columns to insert", "Insert Columns")
+            For j = 1 To i
+                Selection.Insert Shift:=xlToRight, CopyOrigin:=xlFormatFromRightorAbove
+            Next j
+        Last:
+            Exit Sub
+        End Sub`
+                }, {
+                    title: "Insert Multiple Rows",
+                    code: `Sub InsertMultipleRows()
+            Dim i As Integer, j As Integer
+            ActiveCell.EntireRow.Select
+            On Error GoTo Last
+            i = InputBox("Enter number of rows to insert", "Insert Rows")
+            For j = 1 To i
+                Selection.Insert Shift:=xlToDown, CopyOrigin:=xlFormatFromRightorAbove
+            Next j
+        Last:
+            Exit Sub
+        End Sub`
+                }, {
+                    title: "AutoFit Columns",
+                    code: `Sub AutoFitColumns()
+            Cells.Select
+            Cells.EntireColumn.AutoFit
+        End Sub`
+                }, {
+                    title: "AutoFit Rows",
+                    code: `Sub AutoFitRows()
+            Cells.Select
+            Cells.EntireRow.AutoFit
+        End Sub`
+                }, {
+                    title: "Unhide All Rows and Columns",
+                    code: `Sub UnhideRowsColumns()
+            Columns.EntireColumn.Hidden = False
+            Rows.EntireRow.Hidden = False
+        End Sub`
+                }, {
+                    title: "Highlight Duplicate Values",
+                    code: `Sub HighlightDuplicateValues()
+            Dim myRange As Range, myCell As Range
+            Set myRange = Selection
+            For Each myCell In myRange
+                If WorksheetFunction.CountIf(myRange, myCell.Value) > 1 Then
+                    myCell.Interior.ColorIndex = 36
+                End If
+            Next myCell
+        End Sub`
+                }, {
+                    title: "Convert Range to Static Image",
+                    code: `Sub PasteAsPicture()
+            Application.CutCopyMode = False
+            Selection.Copy
+            ActiveSheet.Pictures.Paste.Select
+        End Sub`
+                }, {
+                    title: "Highlight Active Row and Column on Double-Click",
+                    code: `' Place this in the sheet's code window
+        Private Sub Worksheet_BeforeDoubleClick(ByVal Target As Range, Cancel As Boolean)
+            Dim strRange As String
+            strRange = Target.Cells.Address & "," & _
+                       Target.Cells.EntireColumn.Address & "," & _
+                       Target.Cells.EntireRow.Address
+            Range(strRange).Select
+        End Sub`
+                }]
+            },
+            tipsTutorials: {
+                title: "Useful Excel VBA Tips and Tutorials",
+                content: `<strong>Declaring Variables:</strong> Use Dim myVar As String<br><strong>Setting Object Variables:</strong> Use Set myObj = Range("B2:C3")<br><strong>Using Worksheet Functions in VBA:</strong> Application.WorksheetFunction.CountA("A:A")<br><strong>Commenting Code:</strong> Use an apostrophe (')<br><strong>Data Types:</strong> Integer, Long, Single, Double, Date, String, Boolean, Variant<br><strong>Logical Operators:</strong> =, <>, >, >=, <, <=, And, Or, Not<br><strong>Always test macros on a copy of your file first.</strong><br><strong>Save workbooks as .xlsm to preserve macros.</strong>`
+            }
+        };
+
+        // VBA render function
+        function renderVbaLibrary() {
+            const mount = document.getElementById('viz-content-mount');
+            let html = `<div class="col-span-full space-y-4">`;
+
+            html += `<div class="vba-section"><h3>📘 ${vbaData.overview.title}</h3><p>${vbaData.overview.content}</p></div>`;
+            html += `<div class="vba-section"><h3>⚡ ${vbaData.whatCanBeDone.title}</h3><p>${vbaData.whatCanBeDone.content}</p></div>`;
+
+            html += `<div class="vba-section"><h3>🧩 ${vbaData.essentialConcepts.title}</h3><div class="vba-grid">`;
+            vbaData.essentialConcepts.subsections.forEach(sub => {
+                html += `<div class="bg-slate-950 p-4 rounded-lg border border-slate-800">
+                    <h4>${sub.title}</h4>
+                    <p>${sub.content}</p>`;
+                if (sub.code) {
+                    html += `<div class="code-block">${sub.code.replace(/\n/g, '<br>')}</div>`;
+                }
+                html += `</div>`;
+            });
+            html += `</div></div>`;
+
+            html += `<div class="vba-section"><h3>📂 ${vbaData.whereToPut.title}</h3><p>${vbaData.whereToPut.content}</p></div>`;
+            html += `<div class="vba-section"><h3>▶️ ${vbaData.howToRun.title}</h3><p>${vbaData.howToRun.content}</p></div>`;
+            html += `<div class="vba-section"><h3>🎥 ${vbaData.recordingMacro.title}</h3><p>${vbaData.recordingMacro.content}</p></div>`;
+            html += `<div class="vba-section"><h3>🐛 ${vbaData.debugging.title}</h3><p>${vbaData.debugging.content}</p></div>`;
+
+            html += `<div class="vba-section"><h3>⚠️ ${vbaData.handlingErrors.title}</h3><p>${vbaData.handlingErrors.content}</p>`;
+            if (vbaData.handlingErrors.code) {
+                html += `<div class="code-block">${vbaData.handlingErrors.code.replace(/\n/g, '<br>')}</div>`;
+            }
+            html += `</div>`;
+
+            html += `<div class="vba-section"><h3>🚫 ${vbaData.limitations.title}</h3><p>${vbaData.limitations.content}</p></div>`;
+            html += `<div class="vba-section"><h3>✅ ${vbaData.bestPractices.title}</h3><p>${vbaData.bestPractices.content}</p>`;
+            if (vbaData.bestPractices.code) {
+                html += `<div class="code-block">${vbaData.bestPractices.code.replace(/\n/g, '<br>')}</div>`;
+            }
+            html += `</div>`;
+
+            html += `<div class="vba-section"><h3>📎 ${vbaData.otherApps.title}</h3><p>${vbaData.otherApps.content}</p></div>`;
+            html += `<div class="vba-section"><h3>📚 ${vbaData.howToLearn.title}</h3><p>${vbaData.howToLearn.content}</p></div>`;
+
+            html += `<div class="vba-section"><h3>📄 ${vbaData.howToArticles.title}</h3><div class="vba-grid">`;
+            vbaData.howToArticles.subsections.forEach(sub => {
+                html += `<div class="bg-slate-950 p-4 rounded-lg border border-slate-800">
+                    <h4 class="text-emerald-400 text-sm font-semibold">${sub.title}</h4>
+                    <div class="code-block">${sub.code.replace(/\n/g, '<br>')}</div>
+                </div>`;
+            });
+            html += `</div></div>`;
+
+            html += `<div class="vba-section"><h3>💡 ${vbaData.tipsTutorials.title}</h3><p>${vbaData.tipsTutorials.content}</p></div>`;
+
+            html += `</div>`;
+            mount.innerHTML = html;
+            if (typeof lucide !== 'undefined') lucide.createIcons();
+        }
+
+        function filterVizCards(filterType) {
+            vizFilterType = filterType;
+            document.querySelectorAll('.chart-ref-item').forEach(el => {
+                el.classList.toggle('active', el.dataset.filter === filterType);
+            });
+            const currentLevel = parseInt(document.querySelector('.subnav-active')?.id?.replace('btn-v-lvl-', '')) || 1;
+            switchVizLevel(currentLevel);
+        }
+
+        function switchVizLevel(lvl) {
+            [1, 2, 3, 4, 5, 6].forEach(i => {
+                const btn = document.getElementById(`btn-v-lvl-${i}`);
+                if (btn) btn.className = (i === lvl) ?
+                    "px-4 py-2 rounded-lg text-xs font-semibold subnav-active transition" :
+                    "px-4 py-2 rounded-lg text-xs font-semibold subnav-inactive transition";
+            });
+
+            const chartRef = document.getElementById('chartRefWrap');
+            if (lvl === 6) {
+                chartRef.style.display = 'none';
+                renderVbaLibrary();
+                return;
+            } else {
+                chartRef.style.display = 'flex';
+            }
+
+            let filtered = AppViz.data.filter(v => v.lvl === lvl);
+            if (vizFilterType !== 'all') {
+                filtered = filtered.filter(v => v.type === vizFilterType);
+            }
+            const mount = document.getElementById('viz-content-mount');
+            if (filtered.length === 0) {
+                mount.innerHTML =
+                    `<div class="col-span-full text-center text-slate-400 py-12">No charts match the selected filter.</div>`;
+                return;
+            }
+            mount.innerHTML = filtered.map((m, idx) => {
+                const bars = (m.pattern || [20, 45, 70, 90, 55, 80, 35, 60]).map(h =>
+                    `<div class="bar bg-emerald-500/70" style="height:${Math.min(h,100)}px;width:24px;"></div>`
+                    ).join('');
+                const sid = `sample_${idx}_${Date.now()}`;
+                return `
+                    <div class="bg-slate-900 border border-slate-800 p-6 rounded-xl space-y-4 shadow-md hover:border-slate-700 transition">
+                        <div><span class="text-[10px] bg-slate-950 text-emerald-400 px-2.5 py-1 rounded border border-slate-700 uppercase">${m.type}</span>
+                        <h3 class="font-bold text-white text-base mt-1">${m.name}</h3>
+                        <div class="viz-preview-bar mt-3">${bars}</div>
+                        <p class="text-xs text-slate-400 italic">${m.demo||''}</p>
+                        <ol class="list-decimal list-inside text-[11px] text-slate-300 space-y-1 mt-4 bg-slate-950 p-4 rounded border border-slate-800/80">
+                            ${m.steps.map(s => `<li class="leading-relaxed font-mono-code text-emerald-100">${s}</li>`).join('')}
+                        </ol>
+                        <div class="mt-2">
+                            <span class="sample-data-toggle" onclick="toggleSampleData('${sid}')">📊 Show Sample Data</span>
+                            <div id="${sid}" class="sample-data-table">
+                                <table>${(m.sample||[]).map(row => `<tr>${row.map(c => `<td>${c}</td>`).join('')}</tr>`).join('')}</table>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+            if (typeof lucide !== 'undefined') lucide.createIcons();
+        }
+
+        function toggleSampleData(id) {
+            const el = document.getElementById(id);
+            if (el) el.style.display = el.style.display === 'table' ? 'none' : 'table';
+        }
+
+        // ========== TAB 3: DASHBOARDS ==========
+        const AppDash = {
+            data: Array.from({ length: 50 }, (_, i) => {
+                const seed = i + 1;
+                return {
+                    id: seed,
+                    lvl: Math.ceil(seed / 10),
+                    title: `Model ${seed}: ${['Financial','Operations','Marketing','HR/Supply','C-Suite'][Math.ceil(seed/10)-1]} Dashboard`,
+                    desc: `Unique KPI set for model ${seed}.`,
+                    kpis: {
+                        revenue: (Math.random() * 300 + 100).toFixed(1),
+                        ebitda: (Math.random() * 50 + 10).toFixed(1),
+                        cashflow: (Math.random() * 80 + 20).toFixed(1),
+                        churn: (Math.random() * 5 + 1).toFixed(1)
+                    }
+                };
+            }),
+            pageMap: { 1: 1, 2: 1, 3: 1, 4: 1, 5: 1 },
+            lvl: 1,
+            renderFn: (d) => `
+                <div class="bg-slate-900 border border-slate-800 p-5 rounded-xl space-y-3 flex flex-col justify-between shadow-md hover:border-slate-700 transition h-full">
+                    <div>
+                        <span class="text-[9px] bg-slate-950 text-sky-400 px-2 py-0.5 rounded border border-slate-800">ID: ${d.id}</span>
+                        <h3 class="text-sm font-bold text-white wrap-break mt-2">${d.title}</h3>
+                        <p class="text-[11px] text-slate-400 mt-1.5">${d.desc}</p>
+                        <div class="grid grid-cols-2 gap-2 mt-3 text-xs">
+                            <div class="bg-slate-950 p-2 rounded border border-slate-800 text-center"><span class="text-slate-400">Revenue</span><div class="text-emerald-400 font-mono">$${d.kpis.revenue}M</div></div>
+                            <div class="bg-slate-950 p-2 rounded border border-slate-800 text-center"><span class="text-slate-400">EBITDA %</span><div class="text-emerald-400 font-mono">${d.kpis.ebitda}%</div></div>
+                            <div class="bg-slate-950 p-2 rounded border border-slate-800 text-center"><span class="text-slate-400">Cash Flow</span><div class="text-sky-400 font-mono">$${d.kpis.cashflow}M</div></div>
+                            <div class="bg-slate-950 p-2 rounded border border-slate-800 text-center"><span class="text-slate-400">Churn</span><div class="text-rose-400 font-mono">${d.kpis.churn}%</div></div>
+                        </div>
+                    </div>
+                    <button onclick="launchPopoutDashboard(${d.id})" class="w-full mt-3 py-2.5 bg-emerald-600 hover:bg-emerald-500 text-white font-bold rounded-lg text-xs flex items-center justify-center transition shadow-lg">
+                        <i data-lucide="external-link" class="w-3.5 h-3.5 mr-2"></i> Pop-out
+                    </button>
+                </div>
+            `
+        };
+
+        function switchDashLevel(lvl) {
+            AppDash.lvl = lvl;
+            [1, 2, 3, 4, 5].forEach(i => {
+                const btn = document.getElementById(`btn-d-lvl-${i}`);
+                if (btn) btn.className = (i === lvl) ?
+                    "px-4 py-2 rounded-lg text-xs font-semibold subnav-active transition" :
+                    "px-4 py-2 rounded-lg text-xs font-semibold subnav-inactive transition";
+            });
+            const data = AppDash.data.filter(d => d.lvl === lvl);
+            const total = data.length;
+            const itemsPerPage = 9;
+            const maxPage = Math.ceil(total / itemsPerPage) || 1;
+            if (AppDash.pageMap[lvl] > maxPage) AppDash.pageMap[lvl] = 1;
+            const mount = document.getElementById('dashboard-content-mount');
+            mount.innerHTML = `<div class="dash-grid" id="dash-grid-inner"></div>`;
+            UI.renderPaginated(data, 'dash-grid-inner', 'dash-page-range',
+                'dash-pagination-controls', AppDash.pageMap[lvl], itemsPerPage, AppDash.renderFn, 'changeDashPage');
+        }
+
+        function changeDashPage(p) {
+            AppDash.pageMap[AppDash.lvl] = p;
+            switchDashLevel(AppDash.lvl);
+        }
+
+        function launchPopoutDashboard(id) {
+            const d = AppDash.data.find(x => x.id === id);
+            if (!d) return;
+            const k = d.kpis;
+            const w = window.open("", "_blank", "width=1280,height=850");
+            if (!w) { alert("Enable pop-ups."); return; }
+            w.document.write(`
+                <!DOCTYPE html><html><head><title>${d.title}</title>
+                <script src="https://cdn.tailwindcss.com"><\/script>
+                <style>body{background:#020617;color:#f8fafc;padding:24px;font-family:'Inter',sans-serif;}<\/style>
+                </head><body>
+                <div class="max-w-7xl mx-auto space-y-6">
+                    <header class="flex justify-between items-center pb-4 border-b border-slate-800">
+                        <div><h1 class="text-2xl font-bold text-white">${d.title}</h1><p class="text-sm text-slate-400">Unique KPI Set</p></div>
+                        <span class="px-4 py-1.5 bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 rounded-full text-xs font-mono">Dashboard #${d.id}</span>
+                    </header>
+                    <div class="grid grid-cols-4 gap-6">
+                        <div class="p-6 bg-slate-900 border border-slate-800 rounded-xl"><div class="text-xs text-slate-400">Revenue</div><div class="text-3xl font-mono mt-2">$${k.revenue}M</div></div>
+                        <div class="p-6 bg-slate-900 border border-slate-800 rounded-xl"><div class="text-xs text-slate-400">EBITDA %</div><div class="text-3xl font-mono mt-2 text-emerald-400">${k.ebitda}%</div></div>
+                        <div class="p-6 bg-slate-900 border border-slate-800 rounded-xl"><div class="text-xs text-slate-400">Cash Flow</div><div class="text-3xl font-mono mt-2 text-sky-400">$${k.cashflow}M</div></div>
+                        <div class="p-6 bg-slate-900 border border-slate-800 rounded-xl"><div class="text-xs text-slate-400">Churn</div><div class="text-3xl font-mono mt-2 text-rose-400">${k.churn}%</div></div>
+                    </div>
+                    <div class="grid grid-cols-3 gap-6">
+                        <div class="col-span-2 p-6 bg-slate-900 border border-slate-800 rounded-xl">
+                            <h3 class="text-sm font-bold text-white mb-4">Variance Bridge ($M)</h3>
+                            <div class="bg-slate-950 border border-slate-800 rounded-lg flex items-end justify-around px-8 pb-4 pt-8 h-48">
+                                <div class="text-center"><div class="bg-slate-600 w-full h-32 rounded-t mx-auto" style="width:40px;"></div><span class="block mt-2 text-xs text-slate-400">Base</span></div>
+                                <div class="text-center"><div class="bg-emerald-500 w-full h-16 rounded mx-auto" style="width:40px;"></div><span class="block mt-2 text-xs text-emerald-400">+ Vol</span></div>
+                                <div class="text-center"><div class="bg-emerald-400 w-full h-10 rounded mx-auto" style="width:40px;"></div><span class="block mt-2 text-xs text-emerald-400">+ Px</span></div>
+                                <div class="text-center"><div class="bg-rose-500 w-full h-12 rounded mx-auto" style="width:40px;"></div><span class="block mt-2 text-xs text-rose-400">- Cst</span></div>
+                                <div class="text-center"><div class="bg-sky-500 w-full h-40 rounded-t mx-auto" style="width:40px;"></div><span class="block mt-2 text-xs text-sky-400">End</span></div>
+                            </div>
+                        </div>
+                        <div class="col-span-1 flex flex-col gap-6">
+                            <div class="bg-slate-900 border border-slate-800 rounded-xl p-4 flex flex-col items-center justify-center h-32 text-slate-300 text-sm">
+                                <svg viewBox="0 0 200 120" class="w-full h-full max-h-28">
+                                    <rect x="10" y="80" width="30" height="30" fill="#10b981" rx="2" />
+                                    <rect x="45" y="60" width="30" height="50" fill="#34d399" rx="2" />
+                                    <rect x="80" y="40" width="30" height="70" fill="#059669" rx="2" />
+                                    <rect x="115" y="20" width="30" height="90" fill="#047857" rx="2" />
+                                    <rect x="150" y="50" width="30" height="60" fill="#10b981" rx="2" />
+                                    <text x="10" y="115" fill="#94a3b8" font-size="10">Regions</text>
+                                </svg>
+                                <span class="text-xs text-slate-400 mt-1">Geospatial Map</span>
+                            </div>
+                            <div class="bg-slate-900 border border-slate-800 rounded-xl p-4 flex flex-col items-center justify-center h-32 text-slate-300 text-sm">
+                                <svg viewBox="0 0 200 100" class="w-full h-full max-h-24">
+                                    <rect x="10" y="20" width="25" height="70" fill="#f59e0b" rx="2" />
+                                    <rect x="40" y="10" width="25" height="80" fill="#f59e0b" rx="2" />
+                                    <rect x="70" y="5" width="25" height="85" fill="#f59e0b" rx="2" />
+                                    <rect x="100" y="15" width="25" height="75" fill="#f59e0b" rx="2" />
+                                    <rect x="130" y="35" width="25" height="55" fill="#f59e0b" rx="2" />
+                                    <polyline points="10,20 35,10 60,5 85,15 110,35" fill="none" stroke="#fbbf24" stroke-width="2" />
+                                    <text x="10" y="95" fill="#94a3b8" font-size="10">Categories</text>
+                                </svg>
+                                <span class="text-xs text-slate-400 mt-1">Pareto Chart</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                </body></html>
+            `);
+            w.document.close();
+        }
+
+        // ========== TAB 4: INTERVIEW ==========
+        const AppInt = {
+            data: [],
+            page: 1,
+            init: () => {
+                const topics = [
+                    { key: "architecture", title: "Architecture & Modeling" },
+                    { key: "formulas", title: "Formula Optimization" },
+                    { key: "quants", title: "Valuation & Quants" },
+                    { key: "vba", title: "VBA & Macro Safety" },
+                    { key: "behavioral", title: "Think-Aloud Protocols" }
+                ];
+                const doT = [
+                    "State edge cases aloud. 'I will wrap this in IFERROR'.",
+                    "Verbalize complexity tradeoffs. 'XLOOKUP binary search is O(log n)'.",
+                    "Enforce 3-tier architecture: Ingestion, Engine, Dashboard.",
+                    "Use 'Option Explicit' in VBA.",
+                    "Highlight how dynamic arrays eliminate CSE flaws."
+                ];
+                const dontT = [
+                    "Never hardcode constants inside logic (e.g. =$C$2*1.05).",
+                    "Avoid volatile functions like OFFSET in large sheets.",
+                    "Don't jump to VBA; evaluate Power Query first.",
+                    "Never leave raw data unstructured; use Ctrl+T.",
+                    "Avoid merging cells; break array spilling."
+                ];
+                let id = 1;
+                topics.forEach(t => {
+                    for (let i = 0; i < 20; i++) {
+                        AppInt.data.push({
+                            id: id++,
+                            topicKey: t.key,
+                            topicTitle: t.title,
+                            doText: doT[i % 5],
+                            dontText: dontT[i % 5],
+                            rationale: "Scalability and deterministic performance are key."
+                        });
+                    }
+                });
+            },
+            renderFn: (d) => `
+                <div class="bg-slate-900 border border-slate-800 p-5 rounded-xl space-y-3 shadow-md">
+                    <div class="flex justify-between border-b border-slate-800 pb-2">
+                        <span class="text-xs font-bold text-white font-mono-code">Rule #${d.id} • [${d.topicTitle}]</span>
+                        <span class="text-[10px] bg-slate-950 text-emerald-400 border border-slate-700 px-2.5 py-1 rounded font-mono-code">MBB/IB</span>
+                    </div>
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 text-xs">
+                        <div class="p-4 bg-emerald-950/20 border border-emerald-800/40 rounded-lg"><strong class="text-emerald-400 flex items-center"><i data-lucide="check-circle" class="w-4 h-4 mr-1"></i>DO:</strong><p class="text-slate-300 mt-1">${d.doText}</p></div>
+                        <div class="p-4 bg-rose-950/20 border border-rose-800/40 rounded-lg"><strong class="text-rose-400 flex items-center"><i data-lucide="x-circle" class="w-4 h-4 mr-1"></i>DON'T:</strong><p class="text-slate-300 mt-1">${d.dontText}</p></div>
+                    </div>
+                    <div class="text-[11px] text-slate-400 pt-1 bg-slate-950 p-3 rounded border border-slate-800/50"><strong>Rationale:</strong> ${d.rationale}</div>
+                </div>
+            `,
+            render: () => {
+                const filter = document.getElementById('filter-interview-topic').value;
+                const filtered = filter === 'all' ? AppInt.data : AppInt.data.filter(d => d.topicKey === filter);
+                document.getElementById('int-total-count').innerText = filtered.length;
+                UI.renderPaginated(filtered, 'interview-content-mount', 'int-page-indicator',
+                    'int-pagination-controls', AppInt.page, 20, AppInt.renderFn, 'AppInt.changePage');
+            },
+            changePage: (p) => { AppInt.page = p;
+                AppInt.render(); }
+        };
+
+        function renderInterviewContent() { AppInt.render(); }
+
+        // ========== TAB 5: TESTING ==========
+        const AppTesting = {
+            qData: [],
+            cData: [],
+            cPage: 1,
+            timer: null,
+            timeRem: 3600,
+            tAnswers: {},
+            init: () => {
+                const qDoms = ["Formulas", "DAX", "Power Query", "VBA", "Stats"];
+                for (let i = 1; i <= 100; i++) {
+                    AppTesting.qData.push({
+                        id: i,
+                        domain: qDoms[i % 5],
+                        stem: `[Q${i}] In a 500k-row model, which method is optimal across Excel 2021/2024/Web?`,
+                        options: [
+                            { text: "VLOOKUP exact match", isCorrect: false, outputReason: "O(n) scan slow." },
+                            { text: "XLOOKUP binary (search_mode=2)", isCorrect: true,
+                            outputReason: "O(log n) efficient." },
+                            { text: "OFFSET", isCorrect: false, outputReason: "Volatile." },
+                            { text: "Manual references", isCorrect: false, outputReason: "Not scalable." }
+                        ],
+                        logic: "Binary search ensures logarithmic time."
+                    });
+                }
+                const storyMap = {
+                    "Finance & Valuation": {
+                        scenario: "PE firm valuing target with complex debt. Model must include scenario analysis.",
+                        question: "Design LBO model with debt schedules and XIRR.",
+                        solution: "1. 3-statement model. 2. Debt tranches. 3. XIRR. 4. Sensitivity tables.",
+                        story: "Industrial sector acquisition, levered 4x debt/EBITDA. Output IRR and MOIC."
+                    },
+                    "Retail & Inventory": {
+                        scenario: "National chain optimizing inventory across 500 stores. Forecast demand.",
+                        question: "Build inventory model using FORECAST.ETS and reorder points.",
+                        solution: "1. Clean data. 2. Forecast demand. 3. Reorder point = demand during lead time + safety stock.",
+                        story: "Reduce stockouts during peak seasons."
+                    },
+                    "SaaS & Product": {
+                        scenario: "SaaS company tracking LTV and churn to improve retention.",
+                        question: "Develop cohort analysis for LTV/CAC.",
+                        solution: "1. Cohort PivotTable. 2. LTV = avg rev * (1/churn). 3. Visualize by cohort.",
+                        story: "Rising churn in SMB segment; identify at-risk cohorts."
+                    },
+                    "Logistics & Ops": {
+                        scenario: "Logistics firm optimizing delivery routes to cut fuel costs.",
+                        question: "Use Solver to minimize distance with time windows.",
+                        solution: "1. Distance matrix. 2. Solver with binary variables. 3. Capacity/time constraints.",
+                        story: "Fleet of 50 vehicles in metro area; rising fuel costs."
+                    }
+                };
+                const caseDoms = ["Finance & Valuation", "Retail & Inventory", "SaaS & Product", "Logistics & Ops"];
+                for (let i = 1; i <= 100; i++) {
+                    const dom = caseDoms[i % 4];
+                    const story = storyMap[dom];
+                    AppTesting.cData.push({
+                        id: i,
+                        domain: dom,
+                        title: `Case #${i}: ${dom} Modeling`,
+                        desc: story.scenario,
+                        q: story.question,
+                        sol: story.solution,
+                        story: story.story,
+                        file: `case_${dom.replace(/\s+/g,'_')}_${i}`
+                    });
+                }
+            },
+            switchSub: (sub) => {
+                ['practice', 'timed', 'cases'].forEach(s => {
+                    document.getElementById(`test-view-${s}`).classList.add('hide-section');
+                    const btn = document.getElementById(`btn-test-sub-${s}`);
+                    if (btn) btn.className = (s === sub) ?
+                        "px-4 py-2 rounded text-sm font-semibold subnav-active transition" :
+                        "px-4 py-2 rounded text-sm font-semibold subnav-inactive transition";
+                });
+                document.getElementById(`test-view-${sub}`).classList.remove('hide-section');
+                if (sub === 'practice') {
+                    const sel = document.getElementById('practice-set-select');
+                    sel.innerHTML = '';
+                    for (let i = 1; i <= 5; i++) sel.innerHTML += `<option value="${i}">Practice Set ${i} (20 Qs)</option>`;
+                    AppTesting.loadPractice();
+                } else if (sub === 'timed') {
+                    const sel = document.getElementById('timed-exam-set-select');
+                    sel.innerHTML = '';
+                    for (let i = 1; i <= 5; i++) sel.innerHTML += `<option value="${i}">Timed Exam ${i}</option>`;
+                } else {
+                    AppTesting.renderCases();
+                }
+            },
+            loadPractice: () => {
+                const setIdx = parseInt(document.getElementById('practice-set-select').value) || 1;
+                const qs = AppTesting.qData.slice((setIdx - 1) * 20, setIdx * 20);
+                document.getElementById('practice-questions-mount').innerHTML = qs.map((q, idx) => `
+                    <div class="bg-slate-900 border border-slate-800 p-5 rounded-xl space-y-3">
+                        <div class="flex justify-between"><span class="font-bold text-white text-sm">Q${idx+1}: ${q.stem}</span><span class="px-2 py-1 bg-slate-950 border border-slate-700 rounded text-[9px] text-emerald-400">${q.domain}</span></div>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs">
+                            ${q.options.map((o, oi) => `
+                                <label class="flex items-start p-3 rounded bg-slate-950 border border-slate-800 hover:bg-slate-800 cursor-pointer">
+                                    <input type="radio" name="prac_q_${q.id}" value="${oi}" class="mr-3 mt-0.5 accent-emerald-500">
+                                    <span class="text-slate-300">${o.text}</span>
+                                </label>
+                            `).join('')}
+                        </div>
+                        <div id="prac-res-${q.id}" class="hide-section mt-3 p-4 rounded border text-[11px]"></div>
+                    </div>
+                `).join('');
+            },
+            gradePractice: () => {
+                let score = 0;
+                const setIdx = parseInt(document.getElementById('practice-set-select').value) || 1;
+                AppTesting.qData.slice((setIdx - 1) * 20, setIdx * 20).forEach(q => {
+                    const sel = document.querySelector(`input[name="prac_q_${q.id}"]:checked`);
+                    const res = document.getElementById(`prac-res-${q.id}`);
+                    if (sel) {
+                        const correct = q.options[parseInt(sel.value)].isCorrect;
+                        if (correct) score++;
+                        res.classList.remove('hide-section');
+                        res.className =
+                            `mt-3 p-4 rounded border font-mono-code text-[11px] block shadow-inner ${correct ? 'bg-emerald-950/40 border-emerald-800 text-emerald-300' : 'bg-rose-950/40 border-rose-800 text-rose-300'}`;
+                        res.innerHTML = `<strong>${correct ? 'Correct' : 'Incorrect'}</strong> — ${q.options[parseInt(sel.value)].outputReason}`;
+                    }
+                });
+                alert(`Score: ${score}/20`);
+            },
+            promptTimed: () => document.getElementById('exam-prompt-modal').classList.remove('hide-section'),
+            closeModal: (start) => { document.getElementById('exam-prompt-modal').classList.add('hide-section'); if (start)
+                    AppTesting.startTimed(); },
+            startTimed: () => {
+                document.getElementById('timed-exam-launcher').classList.add('hide-section');
+                document.getElementById('timed-exam-results').classList.add('hide-section');
+                document.getElementById('timed-exam-active-canvas').classList.remove('hide-section');
+                document.getElementById('exam-timer-container').classList.remove('hide-section');
+                AppTesting.tAnswers = {};
+                const qs = [...AppTesting.qData].sort(() => Math.random() - 0.5).slice(0, 50);
+                document.getElementById('timed-exam-questions-mount').innerHTML = qs.map((q, idx) => `
+                    <div class="bg-slate-900 border border-slate-800 p-5 rounded-xl space-y-3" data-qid="${q.id}">
+                        <div class="flex justify-between"><span class="font-bold text-white text-sm">Q${idx+1}: ${q.stem}</span><span class="px-2 py-1 bg-slate-950 border border-slate-700 rounded text-[9px] text-emerald-400">${q.domain}</span></div>
+                        <div class="grid grid-cols-1 lg:grid-cols-2 gap-3 text-xs">
+                            ${[...q.options].sort(()=>Math.random()-0.5).map(o => `
+                                <label class="p-3 rounded bg-slate-950 border border-slate-800 cursor-pointer flex items-start hover:bg-slate-800">
+                                    <input type="radio" name="timed_q_${q.id}" value="${o.isCorrect}" onchange="AppTesting.tAnswers[${q.id}]=${o.isCorrect}" class="mr-3 mt-0.5 accent-emerald-500">
+                                    <span class="text-slate-300">${o.text}</span>
+                                </label>
+                            `).join('')}
+                        </div>
+                    </div>
+                `).join('');
+                AppTesting.timeRem = 3600;
+                clearInterval(AppTesting.timer);
+                AppTesting.timer = setInterval(() => {
+                    AppTesting.timeRem--;
+                    document.getElementById('exam-timer-display').innerText =
+                        `${Math.floor(AppTesting.timeRem/60).toString().padStart(2,'0')}:${(AppTesting.timeRem%60).toString().padStart(2,'0')}`;
+                    if (AppTesting.timeRem <= 0) { clearInterval(AppTesting.timer);
+                        alert("Time Expired!");
+                        AppTesting.submitTimed(); }
+                }, 1000);
+            },
+            submitTimed: () => {
+                clearInterval(AppTesting.timer);
+                document.getElementById('timed-exam-active-canvas').classList.add('hide-section');
+                document.getElementById('exam-timer-container').classList.add('hide-section');
+                const res = document.getElementById('timed-exam-results');
+                res.classList.remove('hide-section');
+                let score = 0;
+                Object.values(AppTesting.tAnswers).forEach(v => { if (v === true) score++; });
+                const pct = (score / 50) * 100;
+                res.innerHTML = `
+                    <div class="bg-slate-900 border border-slate-800 p-10 rounded-2xl text-center shadow-2xl">
+                        <h2 class="text-5xl font-extrabold ${pct>=75?'text-emerald-400':'text-rose-400'}">${pct}%</h2>
+                        <p class="text-slate-400 mt-2 font-mono">${score} / 50 Correct (Cutoff: 75%)</p>
+                        <button onclick="document.getElementById('timed-exam-results').classList.add('hide-section'); document.getElementById('timed-exam-launcher').classList.remove('hide-section');" class="mt-8 px-8 py-3 bg-slate-800 text-white font-bold rounded-lg hover:bg-slate-700">Return</button>
+                    </div>
+                `;
+            },
+            caseRenderFn: (c) => `
+                <div class="bg-slate-900 border border-slate-800 p-6 rounded-xl space-y-4 flex flex-col justify-between shadow-lg">
+                    <div>
+                        <div class="flex justify-between border-b border-slate-800 pb-2"><span class="text-[10px] bg-emerald-950/50 text-emerald-400 px-2 py-1 rounded border border-emerald-800/50">${c.domain}</span><span class="text-[10px] text-slate-500">ID: ${c.id}</span></div>
+                        <h4 class="font-bold text-white text-base mt-2">${c.title}</h4>
+                        <p class="text-xs text-slate-400 mt-2"><strong>Scenario:</strong> ${c.desc}</p>
+                        <div class="mt-2 p-3 bg-slate-950 border border-slate-800 rounded-lg text-xs text-slate-300"><strong class="text-emerald-400">📖 Story:</strong> ${c.story}</div>
+                        <div class="mt-3 p-3 bg-slate-950 border border-slate-800 rounded-lg"><strong class="text-emerald-400">Prompt:</strong><p class="text-xs text-slate-300 mt-1">${c.q}</p></div>
+                    </div>
+                    <div class="mt-4 border-t border-slate-800 pt-4">
+                        <button onclick="document.getElementById('cs_sol_${c.id}').classList.toggle('hide-section')" class="w-full py-2.5 bg-slate-800 hover:bg-slate-700 text-white font-bold rounded-lg text-xs flex justify-center items-center transition border border-slate-700">
+                            <i data-lucide="unlock" class="w-4 h-4 text-emerald-400 mr-2"></i> Toggle Solution
+                        </button>
+                        <div id="cs_sol_${c.id}" class="hide-section mt-3 p-4 bg-emerald-950/20 border border-emerald-800/40 text-[11px] text-emerald-300 rounded-lg">${UI.formatStr(c.sol)}</div>
+                        <div class="flex justify-between items-center mt-4">
+                            <span class="text-[10px] text-slate-500">Download Data:</span>
+                            <div class="flex space-x-2">
+                                <button onclick="UI.downloadHeavyFile('${c.file}','xlsx','${c.domain}')" class="px-3 py-1.5 bg-slate-800 text-[10px] font-bold text-white rounded hover:bg-emerald-600 transition">.XLSX</button>
+                                <button onclick="UI.downloadHeavyFile('${c.file}','csv','${c.domain}')" class="px-3 py-1.5 bg-slate-800 text-[10px] font-bold text-white rounded hover:bg-emerald-600 transition">.CSV</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `,
+            renderCases: () => {
+                const filter = document.getElementById('case-study-domain-filter').value;
+                const data = filter === 'all' ? AppTesting.cData : AppTesting.cData.filter(c => c.domain === filter);
+                UI.renderPaginated(data, 'cases-cards-mount', 'case-page-indicator', 'case-pagination-controls',
+                    AppTesting.cPage, 10, AppTesting.caseRenderFn, 'AppTesting.changeCasePage');
+            },
+            changeCasePage: (p) => { AppTesting.cPage = p;
+                AppTesting.renderCases(); }
+        };
+
+        // ========== TAB 6: DATASETS – top 50 list ==========
+        (function initTop50() {
+            const top50 = [
+                { name: "Superstore Sales", domain: "Retail",
+                    link: "https://www.kaggle.com/datasets/vivek468/superstore-dataset-final" },
+                { name: "Iris Dataset", domain: "Biology",
+                link: "https://archive.ics.uci.edu/ml/datasets/iris" },
+                { name: "Titanic Survivors", domain: "Demographics",
+                    link: "https://www.kaggle.com/c/titanic/data" },
+                { name: "Wine Quality", domain: "Chemistry",
+                    link: "https://archive.ics.uci.edu/ml/datasets/wine+quality" },
+                { name: "Adult Census Income", domain: "Economics",
+                    link: "https://archive.ics.uci.edu/ml/datasets/adult" },
+                { name: "Boston Housing", domain: "Real Estate",
+                    link: "https://www.kaggle.com/c/boston-housing" },
+                { name: "Breast Cancer Wisconsin", domain: "Healthcare",
+                    link: "https://archive.ics.uci.edu/ml/datasets/Breast+Cancer+Wisconsin+(Diagnostic)" },
+                { name: "Online Shoppers Intention", domain: "E-Commerce",
+                    link: "https://archive.ics.uci.edu/ml/datasets/Online+Shoppers+Purchasing+Intention+Dataset" },
+                { name: "Bank Marketing", domain: "Finance",
+                    link: "https://archive.ics.uci.edu/ml/datasets/Bank+Marketing" },
+                { name: "Avocado Prices", domain: "Agriculture",
+                    link: "https://www.kaggle.com/datasets/neuromusic/avocado-prices" },
+                { name: "Amazon Top 50 Books", domain: "Retail",
+                    link: "https://www.kaggle.com/datasets/sootersaalu/amazon-top-50-bestselling-books-2009-2019" },
+                { name: "FIFA World Cup", domain: "Sports",
+                    link: "https://www.kaggle.com/datasets/abecklas/fifa-world-cup" },
+                { name: "NYC Airbnb Open Data", domain: "Hospitality",
+                    link: "https://www.kaggle.com/datasets/dgomonov/new-york-city-airbnb-open-data" },
+                { name: "World Happiness Report", domain: "Socio-Economics",
+                    link: "https://www.kaggle.com/datasets/unsdsn/world-happiness" },
+                { name: "Stock Price Histories", domain: "Capital Markets",
+                    link: "https://finance.yahoo.com/" },
+                { name: "PPAC Petroleum", domain: "Energy", link: "https://ppac.gov.in" },
+                { name: "data.gov.in", domain: "Government", link: "https://data.gov.in" },
+                { name: "US Accidents", domain: "Transportation",
+                    link: "https://www.kaggle.com/datasets/sobhanmoosavi/us-accidents" },
+                { name: "COVID-19 Data", domain: "Healthcare",
+                    link: "https://github.com/owid/covid-19-data/tree/master/public/data" },
+                { name: "Global Shark Attacks", domain: "Wildlife",
+                    link: "https://www.kaggle.com/datasets/teajay/global-shark-attacks" },
+                { name: "Million Song Dataset", domain: "Music",
+                    link: "https://www.kaggle.com/datasets/undefinenull/million-song-dataset-spotify" },
+                { name: "IMDB Movies", domain: "Entertainment",
+                    link: "https://www.kaggle.com/datasets/ashfakyeafi/imdb-movies-dataset" },
+                { name: "US Elections", domain: "Politics",
+                    link: "https://www.kaggle.com/datasets/benhamner/2016-us-election" },
+                { name: "Climate Change", domain: "Environment",
+                    link: "https://www.kaggle.com/datasets/berkeleyearth/climate-change-earth-surface-temperature-data" },
+                { name: "Airbnb Listings", domain: "Hospitality",
+                    link: "https://www.kaggle.com/datasets/dgomonov/new-york-city-airbnb-open-data" },
+                { name: "Bitcoin Historical", domain: "Cryptocurrency",
+                    link: "https://www.kaggle.com/datasets/mczielinski/bitcoin-historical-data" },
+                { name: "US Baby Names", domain: "Demographics",
+                    link: "https://www.kaggle.com/datasets/kaggle/us-baby-names" },
+                { name: "Food Recipes", domain: "Culinary",
+                    link: "https://www.kaggle.com/datasets/shuyangli94/food-com-recipes-and-user-interactions" },
+                { name: "Pokemon Stats", domain: "Gaming",
+                    link: "https://www.kaggle.com/datasets/abcsds/pokemon" },
+                { name: "NBA Player Stats", domain: "Sports",
+                    link: "https://www.kaggle.com/datasets/justinas/nba-players-data" },
+                { name: "World Bank Data", domain: "Economics",
+                    link: "https://www.kaggle.com/datasets/worldbank/world-bank-data" },
+                { name: "Google Play Apps", domain: "Technology",
+                    link: "https://www.kaggle.com/datasets/lava18/google-play-store-apps" },
+                { name: "UFO Sightings", domain: "Mystery",
+                    link: "https://www.kaggle.com/datasets/ruslankl/ufo-sightings" },
+                { name: "Marvel vs DC", domain: "Entertainment",
+                    link: "https://www.kaggle.com/datasets/rtatman/marvel-vs-dc" },
+                { name: "Billionaires", domain: "Finance",
+                    link: "https://www.kaggle.com/datasets/ashishkumarwalia/billionaires-of-the-world" },
+                { name: "Olympics History", domain: "Sports",
+                    link: "https://www.kaggle.com/datasets/heesoo37/120-years-of-olympic-history-athletes-and-results" },
+                { name: "Flight Delays", domain: "Transportation",
+                    link: "https://www.kaggle.com/datasets/usdot/flight-delays" },
+                { name: "Housing Prices", domain: "Real Estate",
+                    link: "https://www.kaggle.com/datasets/camnugent/california-housing-prices" },
+                { name: "Student Performance", domain: "Education",
+                    link: "https://www.kaggle.com/datasets/uciml/student-alcohol-consumption" },
+                { name: "Telco Churn", domain: "Telecom",
+                    link: "https://www.kaggle.com/datasets/blastchar/telco-customer-churn" },
+                { name: "Credit Card Fraud", domain: "Finance",
+                    link: "https://www.kaggle.com/datasets/mlg-ulb/creditcardfraud" },
+                { name: "Heart Disease", domain: "Healthcare",
+                    link: "https://www.kaggle.com/datasets/johnsmith88/heart-disease-dataset" },
+                { name: "Diabetes", domain: "Healthcare",
+                    link: "https://www.kaggle.com/datasets/mathchi/diabetes-data-set" },
+                { name: "Wine Reviews", domain: "Culinary",
+                    link: "https://www.kaggle.com/datasets/zynicide/wine-reviews" },
+                { name: "Netflix Shows", domain: "Entertainment",
+                    link: "https://www.kaggle.com/datasets/shivamb/netflix-shows" },
+                { name: "Earthquake Data", domain: "Environment",
+                    link: "https://www.kaggle.com/datasets/usgs/earthquake-database" },
+                { name: "SpaceX Launches", domain: "Aerospace",
+                    link: "https://www.kaggle.com/datasets/khsamaha/spacex-launch-data" },
+                { name: "US Police Shootings", domain: "Criminal Justice",
+                    link: "https://www.kaggle.com/datasets/ahsen1330/us-police-shootings" },
+                { name: "Global Terrorism", domain: "Security",
+                    link: "https://www.kaggle.com/datasets/START-UMD/gtd" },
+                { name: "Spotify Tracks", domain: "Music",
+                    link: "https://www.kaggle.com/datasets/zaheenhamidani/ultimate-spotify-tracks-db" }
+            ];
+            const container = document.getElementById('top-datasets-list');
+            if (container) {
+                container.innerHTML = top50.map(item => `
+                    <div class="dataset-item">
+                        <div class="name"><a href="${item.link}" target="_blank">${item.name}</a></div>
+                        <div class="domain">${item.domain}</div>
+                    </div>
+                `).join('');
+            }
+        })();
+
+        // ========== TAB 7: CHEATSHEET with Excelsior shortcuts ==========
+        const AppCheat = {
+            forms: [],
+            formPage: 1,
+            shorts: [],
+            shortPage: 1,
+            init: () => {
+                // 100 formulas
+                const funcs = ["XLOOKUP", "FILTER", "SORT", "UNIQUE", "SEQUENCE", "LET", "LAMBDA", "SUMIFS", "INDEX",
+                    "MATCH", "VLOOKUP", "IFERROR", "TEXT", "XIRR", "NPV", "FORECAST.ETS", "LINEST", "T.TEST",
+                    "CHISQ.TEST"
+                ];
+                const cats = ["Logical", "Date", "Lookup", "Text", "Dynamic", "Financial", "Statistical"];
+                for (let i = 1; i <= 100; i++) {
+                    const f = funcs[i % funcs.length];
+                    AppCheat.forms.push({
+                        id: i,
+                        name: `${f} #${i}`,
+                        cat: cats[i % cats.length],
+                        syntax: `=${f}(arg1, arg2, [arg3])`,
+                        example: `=${f}(A2:A100, B2:B100, "N/A")`,
+                        desc: `Applies ${f} in ${cats[i % cats.length]} domain.`
+                    });
+                }
+
+                // 244+ shortcuts (simplified to the Excelsior list)
+                const shortcutCategories = [{
+                    title: "General",
+                    items: [
+                        { action: "Open workbook", win: "Ctrl+O", mac: "⌘+O" },
+                        { action: "New workbook", win: "Ctrl+N", mac: "⌘+N" },
+                        { action: "Save workbook", win: "Ctrl+S", mac: "⌘+S" },
+                        { action: "Save As", win: "F12", mac: "⌘+Shift+S" },
+                        { action: "Print", win: "Ctrl+P", mac: "⌘+P" },
+                        { action: "Close workbook", win: "Ctrl+W", mac: "⌘+W" },
+                        { action: "Undo", win: "Ctrl+Z", mac: "⌘+Z" },
+                        { action: "Redo", win: "Ctrl+Y", mac: "⌘+Y" },
+                        { action: "Repeat last action", win: "F4", mac: "⌘+Y" },
+                        { action: "Open Help", win: "F1", mac: "⌘+/" }
+                    ]
+                }, {
+                    title: "Navigation",
+                    items: [
+                        { action: "Move to next cell", win: "Tab", mac: "Tab" },
+                        { action: "Move to previous cell", win: "Shift+Tab", mac: "Shift+Tab" },
+                        { action: "Move to A1", win: "Ctrl+Home", mac: "Fn+Ctrl+←" },
+                        { action: "Move to last used cell", win: "Ctrl+End", mac: "Fn+Ctrl+→" },
+                        { action: "Next worksheet", win: "Ctrl+PgDn", mac: "Fn+Ctrl+↓" },
+                        { action: "Previous worksheet", win: "Ctrl+PgUp", mac: "Fn+Ctrl+↑" },
+                        { action: "Go to cell (Name Box)", win: "F5 or Ctrl+G", mac: "F5" },
+                        { action: "Jump to edge of data region", win: "Ctrl+Arrow", mac: "⌘+Arrow" },
+                        { action: "Extend selection to edge", win: "Ctrl+Shift+Arrow", mac: "⌘+Shift+Arrow" }
+                    ]
+                }, {
+                    title: "Selection",
+                    items: [
+                        { action: "Select entire column", win: "Ctrl+Space", mac: "Ctrl+Space" },
+                        { action: "Select entire row", win: "Shift+Space", mac: "Shift+Space" },
+                        { action: "Select entire worksheet", win: "Ctrl+A", mac: "⌘+A" },
+                        { action: "Select current region", win: "Ctrl+Shift+*", mac: "⌘+Shift+*" },
+                        { action: "Extend selection by cell", win: "Shift+Arrow", mac: "Shift+Arrow" }
+                    ]
+                }, {
+                    title: "Editing",
+                    items: [
+                        { action: "Edit active cell", win: "F2", mac: "Ctrl+U" },
+                        { action: "Copy", win: "Ctrl+C", mac: "⌘+C" },
+                        { action: "Cut", win: "Ctrl+X", mac: "⌘+X" },
+                        { action: "Paste", win: "Ctrl+V", mac: "⌘+V" },
+                        { action: "Paste special", win: "Ctrl+Alt+V", mac: "⌘+Ctrl+V" },
+                        { action: "Fill down", win: "Ctrl+D", mac: "⌘+D" },
+                        { action: "Fill right", win: "Ctrl+R", mac: "⌘+R" },
+                        { action: "Find", win: "Ctrl+F", mac: "⌘+F" },
+                        { action: "Find & replace", win: "Ctrl+H", mac: "⌘+Ctrl+F" },
+                        { action: "Delete cell contents", win: "Delete", mac: "Delete / Fn+Delete" }
+                    ]
+                }, {
+                    title: "Formulas & Calculation",
+                    items: [
+                        { action: "Insert function dialog", win: "Shift+F3", mac: "Shift+F3" },
+                        { action: "Toggle absolute/relative reference", win: "F4", mac: "⌘+T" },
+                        { action: "Calculate all worksheets", win: "F9", mac: "F9" },
+                        { action: "Calculate active worksheet", win: "Shift+F9", mac: "Shift+F9" },
+                        { action: "Enter as array formula (legacy)", win: "Ctrl+Shift+Enter", mac: "⌘+Shift+Enter" },
+                        { action: "AutoSum", win: "Alt+=", mac: "⌘+Shift+T" },
+                        { action: "Toggle formulas view", win: "Ctrl+`", mac: "Ctrl+`" }
+                    ]
+                }, {
+                    title: "Formatting",
+                    items: [
+                        { action: "Bold", win: "Ctrl+B", mac: "⌘+B" },
+                        { action: "Italic", win: "Ctrl+I", mac: "⌘+I" },
+                        { action: "Underline", win: "Ctrl+U", mac: "⌘+U" },
+                        { action: "Format cells dialog", win: "Ctrl+1", mac: "⌘+1" },
+                        { action: "Apply currency format", win: "Ctrl+Shift+$", mac: "⌘+Shift+$" },
+                        { action: "Apply percentage format", win: "Ctrl+Shift+%", mac: "Ctrl+Shift+%" },
+                        { action: "Apply date format", win: "Ctrl+Shift+#", mac: "Ctrl+Shift+#" },
+                        { action: "Add / remove border outline", win: "Ctrl+Shift+&", mac: "⌘+Option+0" }
+                    ]
+                }, {
+                    title: "Rows & Columns",
+                    items: [
+                        { action: "Insert cells / row / column dialog", win: "Ctrl+Shift++", mac: "Ctrl+I" },
+                        { action: "Delete selection", win: "Ctrl+-", mac: "⌘+-" },
+                        { action: "Hide rows", win: "Ctrl+9", mac: "Ctrl+9" },
+                        { action: "Unhide rows", win: "Ctrl+Shift+9", mac: "Ctrl+Shift+9" },
+                        { action: "Hide columns", win: "Ctrl+0", mac: "Ctrl+0" },
+                        { action: "Group rows / columns", win: "Alt+Shift+→", mac: "⌘+Shift+K" }
+                    ]
+                }];
+                // Build shorts array from the categorized data (for pagination compatibility)
+                shortcutCategories.forEach(cat => {
+                    cat.items.forEach(item => {
+                        AppCheat.shorts.push({
+                            id: AppCheat.shorts.length + 1,
+                            cat: cat.title,
+                            action: item.action,
+                            win: item.win,
+                            mac: item.mac
+                        });
+                    });
+                });
+            },
+            switchSub: (sub) => {
+                ['shortcuts', 'formulas', 'vba', 'macros'].forEach(s => {
+                    const btn = document.getElementById(`btn-cheat-sub-${s}`);
+                    if (btn) btn.className = s === sub ?
+                        "px-4 py-2 rounded text-sm font-semibold subnav-active transition" :
+                        "px-4 py-2 rounded text-sm font-semibold subnav-inactive transition";
+                });
+                const mount = document.getElementById('cheat-content-mount');
+                const pwrap = document.getElementById('cheat-pagination-wrapper');
+
+                if (sub === 'shortcuts') {
+                    pwrap.classList.remove('hide-section');
+                    // Render shortcuts as a grid of cards (paginated)
+                    const itemsPerPage = 20;
+                    const totalPages = Math.ceil(AppCheat.shorts.length / itemsPerPage);
+                    if (AppCheat.shortPage > totalPages) AppCheat.shortPage = 1;
+                    const start = (AppCheat.shortPage - 1) * itemsPerPage;
+                    const pageItems = AppCheat.shorts.slice(start, start + itemsPerPage);
+
+                    // Group page items by category for display
+                    const grouped = {};
+                    pageItems.forEach(item => {
+                        if (!grouped[item.cat]) grouped[item.cat] = [];
+                        grouped[item.cat].push(item);
+                    });
+
+                    let html = `<div class="shortcut-grid">`;
+                    Object.keys(grouped).forEach(cat => {
+                        html += `<div class="shortcut-card">
+                            <div class="cat-title">${cat}</div>
+                            ${grouped[cat].map(item => `
+                                <div class="shortcut-item">
+                                    <span class="action">${item.action}</span>
+                                    <span class="keys">${item.win}<span class="sep">|</span>${item.mac}</span>
+                                </div>
+                            `).join('')}
+                        </div>`;
+                    });
+                    html += `</div>`;
+                    mount.innerHTML = html;
+
+                    // Pagination controls
+                    let pgs = '';
+                    const minP = Math.max(1, AppCheat.shortPage - 2);
+                    const maxP = Math.min(totalPages, AppCheat.shortPage + 2);
+                    if (minP > 1) pgs +=
+                        `<button onclick="AppCheat.changeShortPage(1)" class="px-2.5 py-1.5 rounded bg-slate-800 text-slate-300 text-xs hover:bg-slate-700 transition">1</button><span class="text-slate-500 mx-1">...</span>`;
+                    for (let p = minP; p <= maxP; p++) {
+                        if (p === AppCheat.shortPage) pgs +=
+                            `<button class="px-2.5 py-1.5 rounded bg-emerald-600 text-white font-bold text-xs shadow-md">${p}</button>`;
+                        else pgs +=
+                            `<button onclick="AppCheat.changeShortPage(${p})" class="px-2.5 py-1.5 rounded bg-slate-800 text-slate-300 text-xs hover:bg-slate-700 transition">${p}</button>`;
+                    }
+                    if (maxP < totalPages) pgs +=
+                        `<span class="text-slate-500 mx-1">...</span><button onclick="AppCheat.changeShortPage(${totalPages})" class="px-2.5 py-1.5 rounded bg-slate-800 text-slate-300 text-xs hover:bg-slate-700 transition">${totalPages}</button>`;
+                    document.getElementById('cheat-pagination-controls').innerHTML = pgs;
+                    document.getElementById('cheat-page-indicator').innerText =
+                        `${AppCheat.shortPage} of ${totalPages}`;
+                } else if (sub === 'formulas') {
+                    pwrap.classList.remove('hide-section');
+                    UI.renderPaginated(AppCheat.forms, 'cheat-content-mount', 'cheat-page-indicator',
+                        'cheat-pagination-controls', AppCheat.formPage, 20, (t) =>
+                        `<div class="p-5 bg-slate-900 border border-slate-800 rounded-xl space-y-3">
+                            <div class="flex justify-between border-b border-slate-800 pb-2"><strong class="text-white text-sm">${t.id}. ${t.name}</strong><span class="text-[10px] bg-slate-950 text-emerald-400 border border-slate-700 px-2.5 py-1 rounded uppercase">${t.cat}</span></div>
+                            <p class="text-xs text-slate-400">${t.desc}</p>
+                            <div class="text-[11px] text-sky-300 font-mono-code bg-slate-950 p-2.5 rounded border border-slate-800">${t.syntax}</div>
+                            <div class="text-[11px] text-emerald-300 font-mono-code bg-slate-950 p-2.5 rounded border border-slate-800">${t.example}</div>
+                        </div>`,
+                        'AppCheat.changeFormPage');
+                } else if (sub === 'vba') {
+                    pwrap.classList.add('hide-section');
+                    mount.innerHTML =
+                        `<div class="bg-slate-900 border border-slate-800 p-6 rounded-xl"><h3 class="font-bold text-emerald-400 text-lg">VBA Automation</h3><pre class="bg-slate-950 p-5 font-mono text-[12px] text-sky-300 border border-slate-800 rounded-lg overflow-x-auto">Sub Consolidate()\n  ' ... high-speed consolidation ...\nEnd Sub</pre></div>`;
+                } else {
+                    pwrap.classList.add('hide-section');
+                    mount.innerHTML =
+                        `<div class="bg-slate-900 border border-slate-800 p-6 rounded-xl"><h3 class="font-bold text-emerald-400 text-lg">Macro for Big Data</h3><pre class="bg-slate-950 p-5 font-mono text-[12px] text-emerald-300 border border-slate-800 rounded-lg overflow-x-auto">Public Sub Process()\n  Dim arr: arr = Range("A2:D500000").Value2\n  ' ... process in-memory ...\nEnd Sub</pre></div>`;
+                }
+                if (typeof lucide !== 'undefined') lucide.createIcons();
+            },
+            changeShortPage: (p) => { AppCheat.shortPage = p;
+                AppCheat.switchSub('shortcuts'); },
+            changeFormPage: (p) => { AppCheat.formPage = p;
+                AppCheat.switchSub('formulas'); }
+        };
+
+        // ========== TAB 8: STATS ==========
+        const AppStats = {
+            data: [],
+            page: 1,
+            init: () => {
+                const models = ['=T.TEST(arr1, arr2, 2, 2)', '=LINEST(y, x, TRUE, TRUE)',
+                    '=CHISQ.TEST(obs, exp)', '=NORM.INV(RAND(), u, s)', '=TRIMMEAN(data, 0.1)', '=STDEV.S()',
+                    '=CORREL()', '=FORECAST.ETS(target, values, timeline)'
+                ];
+                for (let i = 1; i <= 100; i++) {
+                    AppStats.data.push({ id: i, model: models[i % models.length],
+                    desc: `Stat model ${i} applying ${models[i%models.length]}.` });
+                }
+            },
+            renderFn: (d) => `
+                <div class="p-4 border border-slate-800 bg-slate-900 rounded-lg mb-3 shadow-md">
+                    <strong class="text-white text-sm">Model ${d.id}:</strong>
+                    <span class="text-sky-300 bg-sky-950/50 px-2 py-0.5 rounded font-mono ml-2 border border-slate-800">${d.model}</span>
+                    <p class="text-slate-400 text-xs mt-2">${d.desc}</p>
+                </div>
+            `,
+            render: () => {
+                const topHtml = `
+                    <div class="bg-slate-900 border border-slate-800 p-6 rounded-xl space-y-5 shadow-lg mb-6">
+                        <h3 class="text-lg font-bold text-emerald-400 flex items-center border-b border-slate-800 pb-2"><i data-lucide="zap" class="w-5 h-5 mr-2"></i>Quick‑Pick Guide</h3>
+                        <div class="overflow-x-auto rounded border border-slate-800">
+                            <table class="w-full text-left border-collapse bg-slate-950 text-xs">
+                                <thead class="bg-slate-900 text-slate-400"><tr><th class="p-4 border-b border-r border-slate-800">You want to...</th><th class="p-4 border-b border-r border-slate-800 text-emerald-400">Formula</th><th class="p-4 border-b border-slate-800 text-sky-400">ToolPak</th></tr></thead>
+                                <tbody class="text-slate-300 font-mono">
+                                    <tr><td class="p-4 border-b border-r border-slate-800 font-sans">Compare means</td><td class="p-4 border-b border-r border-slate-800 text-emerald-300">=T.TEST(arr1, arr2)</td><td class="p-4 border-b border-slate-800 text-sky-300">t-Test</td></tr>
+                                    <tr><td class="p-4 border-b border-r border-slate-800 font-sans">Predict y from x</td><td class="p-4 border-b border-r border-slate-800 text-emerald-300">=LINEST(y, x)</td><td class="p-4 border-b border-slate-800 text-sky-300">Regression</td></tr>
+                                    <tr><td class="p-4 border-b border-r border-slate-800 font-sans">Forecast</td><td class="p-4 border-b border-r border-slate-800 text-emerald-300">=FORECAST.ETS(...)</td><td class="p-4 border-b border-slate-800 text-sky-300">Forecast Sheet</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div id="stats-paginated-list" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"></div>
+                `;
+                document.getElementById('stats-content-mount').innerHTML = topHtml;
+                UI.renderPaginated(AppStats.data, 'stats-paginated-list', 'stats-page-indicator',
+                    'stats-pagination-controls', AppStats.page, 30, AppStats.renderFn, 'AppStats.changePage');
+            },
+            changePage: (p) => { AppStats.page = p;
+                AppStats.render(); }
+        };
+
+        function renderStatsContent() { AppStats.render(); }
+
+        // ========== GLOBAL TAB ROUTER ==========
+        function switchMainTab(tabId) {
+            ['formulas', 'viz', 'dashboards', 'interview', 'testing', 'datasets', 'cheatsheet', 'stats'].forEach(t => {
+                const sec = document.getElementById(`tab-${t}`);
+                if (sec) sec.classList.add('hide-section');
+                const btn = document.getElementById(`nav-tab-${t}`);
+                if (btn) { btn.classList.remove('nav-btn-active');
+                    btn.classList.add('nav-btn-inactive'); }
+            });
+            const targetSec = document.getElementById(tabId);
+            if (targetSec) targetSec.classList.remove('hide-section');
+            const targetBtn = document.getElementById(`nav-${tabId}`);
+            if (targetBtn) { targetBtn.classList.remove('nav-btn-inactive');
+                targetBtn.classList.add('nav-btn-active'); }
+            if (tabId === 'tab-formulas') switchFormulaLevel(currentFormulaLvl || 1);
+            else if (tabId === 'tab-viz') { switchVizLevel(1); }
+            else if (tabId === 'tab-dashboards') switchDashLevel(1);
+            else if (tabId === 'tab-interview') renderInterviewContent();
+            else if (tabId === 'tab-testing') AppTesting.switchSub('practice');
+            else if (tabId === 'tab-datasets') { /* already populated */ }
+            else if (tabId === 'tab-cheatsheet') AppCheat.switchSub('shortcuts');
+            else if (tabId === 'tab-stats') renderStatsContent();
+            if (typeof lucide !== 'undefined') lucide.createIcons();
+        }
+
+        // ========== INIT ==========
+        window.addEventListener('DOMContentLoaded', () => {
+            AppFormulas.init();
+            AppInt.init();
+            AppTesting.init();
+            AppCheat.init();
+            AppStats.init();
+            switchMainTab('tab-formulas');
+        });
+    </script>
+</body>
+</html>

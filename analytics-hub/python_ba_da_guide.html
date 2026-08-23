@@ -1,0 +1,1245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Python for BA/DA/BI — Interview & ETL Mastery</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Fraunces:ital,wght@0,300;0,700;0,900;1,300&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #0a0a0f;
+    --paper: #f5f0e8;
+    --accent: #c8391a;
+    --accent2: #1a6bc8;
+    --accent3: #2a9d4a;
+    --muted: #7a7060;
+    --border: #d4ccb8;
+    --code-bg: #1a1a2e;
+    --code-text: #e8e0d0;
+    --highlight: #f0c060;
+    --tag-bg: #e8e0d0;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--paper);
+    color: var(--ink);
+    font-family: 'Fraunces', Georgia, serif;
+    font-weight: 300;
+    line-height: 1.7;
+  }
+
+  /* HEADER */
+  header {
+    background: var(--ink);
+    color: var(--paper);
+    padding: 60px 40px 40px;
+    position: relative;
+    overflow: hidden;
+  }
+  header::before {
+    content: 'PYTHON';
+    position: absolute;
+    top: -20px; right: -10px;
+    font-family: 'Space Mono', monospace;
+    font-size: 140px;
+    font-weight: 700;
+    color: rgba(255,255,255,0.04);
+    letter-spacing: -8px;
+    pointer-events: none;
+    white-space: nowrap;
+  }
+  .header-label {
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 4px;
+    color: var(--accent);
+    text-transform: uppercase;
+    margin-bottom: 16px;
+  }
+  header h1 {
+    font-size: clamp(32px, 5vw, 62px);
+    font-weight: 900;
+    line-height: 1.05;
+    letter-spacing: -2px;
+    margin-bottom: 20px;
+  }
+  header h1 em {
+    font-style: italic;
+    color: var(--highlight);
+  }
+  .header-sub {
+    font-family: 'Space Mono', monospace;
+    font-size: 13px;
+    color: rgba(245,240,232,0.6);
+    max-width: 600px;
+  }
+  .pill-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 24px;
+  }
+  .pill {
+    background: rgba(255,255,255,0.1);
+    border: 1px solid rgba(255,255,255,0.2);
+    color: var(--paper);
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 2px;
+    padding: 6px 14px;
+    border-radius: 2px;
+    text-transform: uppercase;
+  }
+  .pill.red { background: var(--accent); border-color: var(--accent); }
+
+  /* NAV */
+  nav {
+    background: var(--ink);
+    border-top: 1px solid rgba(255,255,255,0.1);
+    padding: 0 40px;
+    display: flex;
+    gap: 0;
+    overflow-x: auto;
+  }
+  nav a {
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 2px;
+    color: rgba(245,240,232,0.5);
+    text-decoration: none;
+    padding: 14px 18px;
+    border-bottom: 2px solid transparent;
+    white-space: nowrap;
+    transition: all 0.2s;
+  }
+  nav a:hover { color: var(--paper); border-bottom-color: var(--accent); }
+
+  /* LAYOUT */
+  main { max-width: 1100px; margin: 0 auto; padding: 0 40px 80px; }
+
+  /* SECTION */
+  .section {
+    margin-top: 64px;
+    scroll-margin-top: 80px;
+  }
+  .section-header {
+    display: flex;
+    align-items: baseline;
+    gap: 16px;
+    border-bottom: 2px solid var(--ink);
+    padding-bottom: 12px;
+    margin-bottom: 32px;
+  }
+  .section-num {
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    color: var(--accent);
+    letter-spacing: 2px;
+  }
+  .section h2 {
+    font-size: clamp(22px, 3vw, 32px);
+    font-weight: 900;
+    letter-spacing: -1px;
+  }
+
+  /* CONCEPT CARDS */
+  .concept-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 24px;
+  }
+  .card {
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: 2px;
+    overflow: hidden;
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  .card:hover {
+    transform: translateY(-2px);
+    box-shadow: 4px 6px 0 var(--ink);
+  }
+  .card-head {
+    padding: 16px 20px 12px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 12px;
+  }
+  .card-title {
+    font-family: 'Space Mono', monospace;
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--ink);
+  }
+  .card-tag {
+    font-family: 'Space Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 2px;
+    background: var(--tag-bg);
+    color: var(--muted);
+    padding: 3px 8px;
+    border-radius: 2px;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+  .tag-sql { background: #fde8e0; color: var(--accent); }
+  .tag-etl { background: #e0edfd; color: var(--accent2); }
+  .tag-viz { background: #e0fde8; color: var(--accent3); }
+  .tag-int { background: #fdf6e0; color: #8a6a10; }
+
+  /* CODE BLOCKS */
+  .code-block {
+    background: var(--code-bg);
+    border-radius: 0 0 2px 2px;
+    padding: 20px;
+    overflow-x: auto;
+  }
+  pre {
+    font-family: 'Space Mono', monospace;
+    font-size: 12px;
+    line-height: 1.8;
+    color: var(--code-text);
+    white-space: pre;
+  }
+  .c-kw { color: #c792ea; }   /* keyword */
+  .c-fn { color: #82aaff; }   /* function */
+  .c-str { color: #c3e88d; }  /* string */
+  .c-cm { color: #546e7a; font-style: italic; } /* comment */
+  .c-num { color: #f78c6c; }  /* number */
+  .c-out { color: #89ddff; }  /* output */
+  .c-hl { background: rgba(255,255,255,0.08); display: block; margin: 0 -20px; padding: 0 20px; } /* highlight line */
+
+  /* INLINE CODE */
+  code {
+    font-family: 'Space Mono', monospace;
+    font-size: 12px;
+    background: var(--tag-bg);
+    padding: 2px 6px;
+    border-radius: 2px;
+    color: var(--accent);
+  }
+
+  /* WIDE CARD */
+  .card-wide {
+    grid-column: 1 / -1;
+  }
+
+  /* COMPARISON TABLE */
+  .compare-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+    margin: 24px 0;
+  }
+  .compare-table th {
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    padding: 10px 16px;
+    background: var(--ink);
+    color: var(--paper);
+    text-align: left;
+  }
+  .compare-table td {
+    padding: 10px 16px;
+    border-bottom: 1px solid var(--border);
+    vertical-align: top;
+  }
+  .compare-table tr:nth-child(even) td { background: rgba(0,0,0,0.02); }
+  .compare-table td:first-child {
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    color: var(--accent2);
+    white-space: nowrap;
+  }
+  .compare-table td:nth-child(2) {
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    color: var(--accent);
+  }
+
+  /* CALLOUT */
+  .callout {
+    border-left: 4px solid var(--accent);
+    background: white;
+    padding: 16px 20px;
+    margin: 24px 0;
+    border-radius: 0 2px 2px 0;
+  }
+  .callout.blue { border-color: var(--accent2); }
+  .callout.green { border-color: var(--accent3); }
+  .callout-label {
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 2px;
+    color: var(--accent);
+    margin-bottom: 6px;
+    text-transform: uppercase;
+  }
+  .callout.blue .callout-label { color: var(--accent2); }
+  .callout.green .callout-label { color: var(--accent3); }
+
+  /* ROADMAP */
+  .roadmap {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    margin: 24px 0;
+    position: relative;
+  }
+  .roadmap::before {
+    content: '';
+    position: absolute;
+    left: 20px;
+    top: 0; bottom: 0;
+    width: 2px;
+    background: var(--border);
+  }
+  .roadmap-item {
+    display: flex;
+    gap: 24px;
+    align-items: flex-start;
+    padding: 20px 0;
+  }
+  .roadmap-dot {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: var(--ink);
+    color: var(--paper);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Space Mono', monospace;
+    font-size: 12px;
+    font-weight: 700;
+    flex-shrink: 0;
+    z-index: 1;
+  }
+  .roadmap-dot.red { background: var(--accent); }
+  .roadmap-dot.blue { background: var(--accent2); }
+  .roadmap-dot.green { background: var(--accent3); }
+  .roadmap-content h4 {
+    font-weight: 700;
+    font-size: 16px;
+    margin-bottom: 4px;
+  }
+  .roadmap-content p {
+    font-size: 14px;
+    color: var(--muted);
+  }
+
+  /* FOOTER */
+  footer {
+    background: var(--ink);
+    color: rgba(245,240,232,0.4);
+    text-align: center;
+    padding: 32px;
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 2px;
+  }
+  footer span { color: var(--accent); }
+
+  /* SCROLLBAR */
+  ::-webkit-scrollbar { width: 6px; height: 6px; }
+  ::-webkit-scrollbar-track { background: var(--paper); }
+  ::-webkit-scrollbar-thumb { background: var(--muted); border-radius: 3px; }
+
+  @media (max-width: 600px) {
+    main { padding: 0 16px 60px; }
+    header { padding: 40px 16px 30px; }
+    nav { padding: 0 8px; }
+    .concept-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-label">Complete Reference — 2025</div>
+  <h1>Python for<br><em>BA · DA · BI</em></h1>
+  <p class="header-sub">Interview-ready methods, SQL substitution patterns, and critical ETL syntax — all in one place.</p>
+  <div class="pill-row">
+    <div class="pill red">Pandas</div>
+    <div class="pill">NumPy</div>
+    <div class="pill">SQLAlchemy</div>
+    <div class="pill">PySpark</div>
+    <div class="pill">Matplotlib</div>
+    <div class="pill">Seaborn</div>
+    <div class="pill">Plotly</div>
+    <div class="pill">Airflow</div>
+  </div>
+</header>
+
+<nav>
+  <a href="#sql-sub">SQL Substitution</a>
+  <a href="#etl">ETL Patterns</a>
+  <a href="#data-clean">Data Cleaning</a>
+  <a href="#agg">Aggregation</a>
+  <a href="#joins">Joins & Merges</a>
+  <a href="#window">Window Functions</a>
+  <a href="#viz">Visualization</a>
+  <a href="#interview">Interview Edge</a>
+</nav>
+
+<main>
+
+  <!-- ===== SQL SUBSTITUTION ===== -->
+  <section class="section" id="sql-sub">
+    <div class="section-header">
+      <span class="section-num">01</span>
+      <h2>SQL → Python Equivalents</h2>
+    </div>
+
+    <div class="callout">
+      <div class="callout-label">⚡ Interview Insight</div>
+      Interviewers often hand you a SQL task and ask "how would you do this in Python?" 
+      Master the mapping below and you'll answer faster than candidates who think in SQL first.
+    </div>
+
+    <table class="compare-table">
+      <thead>
+        <tr>
+          <th>SQL Operation</th>
+          <th>Pandas Equivalent</th>
+          <th>Notes</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>SELECT col1, col2</td><td>df[['col1','col2']]</td><td>Column selection</td></tr>
+        <tr><td>WHERE condition</td><td>df[df['col'] > val]</td><td>Boolean indexing</td></tr>
+        <tr><td>WHERE … AND …</td><td>df[(cond1) & (cond2)]</td><td>Use & not and</td></tr>
+        <tr><td>WHERE … OR …</td><td>df[(cond1) | (cond2)]</td><td>Use | not or</td></tr>
+        <tr><td>WHERE col IN (…)</td><td>df[df['col'].isin([…])]</td><td>isin() method</td></tr>
+        <tr><td>WHERE col IS NULL</td><td>df[df['col'].isna()]</td><td>isna() / isnull()</td></tr>
+        <tr><td>DISTINCT</td><td>df['col'].unique() or df.drop_duplicates()</td><td>drop_duplicates for rows</td></tr>
+        <tr><td>ORDER BY col DESC</td><td>df.sort_values('col', ascending=False)</td><td>Multiple: list of cols</td></tr>
+        <tr><td>LIMIT 10</td><td>df.head(10)</td><td>or df.iloc[:10]</td></tr>
+        <tr><td>GROUP BY col</td><td>df.groupby('col')</td><td>Chain with agg functions</td></tr>
+        <tr><td>HAVING count > 5</td><td>.filter(lambda x: len(x) > 5)</td><td>After groupby</td></tr>
+        <tr><td>COUNT(*)</td><td>df.shape[0] or len(df)</td><td>Or groupby().size()</td></tr>
+        <tr><td>COUNT DISTINCT</td><td>df['col'].nunique()</td><td>Or groupby().nunique()</td></tr>
+        <tr><td>SUM / AVG / MIN / MAX</td><td>.sum() / .mean() / .min() / .max()</td><td>On series or after groupby</td></tr>
+        <tr><td>INNER JOIN</td><td>pd.merge(df1, df2, on='key', how='inner')</td><td>Default how is inner</td></tr>
+        <tr><td>LEFT JOIN</td><td>pd.merge(df1, df2, on='key', how='left')</td><td></td></tr>
+        <tr><td>FULL OUTER JOIN</td><td>pd.merge(df1, df2, on='key', how='outer')</td><td></td></tr>
+        <tr><td>UNION ALL</td><td>pd.concat([df1, df2], ignore_index=True)</td><td></td></tr>
+        <tr><td>UNION (distinct)</td><td>pd.concat([df1,df2]).drop_duplicates()</td><td></td></tr>
+        <tr><td>CASE WHEN … END</td><td>np.where() or pd.cut() or .map()</td><td>Multi-case: np.select()</td></tr>
+        <tr><td>SUBSTRING / LEFT</td><td>df['col'].str[:n] or .str.extract()</td><td>Vectorized string ops</td></tr>
+        <tr><td>DATE_TRUNC('month')</td><td>df['date'].dt.to_period('M')</td><td>or .dt.floor('MS')</td></tr>
+        <tr><td>DATEDIFF</td><td>(df['end'] - df['start']).dt.days</td><td>DateTime arithmetic</td></tr>
+        <tr><td>ROW_NUMBER() OVER</td><td>df.groupby().cumcount() + 1</td><td>Or rank(method='first')</td></tr>
+        <tr><td>RANK() OVER</td><td>df['col'].rank(method='min')</td><td>Within group: groupby().rank()</td></tr>
+        <tr><td>LAG / LEAD</td><td>df['col'].shift(1) / .shift(-1)</td><td>Within group: groupby().shift()</td></tr>
+        <tr><td>CUMSUM / RUNNING TOTAL</td><td>df['col'].cumsum()</td><td>groupby().cumsum()</td></tr>
+        <tr><td>WITH (CTE)</td><td>Assign intermediate df variables</td><td>Or use method chaining</td></tr>
+        <tr><td>CREATE TABLE AS SELECT</td><td>df.to_sql('table', conn)</td><td>SQLAlchemy engine</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- ===== ETL PATTERNS ===== -->
+  <section class="section" id="etl">
+    <div class="section-header">
+      <span class="section-num">02</span>
+      <h2>Critical ETL Patterns & Syntax</h2>
+    </div>
+
+    <div class="concept-grid">
+
+      <!-- EXTRACT -->
+      <div class="card">
+        <div class="card-head">
+          <span class="card-title">EXTRACT — Read Data Sources</span>
+          <span class="card-tag tag-etl">ETL · EXTRACT</span>
+        </div>
+        <div class="code-block"><pre><span class="c-kw">import</span> pandas <span class="c-kw">as</span> pd
+<span class="c-kw">from</span> sqlalchemy <span class="c-kw">import</span> create_engine
+
+<span class="c-cm"># — CSV / Excel —</span>
+df = pd.<span class="c-fn">read_csv</span>(<span class="c-str">'data.csv'</span>,
+    parse_dates=[<span class="c-str">'date_col'</span>],
+    dtype={<span class="c-str">'id'</span>: <span class="c-str">'Int64'</span>},  <span class="c-cm"># nullable int</span>
+    na_values=[<span class="c-str">'N/A'</span>, <span class="c-str">''</span>, <span class="c-str">'null'</span>],
+    usecols=[<span class="c-str">'id'</span>, <span class="c-str">'name'</span>, <span class="c-str">'amount'</span>])
+
+df = pd.<span class="c-fn">read_excel</span>(<span class="c-str">'file.xlsx'</span>,
+    sheet_name=<span class="c-str">'Sheet1'</span>,
+    skiprows=<span class="c-num">2</span>, header=<span class="c-num">0</span>)
+
+<span class="c-cm"># — SQL Database —</span>
+engine = <span class="c-fn">create_engine</span>(
+    <span class="c-str">'postgresql://user:pass@host:5432/db'</span>)
+df = pd.<span class="c-fn">read_sql</span>(<span class="c-str">"""
+    SELECT * FROM orders
+    WHERE created_at >= '2024-01-01'
+"""</span>, engine)
+
+<span class="c-cm"># — Large files in chunks —</span>
+chunks = pd.<span class="c-fn">read_csv</span>(<span class="c-str">'big.csv'</span>, chunksize=<span class="c-num">100_000</span>)
+df = pd.<span class="c-fn">concat</span>([chunk <span class="c-kw">for</span> chunk <span class="c-kw">in</span> chunks])
+
+<span class="c-cm"># — JSON / API —</span>
+<span class="c-kw">import</span> requests
+data = requests.<span class="c-fn">get</span>(<span class="c-str">'https://api.example.com/data'</span>).json()
+df = pd.<span class="c-fn">json_normalize</span>(data[<span class="c-str">'records'</span>])
+
+<span class="c-cm"># — Parquet (columnar, fast) —</span>
+df = pd.<span class="c-fn">read_parquet</span>(<span class="c-str">'data.parquet'</span>,
+    columns=[<span class="c-str">'id'</span>, <span class="c-str">'value'</span>])</pre></div>
+      </div>
+
+      <!-- TRANSFORM -->
+      <div class="card">
+        <div class="card-head">
+          <span class="card-title">TRANSFORM — Clean & Shape</span>
+          <span class="card-tag tag-etl">ETL · TRANSFORM</span>
+        </div>
+        <div class="code-block"><pre><span class="c-cm"># — Type casting —</span>
+df[<span class="c-str">'amount'</span>] = df[<span class="c-str">'amount'</span>].<span class="c-fn">astype</span>(<span class="c-str">'float64'</span>)
+df[<span class="c-str">'date'</span>] = pd.<span class="c-fn">to_datetime</span>(df[<span class="c-str">'date'</span>], format=<span class="c-str">'%Y-%m-%d'</span>)
+df[<span class="c-str">'cat'</span>] = df[<span class="c-str">'cat'</span>].<span class="c-fn">astype</span>(<span class="c-str">'category'</span>)  <span class="c-cm"># memory ↓</span>
+
+<span class="c-cm"># — Rename / reorder columns —</span>
+df = df.<span class="c-fn">rename</span>(columns={<span class="c-str">'old_name'</span>: <span class="c-str">'new_name'</span>})
+df.columns = df.columns.<span class="c-fn">str.lower</span>().<span class="c-fn">str.replace</span>(<span class="c-str">' '</span>,<span class="c-str">'_'</span>)
+
+<span class="c-cm"># — Derived / calculated columns —</span>
+df[<span class="c-str">'profit'</span>] = df[<span class="c-str">'revenue'</span>] - df[<span class="c-str">'cost'</span>]
+df[<span class="c-str">'margin_pct'</span>] = (df[<span class="c-str">'profit'</span>] / df[<span class="c-str">'revenue'</span>]) * <span class="c-num">100</span>
+df[<span class="c-str">'year_month'</span>] = df[<span class="c-str">'date'</span>].dt.to_period(<span class="c-str">'M'</span>)
+
+<span class="c-cm"># — CASE WHEN equivalent —</span>
+<span class="c-kw">import</span> numpy <span class="c-kw">as</span> np
+conditions = [
+    df[<span class="c-str">'score'</span>] >= <span class="c-num">90</span>,
+    df[<span class="c-str">'score'</span>] >= <span class="c-num">70</span>,
+    df[<span class="c-str">'score'</span>] >= <span class="c-num">50</span>
+]
+choices = [<span class="c-str">'A'</span>, <span class="c-str">'B'</span>, <span class="c-str">'C'</span>]
+df[<span class="c-str">'grade'</span>] = np.<span class="c-fn">select</span>(conditions, choices, default=<span class="c-str">'F'</span>)
+
+<span class="c-cm"># — Apply custom function —</span>
+df[<span class="c-str">'flag'</span>] = df[<span class="c-str">'status'</span>].<span class="c-fn">map</span>({<span class="c-str">'active'</span>:<span class="c-num">1</span>, <span class="c-str">'inactive'</span>:<span class="c-num">0</span>})
+df[<span class="c-str">'clean'</span>] = df[<span class="c-str">'text'</span>].<span class="c-fn">apply</span>(<span class="c-kw">lambda</span> x: x.<span class="c-fn">strip</span>().<span class="c-fn">lower</span>())</pre></div>
+      </div>
+
+      <!-- LOAD -->
+      <div class="card">
+        <div class="card-head">
+          <span class="card-title">LOAD — Write Destinations</span>
+          <span class="card-tag tag-etl">ETL · LOAD</span>
+        </div>
+        <div class="code-block"><pre><span class="c-cm"># — Write to SQL (upsert pattern) —</span>
+df.<span class="c-fn">to_sql</span>(
+    name=<span class="c-str">'target_table'</span>,
+    con=engine,
+    if_exists=<span class="c-str">'replace'</span>,  <span class="c-cm"># 'append' | 'replace' | 'fail'</span>
+    index=<span class="c-kw">False</span>,
+    chunksize=<span class="c-num">5000</span>,
+    method=<span class="c-str">'multi'</span>  <span class="c-cm"># batch inserts, much faster</span>
+)
+
+<span class="c-cm"># — Incremental load (append only new) —</span>
+last_id = pd.<span class="c-fn">read_sql</span>(<span class="c-str">'SELECT MAX(id) FROM target'</span>, engine).iloc[<span class="c-num">0</span>,<span class="c-num">0</span>]
+new_rows = df[df[<span class="c-str">'id'</span>] > last_id]
+new_rows.<span class="c-fn">to_sql</span>(<span class="c-str">'target'</span>, engine, if_exists=<span class="c-str">'append'</span>, index=<span class="c-kw">False</span>)
+
+<span class="c-cm"># — Write CSV / Parquet / Excel —</span>
+df.<span class="c-fn">to_csv</span>(<span class="c-str">'output.csv'</span>, index=<span class="c-kw">False</span>)
+df.<span class="c-fn">to_parquet</span>(<span class="c-str">'output.parquet'</span>, engine=<span class="c-str">'pyarrow'</span>)
+df.<span class="c-fn">to_excel</span>(<span class="c-str">'output.xlsx'</span>, sheet_name=<span class="c-str">'Results'</span>, index=<span class="c-kw">False</span>)
+
+<span class="c-cm"># — Multiple sheets in one Excel —</span>
+<span class="c-kw">with</span> pd.<span class="c-fn">ExcelWriter</span>(<span class="c-str">'report.xlsx'</span>, engine=<span class="c-str">'openpyxl'</span>) <span class="c-kw">as</span> writer:
+    df_summary.<span class="c-fn">to_excel</span>(writer, sheet_name=<span class="c-str">'Summary'</span>, index=<span class="c-kw">False</span>)
+    df_detail.<span class="c-fn">to_excel</span>(writer, sheet_name=<span class="c-str">'Detail'</span>, index=<span class="c-kw">False</span>)
+
+<span class="c-cm"># — To S3 (boto3) —</span>
+<span class="c-kw">import</span> boto3, io
+buf = io.<span class="c-fn">BytesIO</span>()
+df.<span class="c-fn">to_parquet</span>(buf); buf.<span class="c-fn">seek</span>(<span class="c-num">0</span>)
+boto3.<span class="c-fn">client</span>(<span class="c-str">'s3'</span>).<span class="c-fn">upload_fileobj</span>(buf, <span class="c-str">'bucket'</span>, <span class="c-str">'key.parquet'</span>)</pre></div>
+      </div>
+
+      <!-- DATA QUALITY -->
+      <div class="card">
+        <div class="card-head">
+          <span class="card-title">Data Quality Checks</span>
+          <span class="card-tag tag-etl">ETL · QUALITY</span>
+        </div>
+        <div class="code-block"><pre><span class="c-cm"># — Profiling snapshot (interview gold!) —</span>
+<span class="c-kw">def</span> <span class="c-fn">profile</span>(df):
+    <span class="c-kw">return</span> pd.<span class="c-fn">DataFrame</span>({
+        <span class="c-str">'dtype'</span>:      df.dtypes,
+        <span class="c-str">'nulls'</span>:      df.<span class="c-fn">isna</span>().<span class="c-fn">sum</span>(),
+        <span class="c-str">'null_pct'</span>:   (df.<span class="c-fn">isna</span>().<span class="c-fn">sum</span>() / <span class="c-fn">len</span>(df) * <span class="c-num">100</span>).<span class="c-fn">round</span>(<span class="c-num">2</span>),
+        <span class="c-str">'unique'</span>:     df.<span class="c-fn">nunique</span>(),
+        <span class="c-str">'sample_val'</span>: df.<span class="c-fn">apply</span>(<span class="c-kw">lambda</span> x: x.<span class="c-fn">dropna</span>().<span class="c-fn">iloc</span>[<span class="c-num">0</span>] <span class="c-kw">if</span> <span class="c-fn">len</span>(x.<span class="c-fn">dropna</span>()) > <span class="c-num">0</span> <span class="c-kw">else</span> <span class="c-kw">None</span>)
+    })
+
+<span class="c-cm"># — Assert row count didn't shrink after join —</span>
+pre_count = <span class="c-fn">len</span>(df)
+merged = df.<span class="c-fn">merge</span>(lookup, on=<span class="c-str">'id'</span>, how=<span class="c-str">'left'</span>)
+<span class="c-kw">assert</span> <span class="c-fn">len</span>(merged) == pre_count, <span class="c-str">f"Row count changed: {len(merged)} vs {pre_count}"</span>
+
+<span class="c-cm"># — Duplicate check —</span>
+dups = df[df.<span class="c-fn">duplicated</span>(subset=[<span class="c-str">'id'</span>], keep=<span class="c-kw">False</span>)]
+<span class="c-kw">if</span> <span class="c-fn">len</span>(dups) > <span class="c-num">0</span>:
+    <span class="c-fn">print</span>(<span class="c-str">f"⚠ {len(dups)} duplicate rows found"</span>)
+
+<span class="c-cm"># — Value range validation —</span>
+<span class="c-kw">assert</span> df[<span class="c-str">'age'</span>].<span class="c-fn">between</span>(<span class="c-num">0</span>, <span class="c-num">120</span>).<span class="c-fn">all</span>(), <span class="c-str">"Age out of range"</span>
+<span class="c-kw">assert</span> df[<span class="c-str">'pct'</span>].<span class="c-fn">between</span>(<span class="c-num">0</span>, <span class="c-num">1</span>).<span class="c-fn">all</span>(), <span class="c-str">"Percentage out of [0,1]"</span></pre></div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ===== DATA CLEANING ===== -->
+  <section class="section" id="data-clean">
+    <div class="section-header">
+      <span class="section-num">03</span>
+      <h2>Data Cleaning Arsenal</h2>
+    </div>
+
+    <div class="concept-grid">
+
+      <div class="card">
+        <div class="card-head">
+          <span class="card-title">Handling Missing Values</span>
+          <span class="card-tag tag-sql">DATA CLEAN</span>
+        </div>
+        <div class="code-block"><pre><span class="c-cm"># — Detect & summarize —</span>
+df.<span class="c-fn">isna</span>().<span class="c-fn">sum</span>()                       <span class="c-cm"># per column</span>
+df.<span class="c-fn">isna</span>().<span class="c-fn">any</span>(axis=<span class="c-num">1</span>)                 <span class="c-cm"># rows with ANY null</span>
+
+<span class="c-cm"># — Drop —</span>
+df.<span class="c-fn">dropna</span>()                             <span class="c-cm"># drop rows with any null</span>
+df.<span class="c-fn">dropna</span>(subset=[<span class="c-str">'critical_col'</span>])    <span class="c-cm"># only if specific col null</span>
+df.<span class="c-fn">dropna</span>(thresh=<span class="c-num">5</span>)                   <span class="c-cm"># keep rows with ≥5 non-null</span>
+
+<span class="c-cm"># — Fill —</span>
+df[<span class="c-str">'col'</span>].<span class="c-fn">fillna</span>(<span class="c-num">0</span>)                    <span class="c-cm"># constant</span>
+df[<span class="c-str">'col'</span>].<span class="c-fn">fillna</span>(df[<span class="c-str">'col'</span>].<span class="c-fn">mean</span>())  <span class="c-cm"># mean imputation</span>
+df[<span class="c-str">'col'</span>].<span class="c-fn">fillna</span>(method=<span class="c-str">'ffill'</span>)     <span class="c-cm"># forward fill</span>
+df[<span class="c-str">'col'</span>].<span class="c-fn">fillna</span>(method=<span class="c-str">'bfill'</span>)     <span class="c-cm"># backward fill</span>
+
+<span class="c-cm"># — Grouped mean imputation (smarter) —</span>
+df[<span class="c-str">'salary'</span>] = df.<span class="c-fn">groupby</span>(<span class="c-str">'dept'</span>)[<span class="c-str">'salary'</span>].<span class="c-fn">transform</span>(
+    <span class="c-kw">lambda</span> x: x.<span class="c-fn">fillna</span>(x.<span class="c-fn">mean</span>())
+)</pre></div>
+      </div>
+
+      <div class="card">
+        <div class="card-head">
+          <span class="card-title">String Cleaning & Standardization</span>
+          <span class="card-tag tag-sql">DATA CLEAN</span>
+        </div>
+        <div class="code-block"><pre><span class="c-cm"># — Vectorized string methods (.str accessor) —</span>
+df[<span class="c-str">'name'</span>] = df[<span class="c-str">'name'</span>].str.<span class="c-fn">strip</span>().<span class="c-fn">str.lower</span>()
+df[<span class="c-str">'phone'</span>] = df[<span class="c-str">'phone'</span>].str.<span class="c-fn">replace</span>(<span class="c-str">r'[^0-9]'</span>, <span class="c-str">''</span>, regex=<span class="c-kw">True</span>)
+df[<span class="c-str">'email'</span>] = df[<span class="c-str">'email'</span>].str.<span class="c-fn">strip</span>().<span class="c-fn">str.lower</span>()
+
+<span class="c-cm"># — Extract patterns with regex —</span>
+df[<span class="c-str">'zip'</span>] = df[<span class="c-str">'address'</span>].str.<span class="c-fn">extract</span>(<span class="c-str">r'(\d{5})'</span>)
+df[<span class="c-str">'year'</span>] = df[<span class="c-str">'date_str'</span>].str.<span class="c-fn">extract</span>(<span class="c-str">r'(\d{4})'</span>)
+
+<span class="c-cm"># — Split column —</span>
+df[[<span class="c-str">'first'</span>, <span class="c-str">'last'</span>]] = df[<span class="c-str">'full_name'</span>].str.<span class="c-fn">split</span>(<span class="c-str">' '</span>, n=<span class="c-num">1</span>, expand=<span class="c-kw">True</span>)
+
+<span class="c-cm"># — Contains / startswith / endswith —</span>
+df[df[<span class="c-str">'col'</span>].str.<span class="c-fn">contains</span>(<span class="c-str">'pattern'</span>, na=<span class="c-kw">False</span>)]
+df[df[<span class="c-str">'col'</span>].str.<span class="c-fn">startswith</span>(<span class="c-str">'prefix'</span>)]
+
+<span class="c-cm"># — Fuzzy matching (interview standout!) —</span>
+<span class="c-kw">from</span> thefuzz <span class="c-kw">import</span> process
+best_match, score = process.<span class="c-fn">extractOne</span>(<span class="c-str">'New Yrok'</span>, [<span class="c-str">'New York'</span>, <span class="c-str">'Newark'</span>])</pre></div>
+      </div>
+
+      <div class="card">
+        <div class="card-head">
+          <span class="card-title">Deduplication</span>
+          <span class="card-tag tag-sql">DATA CLEAN</span>
+        </div>
+        <div class="code-block"><pre><span class="c-cm"># — Basic dedup —</span>
+df.<span class="c-fn">drop_duplicates</span>()                     <span class="c-cm"># all columns</span>
+df.<span class="c-fn">drop_duplicates</span>(subset=[<span class="c-str">'id'</span>])        <span class="c-cm"># by key only</span>
+df.<span class="c-fn">drop_duplicates</span>(subset=[<span class="c-str">'id'</span>], keep=<span class="c-str">'last'</span>)  <span class="c-cm"># keep newest</span>
+
+<span class="c-cm"># — Keep row with latest date per group —</span>
+df_dedup = (
+    df.<span class="c-fn">sort_values</span>(<span class="c-str">'updated_at'</span>, ascending=<span class="c-kw">False</span>)
+      .<span class="c-fn">drop_duplicates</span>(subset=[<span class="c-str">'customer_id'</span>], keep=<span class="c-str">'first'</span>)
+)
+
+<span class="c-cm"># — SCD Type 2: identify changed rows —</span>
+merged = current.<span class="c-fn">merge</span>(new_data, on=<span class="c-str">'id'</span>, suffixes=(<span class="c-str">'_old'</span>,<span class="c-str">'_new'</span>))
+changed = merged[merged[<span class="c-str">'value_old'</span>] != merged[<span class="c-str">'value_new'</span>]]
+
+<span class="c-cm"># — Hash-based change detection —</span>
+<span class="c-kw">import</span> hashlib, json
+df[<span class="c-str">'row_hash'</span>] = df.<span class="c-fn">apply</span>(
+    <span class="c-kw">lambda</span> r: hashlib.<span class="c-fn">md5</span>(json.<span class="c-fn">dumps</span>(<span class="c-fn">list</span>(r), default=<span class="c-fn">str</span>).<span class="c-fn">encode</span>()).<span class="c-fn">hexdigest</span>(),
+    axis=<span class="c-num">1</span>
+)</pre></div>
+      </div>
+
+      <div class="card">
+        <div class="card-head">
+          <span class="card-title">Outlier Detection</span>
+          <span class="card-tag tag-sql">DATA CLEAN</span>
+        </div>
+        <div class="code-block"><pre><span class="c-cm"># — Z-score method —</span>
+<span class="c-kw">from</span> scipy <span class="c-kw">import</span> stats
+z_scores = stats.<span class="c-fn">zscore</span>(df[<span class="c-str">'col'</span>].<span class="c-fn">dropna</span>())
+outliers = df[<span class="c-fn">abs</span>(z_scores) > <span class="c-num">3</span>]           <span class="c-cm"># beyond 3σ</span>
+
+<span class="c-cm"># — IQR method (robust, non-parametric) —</span>
+Q1 = df[<span class="c-str">'col'</span>].<span class="c-fn">quantile</span>(<span class="c-num">0.25</span>)
+Q3 = df[<span class="c-str">'col'</span>].<span class="c-fn">quantile</span>(<span class="c-num">0.75</span>)
+IQR = Q3 - Q1
+lower = Q1 - <span class="c-num">1.5</span> * IQR
+upper = Q3 + <span class="c-num">1.5</span> * IQR
+
+df_clean = df[df[<span class="c-str">'col'</span>].<span class="c-fn">between</span>(lower, upper)]
+
+<span class="c-cm"># — Cap instead of remove (Winsorize) —</span>
+df[<span class="c-str">'col'</span>] = df[<span class="c-str">'col'</span>].<span class="c-fn">clip</span>(lower=lower, upper=upper)
+
+<span class="c-cm"># — Percentile capping —</span>
+p01 = df[<span class="c-str">'col'</span>].<span class="c-fn">quantile</span>(<span class="c-num">0.01</span>)
+p99 = df[<span class="c-str">'col'</span>].<span class="c-fn">quantile</span>(<span class="c-num">0.99</span>)
+df[<span class="c-str">'col'</span>] = df[<span class="c-str">'col'</span>].<span class="c-fn">clip</span>(p01, p99)</pre></div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ===== AGGREGATION ===== -->
+  <section class="section" id="agg">
+    <div class="section-header">
+      <span class="section-num">04</span>
+      <h2>Aggregation & GroupBy Mastery</h2>
+    </div>
+
+    <div class="concept-grid">
+
+      <div class="card card-wide">
+        <div class="card-head">
+          <span class="card-title">Advanced GroupBy Patterns</span>
+          <span class="card-tag tag-sql">SQL EQUIV</span>
+        </div>
+        <div class="code-block"><pre><span class="c-cm"># — Multi-column agg (most-used in interviews) —</span>
+result = df.<span class="c-fn">groupby</span>([<span class="c-str">'region'</span>, <span class="c-str">'product'</span>]).<span class="c-fn">agg</span>(
+    total_sales   = (<span class="c-str">'revenue'</span>,  <span class="c-str">'sum'</span>),
+    avg_margin    = (<span class="c-str">'margin'</span>,   <span class="c-str">'mean'</span>),
+    order_count   = (<span class="c-str">'order_id'</span>, <span class="c-str">'count'</span>),
+    unique_cust   = (<span class="c-str">'cust_id'</span>,  <span class="c-str">'nunique'</span>),
+    max_date      = (<span class="c-str">'order_dt'</span>, <span class="c-str">'max'</span>),
+    pct_80        = (<span class="c-str">'revenue'</span>,  <span class="c-kw">lambda</span> x: x.<span class="c-fn">quantile</span>(<span class="c-num">0.8</span>))  <span class="c-cm"># custom!</span>
+).<span class="c-fn">reset_index</span>()
+
+<span class="c-cm"># — HAVING equivalent: filter after groupby —</span>
+top_regions = (
+    df.<span class="c-fn">groupby</span>(<span class="c-str">'region'</span>)[<span class="c-str">'revenue'</span>]
+      .<span class="c-fn">sum</span>()
+      .<span class="c-fn">reset_index</span>()
+      .<span class="c-fn">query</span>(<span class="c-str">'revenue > 1_000_000'</span>)   <span class="c-cm"># HAVING revenue > 1M</span>
+      .<span class="c-fn">sort_values</span>(<span class="c-str">'revenue'</span>, ascending=<span class="c-kw">False</span>)
+)
+
+<span class="c-cm"># — Pivot table (Excel-style) —</span>
+pivot = pd.<span class="c-fn">pivot_table</span>(df,
+    values=<span class="c-str">'revenue'</span>, 
+    index=<span class="c-str">'region'</span>, 
+    columns=<span class="c-str">'quarter'</span>,
+    aggfunc=<span class="c-str">'sum'</span>,
+    fill_value=<span class="c-num">0</span>,
+    margins=<span class="c-kw">True</span>   <span class="c-cm"># adds grand totals (row & col)</span>
+)
+
+<span class="c-cm"># — Cross-tab (frequency matrix) —</span>
+ct = pd.<span class="c-fn">crosstab</span>(df[<span class="c-str">'region'</span>], df[<span class="c-str">'product_cat'</span>],
+    values=df[<span class="c-str">'revenue'</span>], aggfunc=<span class="c-str">'sum'</span>, normalize=<span class="c-str">'index'</span>)  <span class="c-cm"># row %</span></pre></div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ===== JOINS ===== -->
+  <section class="section" id="joins">
+    <div class="section-header">
+      <span class="section-num">05</span>
+      <h2>Joins, Merges & Reshaping</h2>
+    </div>
+
+    <div class="concept-grid">
+
+      <div class="card">
+        <div class="card-head">
+          <span class="card-title">All Join Types</span>
+          <span class="card-tag tag-sql">SQL EQUIV</span>
+        </div>
+        <div class="code-block"><pre><span class="c-cm"># — Standard joins —</span>
+pd.<span class="c-fn">merge</span>(df1, df2, on=<span class="c-str">'key'</span>, how=<span class="c-str">'inner'</span>)   <span class="c-cm"># INNER JOIN</span>
+pd.<span class="c-fn">merge</span>(df1, df2, on=<span class="c-str">'key'</span>, how=<span class="c-str">'left'</span>)    <span class="c-cm"># LEFT JOIN</span>
+pd.<span class="c-fn">merge</span>(df1, df2, on=<span class="c-str">'key'</span>, how=<span class="c-str">'right'</span>)   <span class="c-cm"># RIGHT JOIN</span>
+pd.<span class="c-fn">merge</span>(df1, df2, on=<span class="c-str">'key'</span>, how=<span class="c-str">'outer'</span>)   <span class="c-cm"># FULL OUTER JOIN</span>
+
+<span class="c-cm"># — Different column names —</span>
+pd.<span class="c-fn">merge</span>(orders, customers,
+    left_on=<span class="c-str">'cust_id'</span>, right_on=<span class="c-str">'id'</span>, how=<span class="c-str">'left'</span>)
+
+<span class="c-cm"># — Multi-key join —</span>
+pd.<span class="c-fn">merge</span>(df1, df2, on=[<span class="c-str">'region'</span>, <span class="c-str">'product_id'</span>])
+
+<span class="c-cm"># — Anti-join (rows in left NOT in right) —</span>
+merged = pd.<span class="c-fn">merge</span>(df1, df2, on=<span class="c-str">'id'</span>, how=<span class="c-str">'left'</span>, indicator=<span class="c-kw">True</span>)
+anti = merged[merged[<span class="c-str">'_merge'</span>] == <span class="c-str">'left_only'</span>].<span class="c-fn">drop</span>(<span class="c-str">'_merge'</span>, axis=<span class="c-num">1</span>)
+
+<span class="c-cm"># — Validate join (catch fan-out bugs!) —</span>
+pd.<span class="c-fn">merge</span>(df1, df2, on=<span class="c-str">'id'</span>, validate=<span class="c-str">'m:1'</span>)  <span class="c-cm"># many:one check</span>
+<span class="c-cm"># options: '1:1' | '1:m' | 'm:1' | 'm:m'</span></pre></div>
+      </div>
+
+      <div class="card">
+        <div class="card-head">
+          <span class="card-title">Reshape: Melt & Pivot</span>
+          <span class="card-tag tag-sql">RESHAPE</span>
+        </div>
+        <div class="code-block"><pre><span class="c-cm"># — Wide → Long (UNPIVOT) —</span>
+df_long = df.<span class="c-fn">melt</span>(
+    id_vars=[<span class="c-str">'id'</span>, <span class="c-str">'region'</span>],        <span class="c-cm"># keep as-is</span>
+    value_vars=[<span class="c-str">'Q1'</span>, <span class="c-str">'Q2'</span>, <span class="c-str">'Q3'</span>, <span class="c-str">'Q4'</span>],
+    var_name=<span class="c-str">'quarter'</span>,
+    value_name=<span class="c-str">'revenue'</span>
+)
+
+<span class="c-cm"># — Long → Wide (PIVOT) —</span>
+df_wide = df_long.<span class="c-fn">pivot</span>(
+    index=<span class="c-str">'id'</span>,
+    columns=<span class="c-str">'quarter'</span>,
+    values=<span class="c-str">'revenue'</span>
+).<span class="c-fn">reset_index</span>()
+
+<span class="c-cm"># — Stack / Unstack (multi-index) —</span>
+df_stacked = df.<span class="c-fn">set_index</span>([<span class="c-str">'region'</span>, <span class="c-str">'product'</span>]).<span class="c-fn">stack</span>()
+df_unstacked = df_stacked.<span class="c-fn">unstack</span>(<span class="c-str">'product'</span>)
+
+<span class="c-cm"># — Concat rows or columns —</span>
+combined = pd.<span class="c-fn">concat</span>([df1, df2], axis=<span class="c-num">0</span>, ignore_index=<span class="c-kw">True</span>)
+side_by_side = pd.<span class="c-fn">concat</span>([df1, df2], axis=<span class="c-num">1</span>)</pre></div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ===== WINDOW FUNCTIONS ===== -->
+  <section class="section" id="window">
+    <div class="section-header">
+      <span class="section-num">06</span>
+      <h2>Window Functions & Running Calculations</h2>
+    </div>
+
+    <div class="callout blue">
+      <div class="callout-label">🎯 Interview Differentiator</div>
+      Window functions are where most BA/DA candidates stumble in interviews. Mastering 
+      <code>transform()</code>, <code>shift()</code>, and <code>rolling()</code> puts you 
+      in the top 10% of candidates.
+    </div>
+
+    <div class="concept-grid">
+
+      <div class="card card-wide">
+        <div class="card-head">
+          <span class="card-title">All Window Function Patterns</span>
+          <span class="card-tag tag-sql">WINDOW FNS</span>
+        </div>
+        <div class="code-block"><pre><span class="c-cm"># — ROW_NUMBER() per group —</span>
+df[<span class="c-str">'row_num'</span>] = df.<span class="c-fn">groupby</span>(<span class="c-str">'dept'</span>).<span class="c-fn">cumcount</span>() + <span class="c-num">1</span>
+
+<span class="c-cm"># — RANK() per group (handles ties) —</span>
+df[<span class="c-str">'rank'</span>] = df.<span class="c-fn">groupby</span>(<span class="c-str">'dept'</span>)[<span class="c-str">'salary'</span>].<span class="c-fn">rank</span>(method=<span class="c-str">'min'</span>, ascending=<span class="c-kw">False</span>)
+<span class="c-cm"># rank methods: 'average' | 'min' (RANK) | 'max' | 'first' (ROW_NUMBER) | 'dense' (DENSE_RANK)</span>
+
+<span class="c-cm"># — DENSE_RANK() —</span>
+df[<span class="c-str">'dense_rank'</span>] = df.<span class="c-fn">groupby</span>(<span class="c-str">'dept'</span>)[<span class="c-str">'salary'</span>].<span class="c-fn">rank</span>(method=<span class="c-str">'dense'</span>, ascending=<span class="c-kw">False</span>)
+
+<span class="c-cm"># — LAG / LEAD —</span>
+df[<span class="c-str">'prev_month_rev'</span>] = df.<span class="c-fn">groupby</span>(<span class="c-str">'product'</span>)[<span class="c-str">'revenue'</span>].<span class="c-fn">shift</span>(<span class="c-num">1</span>)  <span class="c-cm"># LAG(1)</span>
+df[<span class="c-str">'next_month_rev'</span>] = df.<span class="c-fn">groupby</span>(<span class="c-str">'product'</span>)[<span class="c-str">'revenue'</span>].<span class="c-fn">shift</span>(-<span class="c-num">1</span>) <span class="c-cm"># LEAD(1)</span>
+
+<span class="c-cm"># — MoM % change —</span>
+df[<span class="c-str">'mom_growth'</span>] = df.<span class="c-fn">groupby</span>(<span class="c-str">'product'</span>)[<span class="c-str">'revenue'</span>].<span class="c-fn">pct_change</span>() * <span class="c-num">100</span>
+
+<span class="c-cm"># — Running total (CUMSUM) per group —</span>
+df[<span class="c-str">'running_total'</span>] = df.<span class="c-fn">groupby</span>(<span class="c-str">'region'</span>)[<span class="c-str">'revenue'</span>].<span class="c-fn">cumsum</span>()
+
+<span class="c-cm"># — % of group total (SUM OVER PARTITION BY) —</span>
+df[<span class="c-str">'group_total'</span>] = df.<span class="c-fn">groupby</span>(<span class="c-str">'region'</span>)[<span class="c-str">'revenue'</span>].<span class="c-fn">transform</span>(<span class="c-str">'sum'</span>)
+df[<span class="c-str">'pct_of_group'</span>] = df[<span class="c-str">'revenue'</span>] / df[<span class="c-str">'group_total'</span>] * <span class="c-num">100</span>
+
+<span class="c-cm"># — Rolling averages (moving windows) —</span>
+df[<span class="c-str">'ma_3'</span>] = df[<span class="c-str">'revenue'</span>].<span class="c-fn">rolling</span>(window=<span class="c-num">3</span>, min_periods=<span class="c-num">1</span>).<span class="c-fn">mean</span>()  <span class="c-cm"># 3-period MA</span>
+df[<span class="c-str">'ma_7'</span>] = df[<span class="c-str">'revenue'</span>].<span class="c-fn">rolling</span>(<span class="c-num">7</span>).<span class="c-fn">mean</span>()              <span class="c-cm"># 7-day MA</span>
+df[<span class="c-str">'roll_std'</span>] = df[<span class="c-str">'revenue'</span>].<span class="c-fn">rolling</span>(<span class="c-num">30</span>).<span class="c-fn">std</span>()          <span class="c-cm"># rolling volatility</span>
+
+<span class="c-cm"># — Expanding window (from start to current row) —</span>
+df[<span class="c-str">'ytd_total'</span>] = df[<span class="c-str">'revenue'</span>].<span class="c-fn">expanding</span>().<span class="c-fn">sum</span>()
+
+<span class="c-cm"># — Exponential weighted mean (trend-aware) —</span>
+df[<span class="c-str">'ewm_revenue'</span>] = df[<span class="c-str">'revenue'</span>].<span class="c-fn">ewm</span>(span=<span class="c-num">7</span>, adjust=<span class="c-kw">False</span>).<span class="c-fn">mean</span>()
+
+<span class="c-cm"># — Top N per group (like ROW_NUMBER + filter) —</span>
+top2_per_region = (
+    df.<span class="c-fn">sort_values</span>([<span class="c-str">'region'</span>, <span class="c-str">'revenue'</span>], ascending=[<span class="c-kw">True</span>, <span class="c-kw">False</span>])
+      .<span class="c-fn">groupby</span>(<span class="c-str">'region'</span>)
+      .<span class="c-fn">head</span>(<span class="c-num">2</span>)
+)</pre></div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ===== VISUALIZATION ===== -->
+  <section class="section" id="viz">
+    <div class="section-header">
+      <span class="section-num">07</span>
+      <h2>Visualization for BI / Reporting</h2>
+    </div>
+
+    <div class="concept-grid">
+
+      <div class="card">
+        <div class="card-head">
+          <span class="card-title">Matplotlib & Seaborn — Quick Hits</span>
+          <span class="card-tag tag-viz">VIZ</span>
+        </div>
+        <div class="code-block"><pre><span class="c-kw">import</span> matplotlib.pyplot <span class="c-kw">as</span> plt
+<span class="c-kw">import</span> seaborn <span class="c-kw">as</span> sns
+
+<span class="c-cm"># — Set clean theme —</span>
+sns.<span class="c-fn">set_theme</span>(style=<span class="c-str">'whitegrid'</span>, palette=<span class="c-str">'muted'</span>)
+
+<span class="c-cm"># — Bar chart —</span>
+fig, ax = plt.<span class="c-fn">subplots</span>(figsize=(<span class="c-num">10</span>, <span class="c-num">5</span>))
+sns.<span class="c-fn">barplot</span>(data=df, x=<span class="c-str">'region'</span>, y=<span class="c-str">'revenue'</span>, ax=ax, errorbar=<span class="c-kw">None</span>)
+ax.<span class="c-fn">set_title</span>(<span class="c-str">'Revenue by Region'</span>, fontsize=<span class="c-num">14</span>, fontweight=<span class="c-str">'bold'</span>)
+ax.<span class="c-fn">yaxis.set_major_formatter</span>(plt.FuncFormatter(<span class="c-kw">lambda</span> x, _: <span class="c-str">f'${x/1e6:.1f}M'</span>))
+
+<span class="c-cm"># — Heatmap (correlation matrix) —</span>
+corr = df.<span class="c-fn">select_dtypes</span>(<span class="c-str">'number'</span>).<span class="c-fn">corr</span>()
+sns.<span class="c-fn">heatmap</span>(corr, annot=<span class="c-kw">True</span>, fmt=<span class="c-str">'.2f'</span>, cmap=<span class="c-str">'coolwarm'</span>, center=<span class="c-num">0</span>)
+
+<span class="c-cm"># — Boxplot (outlier visual) —</span>
+sns.<span class="c-fn">boxplot</span>(data=df, x=<span class="c-str">'category'</span>, y=<span class="c-str">'value'</span>, showfliers=<span class="c-kw">True</span>)
+
+<span class="c-cm"># — Histogram with KDE —</span>
+sns.<span class="c-fn">histplot</span>(df[<span class="c-str">'revenue'</span>], kde=<span class="c-kw">True</span>, bins=<span class="c-num">30</span>)
+plt.<span class="c-fn">tight_layout</span>()
+plt.<span class="c-fn">savefig</span>(<span class="c-str">'chart.png'</span>, dpi=<span class="c-num">150</span>, bbox_inches=<span class="c-str">'tight'</span>)</pre></div>
+      </div>
+
+      <div class="card">
+        <div class="card-head">
+          <span class="card-title">Plotly — Interactive BI Charts</span>
+          <span class="card-tag tag-viz">VIZ · INTERACTIVE</span>
+        </div>
+        <div class="code-block"><pre><span class="c-kw">import</span> plotly.express <span class="c-kw">as</span> px
+<span class="c-kw">import</span> plotly.graph_objects <span class="c-kw">as</span> go
+
+<span class="c-cm"># — Line chart with hover —</span>
+fig = px.<span class="c-fn">line</span>(df, x=<span class="c-str">'month'</span>, y=<span class="c-str">'revenue'</span>, color=<span class="c-str">'region'</span>,
+    title=<span class="c-str">'Monthly Revenue by Region'</span>,
+    labels={<span class="c-str">'revenue'</span>: <span class="c-str">'Revenue ($)'</span>})
+
+<span class="c-cm"># — Waterfall (great for P&L) —</span>
+fig = go.<span class="c-fn">Figure</span>(go.<span class="c-fn">Waterfall</span>(
+    name=<span class="c-str">'P&L'</span>, orientation=<span class="c-str">'v'</span>,
+    x=[<span class="c-str">'Revenue'</span>, <span class="c-str">'COGS'</span>, <span class="c-str">'Gross Profit'</span>, <span class="c-str">'OpEx'</span>, <span class="c-str">'Net Income'</span>],
+    measure=[<span class="c-str">'absolute'</span>, <span class="c-str">'relative'</span>, <span class="c-str">'total'</span>, <span class="c-str">'relative'</span>, <span class="c-str">'total'</span>],
+    y=[<span class="c-num">500</span>, -<span class="c-num">200</span>, <span class="c-num">0</span>, -<span class="c-num">150</span>, <span class="c-num">0</span>]
+))
+
+<span class="c-cm"># — Scatter with size & color (bubble chart) —</span>
+fig = px.<span class="c-fn">scatter</span>(df, x=<span class="c-str">'cac'</span>, y=<span class="c-str">'ltv'</span>,
+    size=<span class="c-str">'revenue'</span>, color=<span class="c-str">'segment'</span>,
+    hover_data=[<span class="c-str">'customer_id'</span>, <span class="c-str">'region'</span>])
+
+fig.<span class="c-fn">update_layout</span>(
+    template=<span class="c-str">'plotly_white'</span>,
+    font=<span class="c-fn">dict</span>(family=<span class="c-str">'Arial'</span>, size=<span class="c-num">12</span>)
+)
+fig.<span class="c-fn">write_html</span>(<span class="c-str">'dashboard.html'</span>)</pre></div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ===== INTERVIEW EDGE ===== -->
+  <section class="section" id="interview">
+    <div class="section-header">
+      <span class="section-num">08</span>
+      <h2>Interview Edge — Standout Patterns</h2>
+    </div>
+
+    <div class="callout green">
+      <div class="callout-label">💡 Strategy</div>
+      These are patterns that most candidates never bring up. Demonstrate them 
+      proactively and you'll signal you've done real production work, not just tutorials.
+    </div>
+
+    <div class="concept-grid">
+
+      <div class="card">
+        <div class="card-head">
+          <span class="card-title">Method Chaining (Fluent API)</span>
+          <span class="card-tag tag-int">INTERVIEW GOLD</span>
+        </div>
+        <div class="code-block"><pre><span class="c-cm"># Instead of this (amateur approach):</span>
+df1 = df.<span class="c-fn">dropna</span>()
+df2 = df1[df1[<span class="c-str">'revenue'</span>] > <span class="c-num">0</span>]
+df3 = df2.<span class="c-fn">groupby</span>(<span class="c-str">'region'</span>)[<span class="c-str">'revenue'</span>].<span class="c-fn">sum</span>()
+
+<span class="c-cm"># Do this (professional method chaining):</span>
+result = (
+    df
+    .<span class="c-fn">dropna</span>(subset=[<span class="c-str">'revenue'</span>, <span class="c-str">'region'</span>])
+    .<span class="c-fn">query</span>(<span class="c-str">'revenue > 0 and region != "UNKNOWN"'</span>)
+    .<span class="c-fn">assign</span>(
+        revenue_k = <span class="c-kw">lambda</span> x: x[<span class="c-str">'revenue'</span>] / <span class="c-num">1000</span>,
+        month = <span class="c-kw">lambda</span> x: x[<span class="c-str">'date'</span>].dt.to_period(<span class="c-str">'M'</span>)
+    )
+    .<span class="c-fn">groupby</span>([<span class="c-str">'region'</span>, <span class="c-str">'month'</span>])
+    .<span class="c-fn">agg</span>(total_rev=(<span class="c-str">'revenue_k'</span>, <span class="c-str">'sum'</span>),
+         order_ct  =(<span class="c-str">'order_id'</span>, <span class="c-str">'count'</span>))
+    .<span class="c-fn">reset_index</span>()
+    .<span class="c-fn">sort_values</span>(<span class="c-str">'total_rev'</span>, ascending=<span class="c-kw">False</span>)
+)
+<span class="c-cm"># ↑ readable, debuggable, no temp vars</span></pre></div>
+      </div>
+
+      <div class="card">
+        <div class="card-head">
+          <span class="card-title">Performance Optimization</span>
+          <span class="card-tag tag-int">INTERVIEW GOLD</span>
+        </div>
+        <div class="code-block"><pre><span class="c-cm"># — Vectorize! Never loop over rows —</span>
+<span class="c-cm"># BAD (slow):</span>
+<span class="c-kw">for</span> i, row <span class="c-kw">in</span> df.<span class="c-fn">iterrows</span>():          <span class="c-cm"># 1000x slower!</span>
+    df.at[i, <span class="c-str">'total'</span>] = row[<span class="c-str">'qty'</span>] * row[<span class="c-str">'price'</span>]
+
+<span class="c-cm"># GOOD (vectorized):</span>
+df[<span class="c-str">'total'</span>] = df[<span class="c-str">'qty'</span>] * df[<span class="c-str">'price'</span>]
+
+<span class="c-cm"># — Use categoricals for repeated strings —</span>
+df[<span class="c-str">'region'</span>] = df[<span class="c-str">'region'</span>].<span class="c-fn">astype</span>(<span class="c-str">'category'</span>)  <span class="c-cm"># 80% memory reduction</span>
+
+<span class="c-cm"># — Downsample numeric types —</span>
+df[<span class="c-str">'val'</span>] = pd.<span class="c-fn">to_numeric</span>(df[<span class="c-str">'val'</span>], downcast=<span class="c-str">'float'</span>)  <span class="c-cm"># float64 → float32</span>
+
+<span class="c-cm"># — query() is faster on large DataFrames —</span>
+df.<span class="c-fn">query</span>(<span class="c-str">'revenue > @threshold and region == @target_region'</span>)
+
+<span class="c-cm"># — Check memory usage —</span>
+df.<span class="c-fn">info</span>(memory_usage=<span class="c-str">'deep'</span>)
+df.<span class="c-fn">memory_usage</span>(deep=<span class="c-kw">True</span>).<span class="c-fn">sum</span>() / <span class="c-num">1e6</span>  <span class="c-cm"># MB</span></pre></div>
+      </div>
+
+      <div class="card">
+        <div class="card-head">
+          <span class="card-title">pandasql — Run Actual SQL on DataFrames</span>
+          <span class="card-tag tag-int">WORKAROUND</span>
+        </div>
+        <div class="code-block"><pre><span class="c-cm"># When SQL is genuinely easier — use it directly!</span>
+<span class="c-kw">import</span> pandasql <span class="c-kw">as</span> psql
+
+orders = pd.<span class="c-fn">read_csv</span>(<span class="c-str">'orders.csv'</span>)
+customers = pd.<span class="c-fn">read_csv</span>(<span class="c-str">'customers.csv'</span>)
+
+result = psql.<span class="c-fn">sqldf</span>(<span class="c-str">"""
+    SELECT 
+        c.region,
+        COUNT(DISTINCT o.customer_id)   AS unique_customers,
+        SUM(o.revenue)                  AS total_revenue,
+        AVG(o.revenue)                  AS avg_order_value,
+        RANK() OVER (
+            ORDER BY SUM(o.revenue) DESC
+        ) AS revenue_rank
+    FROM orders o
+    JOIN customers c ON o.customer_id = c.id
+    WHERE o.status = 'completed'
+    GROUP BY c.region
+    HAVING COUNT(*) > 100
+    ORDER BY total_revenue DESC
+"""</span>, <span class="c-fn">locals</span>())
+<span class="c-cm"># ↑ Instantly impresses SQL-first interviewers!</span></pre></div>
+      </div>
+
+      <div class="card">
+        <div class="card-head">
+          <span class="card-title">Cohort & Retention Analysis</span>
+          <span class="card-tag tag-int">BA SPECIFIC</span>
+        </div>
+        <div class="code-block"><pre><span class="c-cm"># — Cohort retention matrix —</span>
+df[<span class="c-str">'cohort_month'</span>] = df.<span class="c-fn">groupby</span>(<span class="c-str">'user_id'</span>)[<span class="c-str">'date'</span>].\
+    <span class="c-fn">transform</span>(<span class="c-str">'min'</span>).dt.to_period(<span class="c-str">'M'</span>)
+df[<span class="c-str">'order_month'</span>] = df[<span class="c-str">'date'</span>].dt.to_period(<span class="c-str">'M'</span>)
+df[<span class="c-str">'period'</span>] = (df[<span class="c-str">'order_month'</span>] - df[<span class="c-str">'cohort_month'</span>]).apply(<span class="c-kw">lambda</span> x: x.n)
+
+cohort_size = df.<span class="c-fn">groupby</span>(<span class="c-str">'cohort_month'</span>)[<span class="c-str">'user_id'</span>].<span class="c-fn">nunique</span>()
+retention_matrix = (
+    df.<span class="c-fn">groupby</span>([<span class="c-str">'cohort_month'</span>, <span class="c-str">'period'</span>])[<span class="c-str">'user_id'</span>]
+      .<span class="c-fn">nunique</span>()
+      .<span class="c-fn">unstack</span>()
+      .<span class="c-fn">divide</span>(cohort_size, axis=<span class="c-num">0</span>)
+)
+
+<span class="c-cm"># — RFM Segmentation —</span>
+snapshot = df[<span class="c-str">'date'</span>].<span class="c-fn">max</span>()
+rfm = df.<span class="c-fn">groupby</span>(<span class="c-str">'customer_id'</span>).<span class="c-fn">agg</span>(
+    Recency   = (<span class="c-str">'date'</span>,     <span class="c-kw">lambda</span> x: (snapshot - x.<span class="c-fn">max</span>()).days),
+    Frequency = (<span class="c-str">'order_id'</span>, <span class="c-str">'count'</span>),
+    Monetary  = (<span class="c-str">'revenue'</span>,  <span class="c-str">'sum'</span>)
+).<span class="c-fn">reset_index</span>()
+rfm[<span class="c-str">'R_score'</span>] = pd.<span class="c-fn">qcut</span>(rfm[<span class="c-str">'Recency'</span>],   <span class="c-num">5</span>, labels=[<span class="c-num">5</span>,<span class="c-num">4</span>,<span class="c-num">3</span>,<span class="c-num">2</span>,<span class="c-num">1</span>])
+rfm[<span class="c-str">'F_score'</span>] = pd.<span class="c-fn">qcut</span>(rfm[<span class="c-str">'Frequency'</span>], <span class="c-num">5</span>, labels=[<span class="c-num">1</span>,<span class="c-num">2</span>,<span class="c-num">3</span>,<span class="c-num">4</span>,<span class="c-num">5</span>])</pre></div>
+      </div>
+
+      <div class="card">
+        <div class="card-head">
+          <span class="card-title">PySpark — Scale SQL-Like Operations</span>
+          <span class="card-tag tag-int">BIG DATA</span>
+        </div>
+        <div class="code-block"><pre><span class="c-kw">from</span> pyspark.sql <span class="c-kw">import</span> SparkSession
+<span class="c-kw">from</span> pyspark.sql <span class="c-kw">import</span> functions <span class="c-kw">as</span> F
+<span class="c-kw">from</span> pyspark.sql.window <span class="c-kw">import</span> Window
+
+spark = SparkSession.<span class="c-fn">builder</span>.<span class="c-fn">appName</span>(<span class="c-str">'ETL'</span>).<span class="c-fn">getOrCreate</span>()
+
+<span class="c-cm"># — Read large dataset —</span>
+df = spark.read.<span class="c-fn">parquet</span>(<span class="c-str">'s3://bucket/data/'</span>)
+
+<span class="c-cm"># — SQL-like transforms —</span>
+result = (df
+    .<span class="c-fn">filter</span>(F.<span class="c-fn">col</span>(<span class="c-str">'revenue'</span>) > <span class="c-num">0</span>)
+    .<span class="c-fn">groupBy</span>(<span class="c-str">'region'</span>, <span class="c-str">'product'</span>)
+    .<span class="c-fn">agg</span>(
+        F.<span class="c-fn">sum</span>(<span class="c-str">'revenue'</span>).<span class="c-fn">alias</span>(<span class="c-str">'total_rev'</span>),
+        F.<span class="c-fn">countDistinct</span>(<span class="c-str">'customer_id'</span>).<span class="c-fn">alias</span>(<span class="c-str">'unique_custs'</span>)
+    )
+)
+
+<span class="c-cm"># — Window function in PySpark —</span>
+w = Window.<span class="c-fn">partitionBy</span>(<span class="c-str">'region'</span>).<span class="c-fn">orderBy</span>(F.<span class="c-fn">desc</span>(<span class="c-str">'revenue'</span>))
+df = df.<span class="c-fn">withColumn</span>(<span class="c-str">'rank'</span>, F.<span class="c-fn">rank</span>().<span class="c-fn">over</span>(w))
+
+<span class="c-cm"># — Or just use SQL directly! —</span>
+df.<span class="c-fn">createOrReplaceTempView</span>(<span class="c-str">'orders'</span>)
+result = spark.<span class="c-fn">sql</span>(<span class="c-str">"SELECT region, SUM(revenue) FROM orders GROUP BY 1"</span>)</pre></div>
+      </div>
+
+      <div class="card">
+        <div class="card-head">
+          <span class="card-title">Automation & Scheduling Patterns</span>
+          <span class="card-tag tag-int">ETL PIPELINE</span>
+        </div>
+        <div class="code-block"><pre><span class="c-cm"># — Production ETL function template —</span>
+<span class="c-kw">import</span> logging
+logging.<span class="c-fn">basicConfig</span>(level=logging.INFO,
+    format=<span class="c-str">'%(asctime)s %(levelname)s %(message)s'</span>)
+
+<span class="c-kw">def</span> <span class="c-fn">run_etl</span>(start_date: str, end_date: str) -> <span class="c-fn">dict</span>:
+    <span class="c-str">"""Incremental ETL with logging & error handling."""</span>
+    stats = {<span class="c-str">'extracted'</span>: <span class="c-num">0</span>, <span class="c-str">'loaded'</span>: <span class="c-num">0</span>, <span class="c-str">'errors'</span>: <span class="c-num">0</span>}
+    <span class="c-kw">try</span>:
+        logging.<span class="c-fn">info</span>(<span class="c-str">f"Extracting {start_date} → {end_date}"</span>)
+        df = <span class="c-fn">extract</span>(start_date, end_date)
+        stats[<span class="c-str">'extracted'</span>] = <span class="c-fn">len</span>(df)
+        
+        df = <span class="c-fn">transform</span>(df)
+        <span class="c-fn">validate</span>(df)                         <span class="c-cm"># assert checks</span>
+        
+        rows = <span class="c-fn">load</span>(df)
+        stats[<span class="c-str">'loaded'</span>] = rows
+        logging.<span class="c-fn">info</span>(<span class="c-str">f"✓ Loaded {rows} rows successfully"</span>)
+        
+    <span class="c-kw">except</span> <span class="c-fn">Exception</span> <span class="c-kw">as</span> e:
+        stats[<span class="c-str">'errors'</span>] += <span class="c-num">1</span>
+        logging.<span class="c-fn">error</span>(<span class="c-str">f"ETL failed: {e}"</span>)
+        <span class="c-kw">raise</span>
+    
+    <span class="c-kw">return</span> stats
+
+<span class="c-cm"># — Schedule with Airflow DAG (conceptual) —</span>
+<span class="c-cm"># from airflow.decorators import dag, task</span>
+<span class="c-cm"># @dag(schedule='0 6 * * *', start_date=datetime(2024,1,1))</span>
+<span class="c-cm"># def daily_sales_etl(): ...</span></pre></div>
+      </div>
+
+    </div>
+
+    <!-- ROADMAP -->
+    <h3 style="margin-top:48px; margin-bottom:24px; font-size:22px; font-weight:900; letter-spacing:-0.5px;">Standing Out — Interview Roadmap</h3>
+    <div class="roadmap">
+      <div class="roadmap-item">
+        <div class="roadmap-dot red">01</div>
+        <div class="roadmap-content">
+          <h4>Speak SQL, Code Pandas</h4>
+          <p>When asked a SQL problem, solve it and immediately offer the Pandas equivalent. Shows range — especially valued at analytics-heavy companies.</p>
+        </div>
+      </div>
+      <div class="roadmap-item">
+        <div class="roadmap-dot blue">02</div>
+        <div class="roadmap-content">
+          <h4>Always Mention Data Quality</h4>
+          <p>For every dataset, proactively discuss: nulls, duplicates, type mismatches, outliers. Mention your <code>profile(df)</code> helper. This is real BA thinking.</p>
+        </div>
+      </div>
+      <div class="roadmap-item">
+        <div class="roadmap-dot green">03</div>
+        <div class="roadmap-content">
+          <h4>Use Method Chaining Without Being Asked</h4>
+          <p>Readable, production-quality chained code signals seniority. Messy temp variable code signals junior. The difference is visible within 30 seconds.</p>
+        </div>
+      </div>
+      <div class="roadmap-item">
+        <div class="roadmap-dot red">04</div>
+        <div class="roadmap-content">
+          <h4>Bring Up Window Functions Unprompted</h4>
+          <p>Cohort analysis, period-over-period growth, running totals — mention these before being asked. Most candidates wait to be told what to calculate.</p>
+        </div>
+      </div>
+      <div class="roadmap-item">
+        <div class="roadmap-dot blue">05</div>
+        <div class="roadmap-content">
+          <h4>Discuss Scale & Performance</h4>
+          <p>Mention chunked reads, categorical dtypes, vectorization vs. loops, and Parquet vs. CSV. This differentiates you from candidates who've only used small datasets.</p>
+        </div>
+      </div>
+      <div class="roadmap-item">
+        <div class="roadmap-dot green">06</div>
+        <div class="roadmap-content">
+          <h4>Show Business Thinking in Code</h4>
+          <p>Add comments that explain <em>why</em> you're doing something, not just what. <code># Validate no fan-out before loading</code> tells interviewers you understand the consequences.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  Python BA/DA/BI Reference · All syntax targets <span>Python 3.10+</span> · pandas 2.x · numpy 1.26+
+</footer>
+
+</body>
+</html>

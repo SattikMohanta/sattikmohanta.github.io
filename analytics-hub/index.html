@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Localhost Unified Analytics & Exam Suite</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <style>
+    iframe { width: 100%; height: 100%; border: none; }
+  </style>
+</head>
+<body class="bg-slate-950 text-slate-100 flex flex-col h-screen overflow-hidden font-sans">
+
+  <!-- Top Hub Navigation Header -->
+  <header class="bg-slate-900 border-b border-slate-800 px-4 py-2.5 flex items-center justify-between flex-shrink-0 z-50">
+    <div class="flex items-center space-x-3">
+      <div class="bg-indigo-600 p-2 rounded-lg text-white">
+        <i data-lucide="layers" class="w-5 h-5"></i>
+      </div>
+      <div>
+        <h1 class="font-bold text-sm leading-tight text-white">Analytics & Prep Engine Hub</h1>
+        <p class="text-[10px] text-slate-400">Localhost Unified Gateway</p>
+      </div>
+    </div>
+
+    <!-- App Switcher Tabs -->
+    <div class="flex items-center gap-1.5 bg-slate-950 p-1 rounded-xl border border-slate-800 text-xs font-semibold">
+      <button onclick="loadApp('ecba.html', this)" class="app-tab-btn active px-3 py-1.5 rounded-lg bg-blue-600 text-white flex items-center space-x-2 transition">
+        <i data-lucide="award" class="w-3.5 h-3.5"></i>
+        <span>IIBA® ECBA™ Prep</span>
+      </button>
+      <button onclick="loadApp('sql.html', this)" class="app-tab-btn px-3 py-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 flex items-center space-x-2 transition">
+        <i data-lucide="database" class="w-3.5 h-3.5"></i>
+        <span>SQL Mastery Suite</span>
+      </button>
+      <button onclick="loadApp('powerbi.html', this)" class="app-tab-btn px-3 py-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 flex items-center space-x-2 transition">
+        <i data-lucide="bar-chart-2" class="w-3.5 h-3.5"></i>
+        <span>Power BI PL-300 Engine</span>
+      </button>
+    </div>
+
+    <div class="flex items-center space-x-2">
+      <a id="open-new-tab" href="ecba.html" target="_blank" class="px-2.5 py-1.5 bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs rounded-lg flex items-center space-x-1.5 transition">
+        <i data-lucide="external-link" class="w-3.5 h-3.5"></i>
+        <span class="hidden sm:inline">Open App in New Tab</span>
+      </a>
+    </div>
+  </header>
+
+  <!-- Frame Viewport -->
+  <main class="flex-1 w-full h-full bg-slate-950 relative">
+    <iframe id="portal-frame" src="ecba.html" class="w-full h-full"></iframe>
+  </main>
+
+  <script>
+    function loadApp(url, btn) {
+      document.getElementById('portal-frame').src = url;
+      document.getElementById('open-new-tab').href = url;
+      
+      document.querySelectorAll('.app-tab-btn').forEach(b => {
+        b.className = 'app-tab-btn px-3 py-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 flex items-center space-x-2 transition';
+      });
+      btn.className = 'app-tab-btn active px-3 py-1.5 rounded-lg bg-blue-600 text-white flex items-center space-x-2 transition';
+    }
+
+    window.addEventListener('DOMContentLoaded', () => {
+      lucide.createIcons();
+    });
+  </script>
+</body>
+</html>

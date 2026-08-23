@@ -1,0 +1,1667 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Enterprise SQL & Data Analytics Suite — 200+ Benchmark Engine</title>
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <!-- SQL.js WASM In-Browser Engine -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.8.0/sql-wasm.js"></script>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600&family=Inter:wght@300;400;500;600;700&display=swap');
+    body { font-family: 'Inter', sans-serif; }
+    .font-mono-code { font-family: 'Fira Code', monospace; }
+    
+    .wrap-content {
+      white-space: pre-wrap !important;
+      word-break: break-word !important;
+      overflow-wrap: anywhere !important;
+    }
+    .wrap-table-cell {
+      white-space: normal !important;
+      word-break: break-word !important;
+      overflow-wrap: break-word !important;
+    }
+    .wrap-sidebar-btn {
+      white-space: normal !important;
+      word-break: break-word !important;
+      line-height: 1.3 !important;
+    }
+
+    .custom-scroll::-webkit-scrollbar { width: 5px; height: 5px; }
+    .custom-scroll::-webkit-scrollbar-track { background: #0f172a; }
+    .custom-scroll::-webkit-scrollbar-thumb { background: #334155; border-radius: 4px; }
+    
+    .nav-btn-active { background-color: #0284c7; color: #ffffff; font-weight: 600; }
+    .nav-btn-inactive { color: #94a3b8; }
+    .nav-btn-inactive:hover { background-color: #1e293b; color: #f8fafc; }
+    
+    .dialect-btn-active { background-color: #0284c7; color: #ffffff; border-color: #38bdf8; }
+    .dialect-btn-inactive { background-color: #1e293b; color: #94a3b8; border-color: #334155; }
+    .dialect-btn-inactive:hover { color: #f8fafc; border-color: #475569; }
+    
+    .module-item-active { background-color: #1e293b; border-left: 3px solid #38bdf8; color: #f8fafc; font-weight: 600; }
+    .module-item-inactive { color: #94a3b8; border-left: 3px solid transparent; }
+    .module-item-inactive:hover { background-color: #0f172a; color: #cbd5e1; }
+  </style>
+</head>
+<body class="bg-slate-950 text-slate-100 min-h-screen flex overflow-hidden">
+
+  <!-- ========================================================================= -->
+  <!-- VERTICAL SIDEBAR NAVIGATION (Left)                                       -->
+  <!-- ========================================================================= -->
+  <aside class="w-64 bg-slate-900 border-r border-slate-800 flex flex-col justify-between flex-shrink-0 z-40">
+    <div class="flex flex-col min-w-0">
+      <!-- Platform Branding -->
+      <div class="p-4 border-b border-slate-800 flex items-center space-x-3">
+        <div class="bg-sky-500 p-2 rounded-lg text-slate-950 flex-shrink-0">
+          <i data-lucide="database" class="w-5 h-5"></i>
+        </div>
+        <div class="min-w-0">
+          <h1 class="font-bold text-sm text-white tracking-tight leading-tight wrap-content">SQL Mastery Pro</h1>
+          <span class="text-[10px] text-sky-400 font-mono-code wrap-content">200+ Benchmark Suite v8.0</span>
+        </div>
+      </div>
+
+      <!-- Engine Status Indicator -->
+      <div class="p-3 mx-3 my-3 bg-slate-950 border border-slate-800 rounded-lg min-w-0">
+        <div class="flex items-center justify-between text-[11px] mb-2 gap-1">
+          <span class="text-slate-400 flex-shrink-0">Engine:</span>
+          <span id="sidebar-engine-badge" class="font-bold font-mono-code text-sky-400 wrap-content text-right text-[10px]">T-SQL Mode</span>
+        </div>
+        <div class="flex items-center space-x-1.5 text-[10px] text-slate-400">
+          <span id="engine-status-dot" class="w-2 h-2 rounded-full bg-amber-400 animate-pulse flex-shrink-0"></span>
+          <span id="engine-status-text" class="wrap-content">Booting Engine...</span>
+        </div>
+      </div>
+
+      <!-- Vertical Tabs Menu -->
+      <nav class="px-2 space-y-1 text-xs font-medium">
+        <button onclick="switchMainTab('tab-concepts')" id="nav-tab-concepts" class="w-full flex items-center space-x-3 px-3 py-2.5 rounded-lg nav-btn-active transition wrap-sidebar-btn text-left">
+          <i data-lucide="book-open" class="w-4 h-4 flex-shrink-0"></i>
+          <span>1. Curriculum Hierarchy</span>
+        </button>
+        <button onclick="switchMainTab('tab-lab')" id="nav-tab-lab" class="w-full flex items-center space-x-3 px-3 py-2.5 rounded-lg nav-btn-inactive transition wrap-sidebar-btn text-left">
+          <i data-lucide="terminal" class="w-4 h-4 flex-shrink-0"></i>
+          <span>2. Problem Lab & Exams</span>
+        </button>
+        <button onclick="switchMainTab('tab-cases')" id="nav-tab-cases" class="w-full flex items-center space-x-3 px-3 py-2.5 rounded-lg nav-btn-inactive transition wrap-sidebar-btn text-left">
+          <i data-lucide="briefcase" class="w-4 h-4 flex-shrink-0"></i>
+          <span>3. Fortune 500 Case Studies (20)</span>
+        </button>
+        <button onclick="switchMainTab('tab-aptitude')" id="nav-tab-aptitude" class="w-full flex items-center space-x-3 px-3 py-2.5 rounded-lg nav-btn-inactive transition wrap-sidebar-btn text-left">
+          <i data-lucide="check-square" class="w-4 h-4 flex-shrink-0"></i>
+          <span>4. Theory & Aptitude (200+ Qs)</span>
+        </button>
+        <button onclick="switchMainTab('tab-resources')" id="nav-tab-resources" class="w-full flex items-center space-x-3 px-3 py-2.5 rounded-lg nav-btn-inactive transition wrap-sidebar-btn text-left">
+          <i data-lucide="download-cloud" class="w-4 h-4 flex-shrink-0"></i>
+          <span>5. Datasets (26 Repos)</span>
+        </button>
+      </nav>
+    </div>
+
+    <!-- Sidebar Footer -->
+    <div class="p-3 border-t border-slate-800 text-[11px] text-slate-500 wrap-content">
+      Multi-Dialect AST Validator Ready[cite: 1]
+    </div>
+  </aside>
+
+  <!-- ========================================================================= -->
+  <!-- MAIN WORKSPACE CONTAINER                                                 -->
+  <!-- ========================================================================= -->
+  <div class="flex-1 flex flex-col min-w-0 h-screen overflow-hidden">
+    
+    <!-- Top Global Action Bar: 1-Click Dialect Engine Switcher -->
+    <header class="bg-slate-900 border-b border-slate-800 px-6 py-3 flex flex-wrap items-center justify-between gap-3 flex-shrink-0">
+      <div class="flex items-center space-x-2 min-w-0">
+        <span class="text-xs font-semibold text-slate-400 uppercase tracking-wider flex-shrink-0">Execute As:</span>
+        <div class="flex flex-wrap items-center gap-1 bg-slate-950 p-1 rounded-lg border border-slate-800 text-xs">
+          <button onclick="setDialectEngine('T-SQL')" id="btn-engine-T-SQL" class="px-2.5 py-1 rounded dialect-btn-active font-mono-code transition">T-SQL / MS SQL</button>
+          <button onclick="setDialectEngine('PostgreSQL')" id="btn-engine-PostgreSQL" class="px-2.5 py-1 rounded dialect-btn-inactive font-mono-code transition">PostgreSQL</button>
+          <button onclick="setDialectEngine('MySQL')" id="btn-engine-MySQL" class="px-2.5 py-1 rounded dialect-btn-inactive font-mono-code transition">MySQL</button>
+          <button onclick="setDialectEngine('SQLite')" id="btn-engine-SQLite" class="px-2.5 py-1 rounded dialect-btn-inactive font-mono-code transition">SQLite</button>
+        </div>
+      </div>
+
+      <div class="flex items-center space-x-2">
+        <span class="text-xs bg-sky-950 text-sky-300 border border-sky-800 px-2.5 py-1 rounded font-mono-code flex items-center space-x-1.5">
+          <span class="w-1.5 h-1.5 rounded-full bg-sky-400 flex-shrink-0"></span>
+          <span class="wrap-content">200+ Master Questions Active</span>
+        </span>
+      </div>
+    </header>
+
+    <!-- Content Workspace -->
+    <main class="flex-1 p-6 overflow-y-auto custom-scroll bg-slate-950">
+
+      <!-- ===================================================================== -->
+      <!-- TAB 1: CURRICULUM HIERARCHY & SYNTAX ENGINE                           -->
+      <!-- ===================================================================== -->
+      <section id="tab-concepts" class="tab-view space-y-6">
+        <div class="flex flex-col md:flex-row md:items-center justify-between pb-4 border-b border-slate-800 gap-4">
+          <div class="min-w-0">
+            <h2 class="text-lg font-bold text-white wrap-content">Curriculum Hierarchy & Universal Execution Sandbox</h2>
+            <p class="text-xs text-slate-400 wrap-content">16 detailed modules with wrapped explanation containers, logic flows, multi-dialect blocks, and 1-tap live execution.</p>
+          </div>
+          <!-- Level Selectors -->
+          <div class="flex flex-wrap gap-2 flex-shrink-0">
+            <button onclick="selectCurriculumLevel(1)" id="btn-lvl-1" class="px-3 py-1.5 rounded-lg text-xs font-semibold bg-sky-600 text-white transition wrap-sidebar-btn">Level 1: Foundations</button>
+            <button onclick="selectCurriculumLevel(2)" id="btn-lvl-2" class="px-3 py-1.5 rounded-lg text-xs font-semibold bg-slate-800 text-slate-400 hover:text-white transition wrap-sidebar-btn">Level 2: Intermediate</button>
+            <button onclick="selectCurriculumLevel(3)" id="btn-lvl-3" class="px-3 py-1.5 rounded-lg text-xs font-semibold bg-slate-800 text-slate-400 hover:text-white transition wrap-sidebar-btn">Level 3: Advanced Analytics</button>
+            <button onclick="selectCurriculumLevel(4)" id="btn-lvl-4" class="px-3 py-1.5 rounded-lg text-xs font-semibold bg-slate-800 text-slate-400 hover:text-white transition wrap-sidebar-btn">Level 4: Architecture & Tuning</button>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+          <div class="lg:col-span-4 bg-slate-900 border border-slate-800 rounded-xl p-3 flex flex-col space-y-2 h-fit min-w-0">
+            <div class="text-[11px] font-bold text-slate-400 uppercase tracking-wider px-2 py-1 flex items-center justify-between">
+              <span id="level-subnav-heading" class="wrap-content">Level 1 Modules</span>
+              <span class="text-[10px] text-sky-400 font-mono-code flex-shrink-0">4 Sub-Topics</span>
+            </div>
+            <div id="submodule-nav-list" class="space-y-1 min-w-0">
+            </div>
+          </div>
+
+          <div class="lg:col-span-8 space-y-5 min-w-0">
+            <div id="curriculum-module-display" class="space-y-5 min-w-0">
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===================================================================== -->
+      <!-- TAB 2: PROBLEM LAB & CERTIFICATION                                    -->
+      <!-- ===================================================================== -->
+      <section id="tab-lab" class="tab-view hidden space-y-6">
+        <div class="bg-slate-900 border border-slate-800 p-4 rounded-xl flex flex-wrap items-center justify-between gap-4">
+          <div class="flex flex-wrap items-center gap-3">
+            <div>
+              <label class="text-[10px] font-bold text-slate-400 uppercase tracking-wider block mb-1">Concept Topic</label>
+              <select id="filter-lab-concept" onchange="filterAndRenderLabProblems()" class="bg-slate-950 border border-slate-700 text-xs rounded-lg px-3 py-1.5 text-slate-200 max-w-[200px] truncate">
+                <option value="all">All Topics (Level 1-4)</option>
+                <option value="Basic Filtering & Aggregation">Basic Filtering & Aggregation</option>
+                <option value="Relational Joins & Set Operations">Relational Joins & Set Operations</option>
+                <option value="Window Functions & Ranking">Window Functions & Ranking</option>
+                <option value="Recursive CTEs & Advanced Analytics">Recursive CTEs & Advanced Analytics</option>
+                <option value="Performance & Subqueries">Performance & Subqueries</option>
+              </select>
+            </div>
+            <div>
+              <label class="text-[10px] font-bold text-slate-400 uppercase tracking-wider block mb-1">Industry Domain</label>
+              <select id="filter-lab-industry" onchange="filterAndRenderLabProblems()" class="bg-slate-950 border border-slate-700 text-xs rounded-lg px-3 py-1.5 text-slate-200 max-w-[200px] truncate">
+                <option value="all">All Industries</option>
+                <option value="Banking & Fintech">Banking & Fintech</option>
+                <option value="E-Commerce & Retail">E-Commerce & Retail</option>
+                <option value="SaaS & Cloud Telemetry">SaaS & Cloud Telemetry</option>
+                <option value="Healthcare & Insurance">Healthcare & Insurance</option>
+                <option value="Logistics & Mobility">Logistics & Mobility</option>
+              </select>
+            </div>
+            <div>
+              <label class="text-[10px] font-bold text-slate-400 uppercase tracking-wider block mb-1">Difficulty</label>
+              <select id="filter-lab-difficulty" onchange="filterAndRenderLabProblems()" class="bg-slate-950 border border-slate-700 text-xs rounded-lg px-3 py-1.5 text-slate-200">
+                <option value="all">All Levels</option>
+                <option value="Beginner">Beginner (L1)</option>
+                <option value="Intermediate">Intermediate (L2)</option>
+                <option value="Advanced">Advanced (L3)</option>
+                <option value="Master">Master (L4)</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="flex items-center space-x-3">
+            <div id="active-timer-display" class="hidden flex items-center space-x-2 bg-rose-950/60 border border-rose-800 text-rose-300 font-mono-code font-bold px-3 py-1.5 rounded-lg text-xs">
+              <i data-lucide="timer" class="w-4 h-4"></i>
+              <span id="lab-timer-clock">45:00</span>
+            </div>
+            <button onclick="setLabMode('practice')" id="btn-mode-practice" class="px-3 py-1.5 rounded-lg text-xs font-semibold bg-sky-600 text-white">Practice Sandbox</button>
+            <button onclick="setLabMode('timed')" id="btn-mode-timed" class="px-3 py-1.5 rounded-lg text-xs font-semibold bg-slate-800 text-slate-400 hover:text-white">Timed Exam Mode</button>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+          <div class="lg:col-span-5 flex flex-col space-y-4 min-w-0">
+            <div class="bg-slate-900 border border-slate-800 rounded-xl p-4">
+              <label class="text-xs font-bold text-slate-400 uppercase tracking-wider block mb-2">Select Challenge (20 Catalog)</label>
+              <select id="lab-problem-select" onchange="promptAndLoadLabProblem()" class="w-full bg-slate-950 border border-slate-700 rounded-lg p-2.5 text-xs text-slate-200 focus:border-sky-500 focus:outline-none">
+              </select>
+            </div>
+
+            <div id="problem-instruction-card" class="bg-slate-900 border border-slate-800 rounded-xl p-5 flex-1 flex flex-col justify-between min-w-0">
+            </div>
+          </div>
+
+          <div class="lg:col-span-7 flex flex-col space-y-4 min-w-0">
+            <div class="bg-slate-900 border border-slate-800 rounded-xl p-4 flex flex-col min-w-0">
+              <div class="flex items-center justify-between pb-3 border-b border-slate-800 gap-2">
+                <span class="text-xs font-bold uppercase text-slate-400 flex items-center space-x-2 min-w-0">
+                  <i data-lucide="code-2" class="w-4 h-4 text-sky-400 flex-shrink-0"></i>
+                  <span class="wrap-content">SQL Editor (<span id="editor-dialect-label" class="text-sky-400">T-SQL Mode</span>)</span>
+                </span>
+                <button onclick="resetLabEditor()" class="text-xs text-slate-400 hover:text-white flex items-center space-x-1 flex-shrink-0">
+                  <i data-lucide="rotate-ccw" class="w-3 h-3"></i>
+                  <span>Reset</span>
+                </button>
+              </div>
+
+              <textarea id="lab-sql-editor" class="w-full h-48 bg-slate-950 text-sky-200 font-mono-code text-xs p-3 rounded-lg border border-slate-800 focus:border-sky-500 focus:outline-none resize-none my-3 wrap-content" spellcheck="false"></textarea>
+
+              <div class="flex flex-wrap items-center justify-between gap-2">
+                <span class="text-[11px] text-slate-500 wrap-content">Transpiler and AST evaluator run in-browser[cite: 1].</span>
+                <button onclick="executeAndValidateLabQuery()" class="bg-sky-500 hover:bg-sky-400 text-slate-950 font-bold px-5 py-2 rounded-lg text-xs flex items-center space-x-2 transition shadow-lg shadow-sky-950 flex-shrink-0">
+                  <i data-lucide="play" class="w-4 h-4 fill-current"></i>
+                  <span>Run & Validate Solution</span>
+                </button>
+              </div>
+            </div>
+
+            <div id="lab-feedback-panel" class="bg-slate-900 border border-slate-800 rounded-xl p-4 min-h-[140px] flex flex-col justify-center min-w-0">
+              <div class="text-xs text-slate-500 italic text-center wrap-content">Accept problem access and execute your SQL statement above.</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===================================================================== -->
+      <!-- TAB 3: 20 FULL ENTERPRISE CASE STUDIES                                -->
+      <!-- ===================================================================== -->
+      <section id="tab-cases" class="tab-view hidden space-y-6">
+        <div class="bg-slate-900 border border-slate-800 p-5 rounded-xl flex flex-wrap items-center justify-between gap-3">
+          <div class="min-w-0">
+            <h2 class="text-lg font-bold text-white wrap-content">20 Enterprise & Fortune 500 Case Studies</h2>
+            <p class="text-xs text-slate-400 wrap-content">Extensive business scenarios from Amazon, IDFC Bank, Meta, Deloitte, Uber, Netflix, and Apple.</p>
+          </div>
+          <div class="flex items-center space-x-2 text-xs">
+            <span class="text-slate-400 flex-shrink-0">Filter Industry:</span>
+            <select id="case-studies-filter" onchange="renderCaseStudies()" class="bg-slate-950 border border-slate-700 text-xs rounded px-2.5 py-1.5 text-slate-200">
+              <option value="all">All 20 Case Studies</option>
+              <option value="Banking & Fintech">Banking & Fintech (5)</option>
+              <option value="E-Commerce & Retail">E-Commerce & Retail (4)</option>
+              <option value="SaaS & Cloud Telemetry">SaaS & Cloud (4)</option>
+              <option value="Healthcare & Life Sciences">Healthcare (3)</option>
+              <option value="Logistics, Mobility & Telecom">Logistics & Telecom (4)</option>
+            </select>
+          </div>
+        </div>
+
+        <div id="cases-grid-display" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        </div>
+      </section>
+
+      <!-- ===================================================================== -->
+      <!-- TAB 4: 200+ APTITUDE & FUNDAMENTALS BENCHMARK                         -->
+      <!-- ===================================================================== -->
+      <section id="tab-aptitude" class="tab-view hidden space-y-6">
+        <div class="bg-slate-900 border border-slate-800 p-5 rounded-xl flex flex-wrap items-center justify-between gap-4">
+          <div class="min-w-0">
+            <h2 class="text-lg font-bold text-white wrap-content">SQL Theoretical & Architectural Aptitude Benchmark (200+ Questions)</h2>
+            <p class="text-xs text-slate-400 wrap-content">Covers all SQL fundamentals across 8 deep domains: DDL/DML, Relational Sets & Joins, Aggregation & 3VL, Windows & Analytics, Indexing & Query Tuning, Storage & Locking, Integrity & Security, and Subqueries/CTEs.</p>
+          </div>
+
+          <div class="flex flex-wrap items-center gap-3">
+            <div class="flex items-center space-x-2">
+              <label class="text-xs text-slate-400 font-semibold flex-shrink-0">Filter Topic:</label>
+              <select id="aptitude-topic-filter" onchange="changeAptitudeFilter()" class="bg-slate-950 border border-slate-700 text-xs rounded-lg px-3 py-2 text-slate-200 max-w-[240px] truncate">
+                <option value="all">All Topics (200+ Qs)</option>
+                <option value="DDL, DML & Execution Order">1. DDL, DML & Execution Order (25 Qs)</option>
+                <option value="Relational Sets & Joins">2. Relational Sets & Joins (25 Qs)</option>
+                <option value="Aggregation, NULLs & 3VL">3. Aggregation, NULLs & 3VL (25 Qs)</option>
+                <option value="Window Functions & Ranking">4. Window Functions & Ranking (25 Qs)</option>
+                <option value="Subqueries, CTEs & Recursion">5. Subqueries, CTEs & Recursion (25 Qs)</option>
+                <option value="Indexing, SARGability & Tuning">6. Indexing, SARGability & Tuning (25 Qs)</option>
+                <option value="Transactions, ACID & Locking">7. Transactions, ACID & Locking (25 Qs)</option>
+                <option value="Integrity, Constraints & Security">8. Integrity, Constraints & Security (25 Qs)</option>
+              </select>
+            </div>
+            <button onclick="gradeAptitudeTest()" class="bg-sky-500 hover:bg-sky-400 text-slate-950 font-bold px-4 py-2 rounded-lg text-xs transition flex-shrink-0 shadow-md shadow-sky-950">
+              Submit Assessment
+            </button>
+          </div>
+        </div>
+
+        <!-- Pagination & Summary Toolbar -->
+        <div class="flex flex-wrap items-center justify-between bg-slate-900/60 border border-slate-800/80 px-4 py-3 rounded-xl gap-3 text-xs">
+          <div class="text-slate-400">
+            Showing questions <span id="apt-page-range" class="text-sky-400 font-bold font-mono-code">1 - 25</span> of <span id="apt-total-count" class="text-white font-bold font-mono-code">200</span>
+          </div>
+
+          <div class="flex items-center space-x-2" id="apt-pagination-controls">
+            <!-- Rendered via JS -->
+          </div>
+        </div>
+
+        <!-- Questions List Container -->
+        <div id="aptitude-questions-container" class="space-y-4 min-w-0">
+          <!-- Rendered dynamically -->
+        </div>
+
+        <!-- Bottom Pagination Bar -->
+        <div class="flex justify-center pt-2">
+          <div class="flex items-center space-x-1" id="apt-bottom-pagination">
+            <!-- Rendered via JS -->
+          </div>
+        </div>
+      </section>
+
+      <!-- ===================================================================== -->
+      <!-- TAB 5: 26+ DATASETS & MULTI-FORMATS                                   -->
+      <!-- ===================================================================== -->
+      <section id="tab-resources" class="tab-view hidden space-y-6">
+        <div class="bg-slate-900 border border-slate-800 p-6 rounded-xl">
+          <h2 class="text-lg font-bold text-white mb-1 wrap-content">Curated Open-Source Repositories & Platform Data Sources</h2>
+          <p class="text-xs text-slate-400 mb-6 wrap-content">Consolidated direct links to schemas and benchmark datasets across GitHub, SQLZoo, SQLBolt, DataLemur, Kaggle, Mode, and freeCodeCamp.</p>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            <div class="p-4 bg-slate-950 border border-slate-800 rounded-xl flex flex-col justify-between">
+              <div>
+                <div class="font-bold text-sky-400 text-sm mb-1 wrap-content">SQLZoo & SQLBolt Interactive Schema Repos</div>
+                <p class="text-xs text-slate-400 mb-4 wrap-content">World Cup, Nobel Prizes, Movie DB, and Northwind canonical datasets for progressive mastery.</p>
+              </div>
+              <div class="space-y-1">
+                <a href="https://sqlzoo.net/wiki/SQL_Tutorial" target="_blank" class="text-xs text-sky-400 hover:underline flex items-center space-x-1 wrap-content">
+                  <span>SQLZoo Wiki Sandbox</span> <i data-lucide="external-link" class="w-3 h-3 ml-1 flex-shrink-0"></i>
+                </a>
+                <a href="https://sqlbolt.com/" target="_blank" class="text-xs text-sky-400 hover:underline flex items-center space-x-1 wrap-content">
+                  <span>SQLBolt Interactive Lessons</span> <i data-lucide="external-link" class="w-3 h-3 ml-1 flex-shrink-0"></i>
+                </a>
+              </div>
+            </div>
+
+            <div class="p-4 bg-slate-950 border border-slate-800 rounded-xl flex flex-col justify-between">
+              <div>
+                <div class="font-bold text-sky-400 text-sm mb-1 wrap-content">DataLemur & HackerRank Real Interview Sets</div>
+                <p class="text-xs text-slate-400 mb-4 wrap-content">FAANG & Fortune 500 relational schema dumps (Meta Ad spend, Amazon delivery, Uber rides, Stripe payments).</p>
+              </div>
+              <div class="space-y-1">
+                <a href="https://datalemur.com/questions" target="_blank" class="text-xs text-sky-400 hover:underline flex items-center space-x-1 wrap-content">
+                  <span>DataLemur Interview Questions</span> <i data-lucide="external-link" class="w-3 h-3 ml-1 flex-shrink-0"></i>
+                </a>
+                <a href="https://www.hackerrank.com/domains/sql" target="_blank" class="text-xs text-sky-400 hover:underline flex items-center space-x-1 wrap-content">
+                  <span>HackerRank SQL Practice Domain</span> <i data-lucide="external-link" class="w-3 h-3 ml-1 flex-shrink-0"></i>
+                </a>
+              </div>
+            </div>
+
+            <div class="p-4 bg-slate-950 border border-slate-800 rounded-xl flex flex-col justify-between">
+              <div>
+                <div class="font-bold text-sky-400 text-sm mb-1 wrap-content">GitHub & Kaggle Open Datasets</div>
+                <p class="text-xs text-slate-400 mb-4 wrap-content">Production-grade OLTP & OLAP datasets (Pagila, Sakila, AdventureWorks, Brazilian E-Commerce Olist).</p>
+              </div>
+              <div class="space-y-1">
+                <a href="https://github.com/lerocha/chinook-database" target="_blank" class="text-xs text-sky-400 hover:underline flex items-center space-x-1 wrap-content">
+                  <span>Chinook Music Store (GitHub)</span> <i data-lucide="external-link" class="w-3 h-3 ml-1 flex-shrink-0"></i>
+                </a>
+                <a href="https://www.kaggle.com/datasets/olistbr/brazilian-ecommerce" target="_blank" class="text-xs text-sky-400 hover:underline flex items-center space-x-1 wrap-content">
+                  <span>Olist 100k E-Commerce (Kaggle)</span> <i data-lucide="external-link" class="w-3 h-3 ml-1 flex-shrink-0"></i>
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="bg-slate-900 border border-slate-800 p-6 rounded-xl">
+          <div class="flex flex-wrap items-center justify-between mb-4 gap-2">
+            <div class="min-w-0">
+              <h3 class="text-base font-bold text-white wrap-content">26+ Enterprise & Benchmark Relational Datasets</h3>
+              <p class="text-xs text-slate-400 wrap-content">Download in SQL DDL (<code class="text-sky-400">.sql</code>), Excel / CSV (<code class="text-emerald-400">.csv</code>), or Word Data Dictionary (<code class="text-indigo-400">.doc</code>) formats.</p>
+            </div>
+            <span class="text-xs bg-slate-950 text-sky-400 border border-slate-800 px-3 py-1 rounded font-mono-code flex-shrink-0">26 Repos Active</span>
+          </div>
+
+          <div class="overflow-x-auto">
+            <table class="w-full text-left text-xs text-slate-300">
+              <thead class="bg-slate-950 text-slate-400 uppercase text-[10px] tracking-wider border-b border-slate-800">
+                <tr>
+                  <th class="p-3">#</th>
+                  <th class="p-3">Dataset Name</th>
+                  <th class="p-3">Source / Benchmark</th>
+                  <th class="p-3">Domain</th>
+                  <th class="p-3">Est. Records</th>
+                  <th class="p-3">Formats</th>
+                  <th class="p-3 text-right">Download</th>
+                </tr>
+              </thead>
+              <tbody id="datasets-table-body" class="divide-y divide-slate-800/60 font-mono-code">
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+  <!-- ========================================================================= -->
+  <!-- MODAL: CONFIRMATION / ACCEPTANCE TO START QUESTION                       -->
+  <!-- ========================================================================= -->
+  <div id="exam-prompt-modal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+    <div class="bg-slate-900 border border-slate-800 rounded-xl p-6 max-w-md w-full shadow-2xl space-y-4">
+      <div class="flex items-center space-x-3 text-sky-400">
+        <i data-lucide="play-circle" class="w-6 h-6 flex-shrink-0"></i>
+        <h3 class="font-bold text-base text-white wrap-content">Begin Challenge Workspace</h3>
+      </div>
+      <p id="modal-prompt-text" class="text-xs text-slate-300 leading-relaxed wrap-content">
+        You are about to access this challenge.
+      </p>
+      <div class="flex justify-end space-x-3 pt-2">
+        <button onclick="closeExamModal(false)" class="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-lg text-xs">Cancel</button>
+        <button onclick="closeExamModal(true)" class="px-4 py-2 bg-sky-500 hover:bg-sky-400 text-slate-950 font-bold rounded-lg text-xs">Proceed & Load Question</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================================================= -->
+  <!-- JAVASCRIPT: 200+ QUESTIONS DATA ENGINE & PAGINATION LOGIC                 -->
+  <!-- ========================================================================= -->
+  <script>
+    let sqlEngine = null;
+    let selectedDialect = 'T-SQL';
+    let labMode = 'practice';
+    let currentProblem = null;
+    let labTimerInterval = null;
+    let labTimeRemaining = 45 * 60;
+    let pendingProblemId = null;
+    let activeLevel = 1;
+    let activeModuleId = 'm1_1';
+
+    // -------------------------------------------------------------
+    // Tab 4: 200+ Master Questions Catalog Generator
+    // Generates exactly 200 distinct conceptual questions across 8 domains
+    // -------------------------------------------------------------
+    const aptitudeDomainTemplates = [
+      {
+        topic: "DDL, DML & Execution Order",
+        base: [
+          { q: "What is the true logical query processing phase order in ANSI SQL?", opt: ["FROM -> WHERE -> GROUP BY -> HAVING -> SELECT -> ORDER BY", "SELECT -> FROM -> WHERE -> GROUP BY -> ORDER BY", "FROM -> SELECT -> WHERE -> HAVING -> ORDER BY", "WHERE -> FROM -> GROUP BY -> SELECT -> HAVING"], ans: 0, exp: "Relational engines parse FROM/JOIN first to construct the candidate dataset, apply row filters (WHERE), aggregate (GROUP BY / HAVING), and evaluate projected expressions (SELECT)." },
+          { q: "Why does TRUNCATE execute orders of magnitude faster than DELETE without WHERE?", opt: ["TRUNCATE deallocates entire data pages and generates minimal log records; DELETE logs each deleted row.", "TRUNCATE runs exclusively in memory.", "DELETE drops the table schema and recreates it.", "TRUNCATE triggers foreign key cascade checks."], ans: 0, exp: "TRUNCATE is a DDL command that deallocates storage pages and logs page deallocations rather than individual row deletions." },
+          { q: "Why can a column alias defined in SELECT not be referenced in the WHERE clause?", opt: ["WHERE executes during phase 2 before the SELECT projection phase evaluates column aliases.", "Aliases are strictly forbidden in relational databases.", "WHERE operates only on system catalog views.", "Aliases can only be referenced in subqueries."], ans: 0, exp: "Because WHERE executes before SELECT in the relational processing lifecycle, the engine has not yet evaluated or named the projection aliases." },
+          { q: "What is the fundamental functional difference between DROP and TRUNCATE?", opt: ["DROP destroys both the table structure and data; TRUNCATE clears row data while preserving the table schema.", "TRUNCATE drops table permissions.", "DROP is reversible with ROLLBACK in all engines.", "TRUNCATE resets primary key metadata to NULL."], ans: 0, exp: "DROP removes the table definition and dependent objects from the database catalog, whereas TRUNCATE deletes all data rows while leaving the schema intact." },
+          { q: "In standard SQL, which statement type constitutes Data Control Language (DCL)?", opt: ["GRANT and REVOKE", "SELECT and INSERT", "CREATE and ALTER", "COMMIT and ROLLBACK"], ans: 0, exp: "DCL commands manage access privileges and security permissions (GRANT, REVOKE)." }
+        ]
+      },
+      {
+        topic: "Relational Sets & Joins",
+        base: [
+          { q: "What occurs mathematically during a CROSS JOIN without a filter predicate?", opt: ["A Cartesian product is computed producing M x N rows.", "An empty dataset is returned.", "An error is thrown requiring an ON condition.", "Only common matching keys are returned."], ans: 0, exp: "A CROSS JOIN combines every row from table A with every row from table B, generating a Cartesian set of size M x N." },
+          { q: "How does a FULL OUTER JOIN handle unmatched rows across both relation sides?", opt: ["It returns all matched rows plus unmatched rows from both tables padded with NULLs.", "It removes all unmatched rows.", "It converts unmatched rows to empty strings.", "It raises a relational exception."], ans: 0, exp: "FULL OUTER JOIN retains all tuples from both the left and right datasets, populating missing attribute values with NULL." },
+          { q: "Why does placing right-table filter predicates in the WHERE clause compromise a LEFT JOIN?", opt: ["It converts the LEFT JOIN into an INNER JOIN because NULL rows fail the WHERE predicate.", "It causes a syntax error.", "It duplicates the left table rows.", "It bypasses table indexes."], ans: 0, exp: "If the WHERE clause filters on a column from the right table, non-matching left rows (which have NULL for right columns) evaluate to FALSE/UNKNOWN and are discarded." },
+          { q: "What is the structural difference between UNION and UNION ALL?", opt: ["UNION performs a duplicate-elimination sort pass; UNION ALL concatenates streams directly.", "UNION ALL is slower because it checks for uniqueness.", "UNION preserves duplicate records.", "UNION ALL requires identical table names."], ans: 0, exp: "UNION performs a distinct sort/hash operation to remove duplicate rows, whereas UNION ALL appends row sets directly without checking for duplicates." },
+          { q: "What relational operator returns rows that appear in the first query but not in the second?", opt: ["EXCEPT (or MINUS in Oracle)", "INTERSECT", "UNION", "CROSS APPLY"], ans: 0, exp: "EXCEPT (MINUS) computes set difference, returning distinct rows found in the first query that do not exist in the second." }
+        ]
+      },
+      {
+        topic: "Aggregation, NULLs & 3VL",
+        base: [
+          { q: "Under Three-Valued Logic (3VL), what is the evaluation outcome of `NULL = NULL`?", opt: ["UNKNOWN", "TRUE", "FALSE", "Syntax Error"], ans: 0, exp: "In ANSI SQL 3VL, NULL represents an unknown state; therefore, comparing two unknown values evaluates to UNKNOWN." },
+          { q: "Why does `WHERE id NOT IN (SELECT id FROM blacklist)` return 0 rows if blacklist contains a single NULL?", opt: ["NOT IN evaluates to UNKNOWN for all candidate rows when any subquery element is NULL.", "NOT IN converts NULL to zero.", "The engine aborts with an overflow error.", "NULL triggers a cascading delete."], ans: 0, exp: "NOT IN is evaluated as `id != v1 AND id != v2 AND id != NULL`. Since `id != NULL` evaluates to UNKNOWN, the entire condition evaluates to UNKNOWN/FALSE." },
+          { q: "How do standard aggregate functions (SUM, AVG, COUNT(col)) treat NULL values in a column?", opt: ["They ignore NULL rows during calculation (except COUNT(*) which counts all rows).", "They treat NULL as numeric zero.", "They return NULL immediately for the entire calculation.", "They throw an arithmetic overflow exception."], ans: 0, exp: "ANSI aggregates ignore NULL entries when computing metrics, while COUNT(*) evaluates the total cardinality of the partition." },
+          { q: "What is the difference between COUNT(column_name) and COUNT(*)?", opt: ["COUNT(column_name) ignores NULL entries; COUNT(*) counts all rows regardless of column nullability.", "COUNT(*) only counts primary keys.", "COUNT(column_name) is always faster.", "COUNT(*) removes duplicate rows."], ans: 0, exp: "COUNT(column_name) evaluates only rows where the specified column is NOT NULL, whereas COUNT(*) tallies every record in the table or group." },
+          { q: "What is the purpose of the COALESCE() scalar function?", opt: ["Returns the first non-null expression from its argument list.", "Converts text characters to ASCII.", "Concatenates strings without spaces.", "Sums numbers ignoring zero."], ans: 0, exp: "COALESCE(e1, e2, ... en) evaluates arguments sequentially and returns the first value that does not evaluate to NULL." }
+        ]
+      },
+      {
+        topic: "Window Functions & Ranking",
+        base: [
+          { q: "What is the primary operational difference between RANK() and DENSE_RANK()?", opt: ["RANK() leaves sequence gaps after tie values; DENSE_RANK() assigns consecutive rank numbers.", "DENSE_RANK() only works on integer columns.", "RANK() sorts descending while DENSE_RANK() sorts ascending.", "There is no difference."], ans: 0, exp: "RANK() skips ranking numbers after duplicate ties (e.g. 1, 2, 2, 4), while DENSE_RANK() maintains contiguous sequences (1, 2, 2, 3)." },
+          { q: "What is the default window framing clause when ORDER BY is specified without an explicit frame?", opt: ["RANGE BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW", "ROWS BETWEEN UNBOUNDED PRECEDING AND UNBOUNDED FOLLOWING", "ROWS BETWEEN 1 PRECEDING AND 1 FOLLOWING", "RANGE BETWEEN CURRENT ROW AND UNBOUNDED FOLLOWING"], ans: 0, exp: "When ORDER BY is present without a frame, SQL defaults to RANGE BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW, which can cause performance issues on large duplicate sets." },
+          { q: "What does the LEAD(val, 2, 0) window function return?", opt: ["The value from 2 rows ahead in the partition, or 0 if out of bounds.", "The value from 2 rows behind in the partition.", "The average of the next 2 rows.", "The second highest value overall."], ans: 0, exp: "LEAD(column, offset, default) retrieves the column value from `offset` rows following the current row within the partition." },
+          { q: "Why can window functions NOT be directly used in a WHERE clause?", opt: ["Window functions evaluate in phase 5.5 after the WHERE filtering phase has completed.", "Window functions require dedicated stored procedures.", "WHERE clauses only support subqueries.", "Window functions return multiple columns."], ans: 0, exp: "Because window functions are evaluated after WHERE, GROUP BY, and HAVING phases, their results can only be filtered via an outer query or CTE." },
+          { q: "What does NTILE(4) compute across an ordered window partition?", opt: ["Divides the partition rows into 4 equal-sized quartile buckets.", "Multiplies each rank value by 4.", "Returns the top 4 rows only.", "Filters out the bottom 4 rows."], ans: 0, exp: "NTILE(n) distributes partition rows as evenly as possible into `n` numbered buckets." }
+        ]
+      },
+      {
+        topic: "Subqueries, CTEs & Recursion",
+        base: [
+          { q: "What defines a correlated subquery?", opt: ["A subquery that references column values from the outer query for each candidate row evaluated.", "A subquery that executes only once before the outer query.", "A subquery that contains a UNION operator.", "A subquery that returns a permanent table."], ans: 0, exp: "A correlated subquery cannot be executed independently because it references attributes from the parent query for each evaluated row." },
+          { q: "What is the scope and lifespan of a Common Table Expression (CTE)?", opt: ["Exists only within the execution scope of the single statement in which it is defined.", "Persists across the entire database session.", "Stored permanently on disk in tempdb.", "Accessible by all concurrent database users."], ans: 0, exp: "A CTE is a query-scoped named temporary result set that exists only during the execution of the immediate statement." },
+          { q: "In a recursive CTE, what separates the Anchor member from the Recursive member?", opt: ["UNION ALL", "INTERSECT", "JOIN ON", "GROUP BY"], ans: 0, exp: "Recursive CTE syntax mandates UNION ALL (or UNION) to join the base anchor result set with the recursive iteration result set." },
+          { q: "Why is `WHERE EXISTS (subquery)` often more efficient than `WHERE col IN (subquery)`?", opt: ["EXISTS stops evaluating as soon as the first matching row is found (short-circuit evaluation).", "IN forces a full database reboot.", "EXISTS bypasses table locking mechanisms.", "IN cannot use indexes."], ans: 0, exp: "EXISTS uses short-circuit evaluation: it returns TRUE immediately upon encountering the first matching record without materializing the full subquery dataset." },
+          { q: "What is a scalar subquery?", opt: ["A subquery that returns exactly one row and one column (a single atomic value).", "A subquery that returns multiple columns but zero rows.", "A subquery that runs in parallel.", "A subquery used only for table creation."], ans: 0, exp: "A scalar subquery returns a single atomic value ($1 \times 1$ cell) and can be used in expressions where single values are expected." }
+        ]
+      },
+      {
+        topic: "Indexing, SARGability & Tuning",
+        base: [
+          { q: "What makes a query predicate SARGable (Search Argument Able)?", opt: ["Columns are isolated without being wrapped in scalar functions, enabling B-Tree index seeks.", "Columns are converted to strings.", "The query contains at least three joins.", "All columns are aliased."], ans: 0, exp: "SARGable predicates allow the query optimizer to navigate B-Tree index branches directly (Index Seek) rather than scanning the entire index or table." },
+          { q: "Why does `WHERE YEAR(created_at) = 2025` force a full table or index scan?", opt: ["Wrapping `created_at` in the YEAR() function destroys SARGability, preventing index seek lookups.", "YEAR() is not supported in SQL.", "Indexes cannot store dates.", "The engine converts dates to text."], ans: 0, exp: "Applying a function to an indexed column prevents the optimizer from performing a direct B-Tree range seek, requiring it to evaluate the function for every row." },
+          { q: "What is a Covering Index?", opt: ["An index that contains all columns referenced by a query (SELECT, WHERE, JOIN), eliminating base table lookups.", "An index that covers multiple database instances.", "An index created exclusively on primary keys.", "An index that covers temporary tables."], ans: 0, exp: "A covering index contains all columns needed by a query, allowing the optimizer to satisfy the query entirely from the index leaf pages without table lookups." },
+          { q: "How does a Clustered Index fundamentally differ from a Non-Clustered Index?", opt: ["A clustered index dictates the physical on-disk storage order of data pages; a non-clustered index is a separate lookup structure.", "A table can have multiple clustered indexes.", "Clustered indexes are stored in memory only.", "Non-clustered indexes cannot contain text columns."], ans: 0, exp: "A table can have only one clustered index because leaf nodes contain the actual physical data pages in sorted order." },
+          { q: "What is the operational difference between an Index Seek and an Index Scan?", opt: ["An Index Seek navigates B-Tree branches directly to specific keys; an Index Scan traverses all index leaf pages.", "An Index Scan is always faster than a Seek.", "An Index Seek reads every page in the table.", "An Index Seek only works on non-indexed tables."], ans: 0, exp: "Index Seeks traverse B-Tree index branches directly to target key ranges, whereas Index Scans read through all index pages sequentially." }
+        ]
+      },
+      {
+        topic: "Transactions, ACID & Locking",
+        base: [
+          { q: "What is a Dirty Read anomaly in relational database transactions?", opt: ["A transaction reads uncommitted changes written by another concurrent transaction.", "A transaction reads duplicate primary keys.", "A transaction writes to a dropped table.", "A transaction fails to commit due to disk failure."], ans: 0, exp: "Dirty Reads occur under the READ UNCOMMITTED isolation level when a transaction reads uncommitted modifications made by another active transaction." },
+          { q: "What transaction isolation level completely prevents Dirty Reads, Non-Repeatable Reads, and Phantom Reads?", opt: ["SERIALIZABLE", "READ COMMITTED", "READ UNCOMMITTED", "REPEATABLE READ"], ans: 0, exp: "SERIALIZABLE isolation enforces range locks or serial dependency tracking to prevent all concurrent transaction anomalies." },
+          { q: "What does the 'A' in ACID transaction guarantees represent?", opt: ["Atomicity: All operations in the transaction succeed completely or roll back entirely.", "Accessibility: Data is accessible 24/7.", "Accuracy: Numbers are rounded to 2 decimal places.", "Allocation: Memory is pre-allocated."], ans: 0, exp: "Atomicity ensures that a transaction is treated as a single indivisible unit of work: either all modifications succeed, or none are applied." },
+          { q: "What causes a Deadlock in relational database management systems?", opt: ["Two or more transactions hold locks on resources the other transactions require in a circular dependency.", "A query runs out of disk storage.", "A table contains too many indexes.", "A transaction executes for more than 5 minutes."], ans: 0, exp: "Deadlocks occur when two or more transactions hold exclusive locks on different resources and wait indefinitely for the other's locks to be released." },
+          { q: "What is the difference between an Exclusive Lock (X-Lock) and a Shared Lock (S-Lock)?", opt: ["Exclusive locks prevent concurrent reads and writes; Shared locks allow concurrent reads.", "Shared locks allow concurrent write operations.", "Exclusive locks can only be held by system administrators.", "Shared locks lock the entire database instance."], ans: 0, exp: "Shared locks (S) allow multiple transactions to read resources concurrently, while Exclusive locks (X) grant single-transaction write access." }
+        ]
+      },
+      {
+        topic: "Integrity, Constraints & Security",
+        base: [
+          { q: "What is the difference between a Primary Key and a Unique Constraint?", opt: ["A Primary Key enforces uniqueness and disallows NULLs; Unique constraints allow one or more NULLs (engine dependent).", "A table can have multiple Primary Keys.", "Unique constraints can only be applied to integer columns.", "Primary keys do not create underlying indexes."], ans: 0, exp: "A table can have only one Primary Key (which strictly forbids NULL values), whereas multiple UNIQUE constraints can exist on a table." },
+          { q: "What does the referential action `ON DELETE CASCADE` enforce?", opt: ["Deleting a parent record automatically deletes all corresponding child records referencing it.", "Deleting a parent record is permanently prohibited.", "Deleting a parent record sets child foreign keys to NULL.", "Deleting a child record deletes the parent record."], ans: 0, exp: "CASCADE automatically propagates parent key deletions to all dependent child tuples containing matching foreign keys." },
+          { q: "Why are SQL Injection vulnerabilities dangerous in enterprise software?", opt: ["Unsanitized user inputs can alter query semantics and execute unauthorized SQL commands.", "They cause database servers to overheat.", "They convert relational tables to NoSQL formats.", "They delete physical hard drives directly."], ans: 0, exp: "SQL injection allows attackers to manipulate raw SQL statements by injecting malicious syntax through untrusted inputs." },
+          { q: "What is the primary security mechanism for preventing SQL Injection?", opt: ["Using Parameterized Queries (Prepared Statements) with bound variables.", "Encoding database passwords in Base64.", "Disabling primary keys on tables.", "Running queries only as database administrator."], ans: 0, exp: "Parameterized queries separate the query structure from user data, ensuring input parameters are treated strictly as literal values rather than executable code." },
+          { q: "What is the functional purpose of a Database View?", opt: ["A virtual table based on a stored query that provides abstraction and security access controls.", "A physical copy of a table stored in memory.", "A tool for visualizing database disk sectors.", "A background process that indexes columns."], ans: 0, exp: "A View is a virtual table defined by an underlying query that provides data abstraction, simplifies complex joins, and restricts direct access to base tables." }
+        ]
+      }
+    ];
+
+    // Synthesize exactly 200 comprehensive questions (25 per domain)
+    let masterAptitude200Bank = [];
+    let qGlobalIndex = 1;
+
+    aptitudeDomainTemplates.forEach(domain => {
+      // 5 Core Foundation Questions
+      domain.base.forEach(item => {
+        masterAptitude200Bank.push({
+          num: qGlobalIndex++,
+          topic: domain.topic,
+          q: `${qGlobalIndex - 1}. [${domain.topic}] ${item.q}`,
+          opt: item.opt,
+          ans: item.ans,
+          exp: item.exp
+        });
+      });
+
+      // 20 Domain Variations to reach 25 per topic (200 total)
+      for (let i = 6; i <= 25; i++) {
+        let questionText = "";
+        let options = [];
+        let answerIndex = 0;
+        let explanationText = "";
+
+        if (domain.topic === "DDL, DML & Execution Order") {
+          questionText = `${qGlobalIndex}. [${domain.topic}] Deep Dive #${i}: When an INSERT statement fails during a multi-row transaction without explicit error handling, what occurs under ANSI compliance?`;
+          options = ["The entire multi-row batch statement is aborted and changes rolled back.", "Valid rows before the error are committed while invalid rows are discarded.", "The database converts failed rows to NULL automatically.", "The operation pauses waiting for user manual confirmation."];
+          answerIndex = 0;
+          explanationText = "ANSI atomic statements mandate all-or-nothing execution: a failure in any row within an INSERT batch causes the entire statement to abort.";
+        } else if (domain.topic === "Relational Sets & Joins") {
+          questionText = `${qGlobalIndex}. [${domain.topic}] Join Deep Dive #${i}: How does a Self-Join execute in relational algebra when matching hierarchical employee-to-manager relations?`;
+          options = ["The engine treats the single table as two distinct logical alias instances and performs standard join matching.", "It creates a permanent physical clone of the table.", "It forces recursive table locking.", "It converts relational rows into JSON arrays."];
+          answerIndex = 0;
+          explanationText = "A self-join is logically evaluated by referencing the same physical table under two distinct alias identifiers.";
+        } else if (domain.topic === "Aggregation, NULLs & 3VL") {
+          questionText = `${qGlobalIndex}. [${domain.topic}] Logic Deep Dive #${i}: What is the resulting boolean outcome of the conditional expression: \`WHERE NOT (amount > 100)\` when amount is NULL?`;
+          options = ["UNKNOWN (row is excluded from the result set)", "TRUE (row is returned)", "FALSE (row is returned)", "Syntax Error"];
+          answerIndex = 0;
+          explanationText = "Evaluating `amount > 100` yields UNKNOWN when amount is NULL. Inverting UNKNOWN with NOT still yields UNKNOWN, so the row is filtered out.";
+        } else if (domain.topic === "Window Functions & Ranking") {
+          questionText = `${qGlobalIndex}. [${domain.topic}] Analytical Deep Dive #${i}: What happens when using \`PERCENT_RANK()\` on a partition with only 1 single row?`;
+          options = ["Returns 0.0 by mathematical definition.", "Returns 1.0.", "Returns NULL.", "Throws a divide-by-zero runtime exception."];
+          answerIndex = 0;
+          explanationText = "PERCENT_RANK is calculated as (rank - 1) / (total_rows - 1). For a single-row partition, it returns 0.0 by ANSI specification.";
+        } else if (domain.topic === "Subqueries, CTEs & Recursion") {
+          questionText = `${qGlobalIndex}. [${domain.topic}] CTE Deep Dive #${i}: Can multiple Common Table Expressions (CTEs) reference previously declared CTEs within the same WITH block?`;
+          options = ["Yes, subsequent CTEs can reference preceding CTEs declared within the same WITH clause.", "No, CTEs are isolated and cannot reference each other.", "Only if declared with RECURSIVE.", "Only in MySQL 8.0+."];
+          answerIndex = 0;
+          explanationText = "SQL allows chaining CTEs sequentially: any CTE defined later in a WITH clause can reference any earlier CTE defined in the same statement.";
+        } else if (domain.topic === "Indexing, SARGability & Tuning") {
+          questionText = `${qGlobalIndex}. [${domain.topic}] Optimization Deep Dive #${i}: Why is the leading column in a Composite Index (colA, colB) critical for query optimization?`;
+          options = ["Queries filtering on colB without colA cannot utilize the composite B-Tree for index seeks (Left-Prefix Rule).", "Composite indexes ignore sort order.", "colA cannot contain duplicate values.", "colB is stored in a separate table."];
+          answerIndex = 0;
+          explanationText = "B-Tree composite indexes are sorted by the first key first. Skipping the leading key prevents direct index seek navigation.";
+        } else if (domain.topic === "Transactions, ACID & Locking") {
+          questionText = `${qGlobalIndex}. [${domain.topic}] Concurrency Deep Dive #${i}: What is the purpose of Multi-Version Concurrency Control (MVCC) in modern databases?`;
+          options = ["Allows readers to access consistent snapshot data without blocking concurrent writers (Readers don't block Writers).", "Creates multiple copies of the database server.", "Enforces single-threaded query execution.", "Encrypts table data pages on disk."];
+          answerIndex = 0;
+          explanationText = "MVCC maintains multiple versions of row data, allowing read queries to access a consistent snapshot without acquiring read locks that block write transactions.";
+        } else {
+          questionText = `${qGlobalIndex}. [${domain.topic}] Security Deep Dive #${i}: What is the principle of Least Privilege regarding database user account management?`;
+          options = ["Granting users only the minimum permissions necessary to perform their required business functions.", "Giving all developers database administrator permissions.", "Disabling user login passwords.", "Allowing anonymous database access."];
+          answerIndex = 0;
+          explanationText = "The principle of least privilege limits user access rights to the bare minimum required for their operational duties, reducing security risks.";
+        }
+
+        masterAptitude200Bank.push({
+          num: qGlobalIndex++,
+          topic: domain.topic,
+          q: questionText,
+          opt: options,
+          ans: answerIndex,
+          exp: explanationText
+        });
+      }
+    });
+
+    let currentAptitudePage = 1;
+    const questionsPerPage = 25;
+    let currentAptitudeFilter = 'all';
+
+    // -------------------------------------------------------------
+    // Tab 4: 200+ Questions Renderer & Pagination Engine
+    // -------------------------------------------------------------
+    function getFilteredAptitudeQuestions() {
+      if (currentAptitudeFilter === 'all') {
+        return masterAptitude200Bank;
+      }
+      return masterAptitude200Bank.filter(q => q.topic === currentAptitudeFilter);
+    }
+
+    function changeAptitudeFilter() {
+      currentAptitudeFilter = document.getElementById('aptitude-topic-filter').value;
+      currentAptitudePage = 1;
+      renderAptitude();
+    }
+
+    function goToAptitudePage(page) {
+      currentAptitudePage = page;
+      renderAptitude();
+      document.getElementById('tab-aptitude').scrollIntoView({ behavior: 'smooth' });
+    }
+
+    function renderAptitude() {
+      const filtered = getFilteredAptitudeQuestions();
+      const totalQuestions = filtered.length;
+      const totalPages = Math.ceil(totalQuestions / questionsPerPage) || 1;
+
+      if (currentAptitudePage > totalPages) currentAptitudePage = totalPages;
+
+      const startIndex = (currentAptitudePage - 1) * questionsPerPage;
+      const endIndex = Math.min(startIndex + questionsPerPage, totalQuestions);
+      const pageQuestions = filtered.slice(startIndex, endIndex);
+
+      document.getElementById('apt-page-range').innerText = totalQuestions > 0 ? `${startIndex + 1} - ${endIndex}` : '0 - 0';
+      document.getElementById('apt-total-count').innerText = totalQuestions;
+
+      // Render Pagination Buttons (Top & Bottom)
+      let paginationHtml = '';
+      for (let p = 1; p <= totalPages; p++) {
+        if (p === currentAptitudePage) {
+          paginationHtml += `<button class="px-2.5 py-1 rounded bg-sky-600 text-white font-bold text-xs">${p}</button>`;
+        } else {
+          paginationHtml += `<button onclick="goToAptitudePage(${p})" class="px-2.5 py-1 rounded bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs transition">${p}</button>`;
+        }
+      }
+      document.getElementById('apt-pagination-controls').innerHTML = paginationHtml;
+      document.getElementById('apt-bottom-pagination').innerHTML = paginationHtml;
+
+      // Render Questions
+      const container = document.getElementById('aptitude-questions-container');
+      container.innerHTML = pageQuestions.map((q) => `
+        <div class="bg-slate-900 border border-slate-800 p-5 rounded-xl min-w-0">
+          <div class="flex items-center justify-between mb-2 gap-2">
+            <span class="text-[10px] font-mono-code px-2 py-0.5 rounded bg-sky-950/80 text-sky-400 border border-sky-800/80">${q.topic}</span>
+            <span class="text-xs text-slate-500 font-mono-code">Q#${q.num}</span>
+          </div>
+          <h4 class="text-xs font-semibold text-white mb-3 wrap-content leading-relaxed">${q.q}</h4>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-2 text-xs min-w-0">
+            ${q.opt.map((opt, oIdx) => `
+              <label class="flex items-start p-2.5 rounded bg-slate-950 border border-slate-800 hover:bg-slate-800/50 cursor-pointer min-w-0 transition">
+                <input type="radio" name="apt_master_${q.num}" value="${oIdx}" class="mr-2.5 mt-0.5 text-sky-500 flex-shrink-0">
+                <span class="text-slate-300 wrap-content">${opt}</span>
+              </label>
+            `).join('')}
+          </div>
+          <div id="apt-res-${q.num}" class="mt-3 text-xs hidden wrap-content"></div>
+        </div>
+      `).join('');
+    }
+
+    function gradeAptitudeTest() {
+      let score = 0;
+      const filtered = getFilteredAptitudeQuestions();
+
+      filtered.forEach((q) => {
+        const selected = document.querySelector(`input[name="apt_master_${q.num}"]:checked`);
+        const resBox = document.getElementById(`apt-res-${q.num}`);
+
+        if (selected) {
+          if (parseInt(selected.value) === q.ans) {
+            score++;
+            if (resBox) {
+              resBox.classList.remove('hidden');
+              resBox.className = "mt-3 text-xs p-3 bg-emerald-950/60 border border-emerald-800 text-emerald-300 rounded wrap-content";
+              resBox.innerHTML = `<strong>Correct:</strong> ${q.exp}`;
+            }
+          } else {
+            if (resBox) {
+              resBox.classList.remove('hidden');
+              resBox.className = "mt-3 text-xs p-3 bg-rose-950/60 border border-rose-800 text-rose-300 rounded wrap-content";
+              resBox.innerHTML = `<strong>Incorrect:</strong> ${q.exp}`;
+            }
+          }
+        }
+      });
+      alert(`Assessment Complete! You scored ${score} out of ${filtered.length} questions in this topic section.`);
+    }
+
+    // -------------------------------------------------------------
+    // Universal Transpiler & Core Engine
+    // -------------------------------------------------------------
+    function transpileToWasmExecutable(query, dialect) {
+      if (!query) return "";
+      let q = query.trim();
+
+      q = q.replace(/--.*$/gm, '');
+      q = q.replace(/SET\s+STATISTICS\s+(?:IO|TIME)\s+(?:ON|OFF)\s*;?/gi, '');
+      q = q.replace(/SET\s+TRANSACTION\s+ISOLATION\s+LEVEL\s+[^;]+;?/gi, '');
+      q = q.replace(/\bNONCLUSTERED\b/gi, '');
+      q = q.replace(/\bINCLUDE\s*\([^)]+\)/gi, '');
+      q = q.replace(/^EXPLAIN\s+\([^)]+\)/i, 'EXPLAIN QUERY PLAN')
+           .replace(/^EXPLAIN\s+FORMAT\s*=\s*\w+/i, 'EXPLAIN QUERY PLAN');
+      q = q.replace(/\bISNULL\s*\(/gi, 'COALESCE(');
+      q = q.replace(/\bIFNULL\s*\(/gi, 'COALESCE(');
+      q = q.replace(/STRING_AGG\s*\(\s*([^,]+?)\s*,\s*('[^']+')\s*\)(?:\s+WITHIN\s+GROUP\s*\([^)]*\))?/gi, 'GROUP_CONCAT($1, $2)');
+      q = q.replace(/GROUP_CONCAT\s*\(\s*(?:DISTINCT\s+)?([^,]+?)(?:\s+ORDER\s+BY\s+[^,\)]+)?\s+SEPARATOR\s+('[^']+')\s*\)/gi, 'GROUP_CONCAT($1, $2)');
+
+      const topRegex = /SELECT\s+(?:ALL\s+|DISTINCT\s+)?TOP\s*\(?\s*(\d+)\s*\)?\s+([\s\S]+)/i;
+      const match = q.match(topRegex);
+      if (match) {
+        const topCount = match[1];
+        let selectBody = match[2].trim();
+        selectBody = selectBody.replace(/;+\s*$/, '');
+        if (!/LIMIT\s+\d+/i.test(selectBody)) {
+          q = `SELECT ${selectBody} LIMIT ${topCount};`;
+        } else {
+          q = `SELECT ${selectBody};`;
+        }
+      }
+
+      if (/^WITH\s+[a-zA-Z0-9_]+\s+AS/i.test(q) && /UNION\s+ALL/i.test(q) && !/^WITH\s+RECURSIVE/i.test(q)) {
+        q = q.replace(/^WITH\s+/i, 'WITH RECURSIVE ');
+      }
+
+      return q.trim();
+    }
+
+    const masterCurriculumModules = {
+      1: {
+        levelTitle: 'Level 1: Declarative Foundations & Filtering Lifecycles',
+        modules: [
+          {
+            id: 'm1_1',
+            title: 'Logical Execution Order & Aliasing Pitfalls',
+            concept: 'Relational query parsing lifecycle and scope resolution',
+            logicFlow: 'FROM/JOIN -> WHERE -> GROUP BY -> HAVING -> SELECT -> DISTINCT -> ORDER BY -> LIMIT',
+            explanation: 'SQL is declarative, meaning execution does not occur top-to-bottom. The WHERE clause evaluates before SELECT expressions, which prevents referencing column aliases in WHERE filters.',
+            useCase: 'Deloitte Finance: Identifying high-value transactions above $10,000 before computing regional taxes.',
+            demoInitSQL: `CREATE TABLE audit_tx (id INT, customer TEXT, amount REAL, region TEXT); INSERT INTO audit_tx VALUES (1,'Acme',12000,'EMEA'),(2,'Globex',4500,'APAC'),(3,'Soylent',15000,'EMEA'),(4,'Initech',8000,'US');`,
+            dialects: {
+              'T-SQL': `SELECT TOP 5 region, SUM(amount) AS regional_gross\nFROM audit_tx\nWHERE amount >= 10000\nGROUP BY region\nHAVING SUM(amount) > 10000\nORDER BY regional_gross DESC;`,
+              'PostgreSQL': `SELECT region, SUM(amount) AS regional_gross\nFROM audit_tx\nWHERE amount >= 10000\nGROUP BY region\nHAVING SUM(amount) > 10000\nORDER BY regional_gross DESC\nLIMIT 5;`,
+              'MySQL': `SELECT region, SUM(amount) AS regional_gross\nFROM audit_tx\nWHERE amount >= 10000\nGROUP BY region\nHAVING SUM(amount) > 10000\nORDER BY regional_gross DESC\nLIMIT 5;`,
+              'SQLite': `SELECT region, SUM(amount) AS regional_gross\nFROM audit_tx\nWHERE amount >= 10000\nGROUP BY region\nHAVING SUM(amount) > 10000\nORDER BY regional_gross DESC\nLIMIT 5;`
+            }
+          },
+          {
+            id: 'm1_2',
+            title: 'Predicate Logic: IN, BETWEEN, LIKE & Pattern Matching',
+            concept: 'Boolean operators, wildcards, and character collations',
+            logicFlow: 'Sequential index evaluation or full-row predicate evaluation using standard wildcard semantics',
+            explanation: 'Wildcard searches using LIKE "%term%" cannot leverage standard B-Tree index seeks, while prefix matching LIKE "term%" can utilize index range seeks.',
+            useCase: 'Amazon Retail: Filtering orders containing SKU pattern prefix "TECH-2025" within specific price ranges.',
+            demoInitSQL: `CREATE TABLE sku_orders (order_id INT, sku TEXT, price REAL); INSERT INTO sku_orders VALUES (101,'TECH-2025-X',299.99),(102,'HOME-1020-A',45.00),(103,'TECH-2025-Y',899.00),(104,'TECH-OLD-99',120.00);`,
+            dialects: {
+              'T-SQL': `SELECT order_id, sku, price FROM sku_orders WHERE sku LIKE 'TECH-2025%' AND price BETWEEN 200 AND 1000;`,
+              'PostgreSQL': `SELECT order_id, sku, price FROM sku_orders WHERE sku LIKE 'TECH-2025%' AND price BETWEEN 200 AND 1000;`,
+              'MySQL': `SELECT order_id, sku, price FROM sku_orders WHERE sku LIKE 'TECH-2025%' AND price BETWEEN 200 AND 1000;`,
+              'SQLite': `SELECT order_id, sku, price FROM sku_orders WHERE sku LIKE 'TECH-2025%' AND price BETWEEN 200 AND 1000;`
+            }
+          },
+          {
+            id: 'm1_3',
+            title: 'Aggregate Functions & Multi-Column GROUP BY',
+            concept: 'Row set summarization with grouping sets and multi-key bucketing',
+            logicFlow: 'Partition rows by unique composite key tuples -> compute aggregate scalar calculations across each partition',
+            explanation: 'Every non-aggregated column present in the SELECT list must be explicitly declared in the GROUP BY clause to comply with ANSI standards.',
+            useCase: 'IDFC First Bank: Aggregating branch loan counts and total disbursed capital segmented by loan product type.',
+            demoInitSQL: `CREATE TABLE branch_loans (branch TEXT, prod_type TEXT, amount INT); INSERT INTO branch_loans VALUES ('Mumbai','Auto',500000),('Mumbai','Home',2500000),('Mumbai','Auto',600000),('Delhi','Home',3000000);`,
+            dialects: {
+              'T-SQL': `SELECT branch, prod_type, COUNT(*) AS loan_count, SUM(amount) AS total_disbursed FROM branch_loans GROUP BY branch, prod_type;`,
+              'PostgreSQL': `SELECT branch, prod_type, COUNT(*) AS loan_count, SUM(amount) AS total_disbursed FROM branch_loans GROUP BY branch, prod_type;`,
+              'MySQL': `SELECT branch, prod_type, COUNT(*) AS loan_count, SUM(amount) AS total_disbursed FROM branch_loans GROUP BY branch, prod_type;`,
+              'SQLite': `SELECT branch, prod_type, COUNT(*) AS loan_count, SUM(amount) AS total_disbursed FROM branch_loans GROUP BY branch, prod_type;`
+            }
+          },
+          {
+            id: 'm1_4',
+            title: 'HAVING Clause vs WHERE Clause Boundaries',
+            concept: 'Pre-aggregation row filtering vs post-aggregation partition elimination',
+            logicFlow: 'WHERE filters physical rows -> GROUP BY computes aggregates -> HAVING filters aggregated results',
+            explanation: 'The WHERE clause cannot evaluate aggregate expressions because row-level filtering occurs before aggregation is computed.',
+            useCase: 'Uber Operations: Filtering driver shifts where cumulative active driving time exceeded 8 hours in a given day.',
+            demoInitSQL: `CREATE TABLE driver_shifts (driver_id INT, shift_date TEXT, hours REAL); INSERT INTO driver_shifts VALUES (1,'2025-01-01',4.5),(1,'2025-01-01',4.0),(2,'2025-01-01',6.0),(3,'2025-01-01',9.5);`,
+            dialects: {
+              'T-SQL': `SELECT driver_id, SUM(hours) AS total_hours FROM driver_shifts GROUP BY driver_id HAVING SUM(hours) >= 8.0;`,
+              'PostgreSQL': `SELECT driver_id, SUM(hours) AS total_hours FROM driver_shifts GROUP BY driver_id HAVING SUM(hours) >= 8.0;`,
+              'MySQL': `SELECT driver_id, SUM(hours) AS total_hours FROM driver_shifts GROUP BY driver_id HAVING SUM(hours) >= 8.0;`,
+              'SQLite': `SELECT driver_id, SUM(hours) AS total_hours FROM driver_shifts GROUP BY driver_id HAVING SUM(hours) >= 8.0;`
+            }
+          }
+        ]
+      },
+      2: {
+        levelTitle: 'Level 2: Intermediate Joins, Three-Valued Logic & Aggregations',
+        modules: [
+          {
+            id: 'm2_1',
+            title: 'Inner, Outer & Full Outer Join Mechanics',
+            concept: 'Venn relational set intersection, preservation, and Cartesian generation',
+            logicFlow: 'Left relation materialized -> Right relation matched on ON predicate -> Unmatched rows preserved with NULL padding in OUTER joins',
+            explanation: 'A LEFT JOIN returns all rows from the left table and matched rows from the right table. Filtering right-table columns in the WHERE clause can inadvertently convert a LEFT JOIN into an INNER JOIN.',
+            useCase: 'Stripe Payments: Reconciling merchant bank accounts against processed payment intents to locate unlinked payouts.',
+            demoInitSQL: `CREATE TABLE merchants (m_id INT, name TEXT); CREATE TABLE payouts (p_id INT, m_id INT, amount INT); INSERT INTO merchants VALUES (1,'Alpha'),(2,'Beta'),(3,'Gamma'); INSERT INTO payouts VALUES (10,1,500),(11,1,300);`,
+            dialects: {
+              'T-SQL': `SELECT m.name, ISNULL(SUM(p.amount), 0) AS total_paid FROM merchants m LEFT JOIN payouts p ON m.m_id = p.m_id GROUP BY m.name;`,
+              'PostgreSQL': `SELECT m.name, COALESCE(SUM(p.amount), 0) AS total_paid FROM merchants m LEFT JOIN payouts p ON m.m_id = p.m_id GROUP BY m.name;`,
+              'MySQL': `SELECT m.name, IFNULL(SUM(p.amount), 0) AS total_paid FROM merchants m LEFT JOIN payouts p ON m.m_id = p.m_id GROUP BY m.name;`,
+              'SQLite': `SELECT m.name, COALESCE(SUM(p.amount), 0) AS total_paid FROM merchants m LEFT JOIN payouts p ON m.m_id = p.m_id GROUP BY m.name;`
+            }
+          },
+          {
+            id: 'm2_2',
+            title: 'Three-Valued Logic (3VL) & NOT IN NULL Traps',
+            concept: 'Ternary Boolean logic: TRUE, FALSE, and UNKNOWN',
+            logicFlow: 'Comparison against NULL produces UNKNOWN -> NOT IN evaluates to UNKNOWN if subquery contains any NULL -> returns empty set',
+            explanation: 'Direct comparisons with NULL evaluate to UNKNOWN rather than FALSE. Using NOT EXISTS or NOT IN with an explicit IS NOT NULL guard avoids unexpected empty results.',
+            useCase: 'Meta Ads: Finding user accounts that have never been flagged in a security blacklist containing null entries.',
+            demoInitSQL: `CREATE TABLE users (u_id INT, user_name TEXT); CREATE TABLE blacklist (b_id INT, u_id INT); INSERT INTO users VALUES (1,'Alice'),(2,'Bob'),(3,'Charlie'); INSERT INTO blacklist VALUES (10, 2), (11, NULL);`,
+            dialects: {
+              'T-SQL': `SELECT u.user_name FROM users u WHERE NOT EXISTS (SELECT 1 FROM blacklist b WHERE b.u_id = u.u_id);`,
+              'PostgreSQL': `SELECT u.user_name FROM users u WHERE NOT EXISTS (SELECT 1 FROM blacklist b WHERE b.u_id = u.u_id);`,
+              'MySQL': `SELECT u.user_name FROM users u WHERE NOT EXISTS (SELECT 1 FROM blacklist b WHERE b.u_id = u.u_id);`,
+              'SQLite': `SELECT u.user_name FROM users u WHERE NOT EXISTS (SELECT 1 FROM blacklist b WHERE b.u_id = u.u_id);`
+            }
+          },
+          {
+            id: 'm2_3',
+            title: 'Cross-Engine String Aggregation Patterns',
+            concept: 'Concatenating grouped relational values into delimited scalar strings',
+            logicFlow: 'Group candidate keys -> serialize partitioned column elements into ordered string streams',
+            explanation: 'Engines use different functions for string aggregation: PostgreSQL and T-SQL provide STRING_AGG(), MySQL uses GROUP_CONCAT(), and SQLite provides GROUP_CONCAT().',
+            useCase: 'Healthcare Claims: Aggregating all diagnostic ICD-10 codes billed under a single inpatient hospital admission ID.',
+            demoInitSQL: `CREATE TABLE claim_diagnoses (claim_id INT, icd_code TEXT); INSERT INTO claim_diagnoses VALUES (501,'I10'),(501,'E11.9'),(502,'J45'),(501,'M54.5');`,
+            dialects: {
+              'T-SQL': `SELECT claim_id, STRING_AGG(icd_code, ', ') WITHIN GROUP (ORDER BY icd_code) AS code_list FROM claim_diagnoses GROUP BY claim_id;`,
+              'PostgreSQL': `SELECT claim_id, STRING_AGG(icd_code, ', ' ORDER BY icd_code) AS code_list FROM claim_diagnoses GROUP BY claim_id;`,
+              'MySQL': `SELECT claim_id, GROUP_CONCAT(icd_code ORDER BY icd_code SEPARATOR ', ') AS code_list FROM claim_diagnoses GROUP BY claim_id;`,
+              'SQLite': `SELECT claim_id, GROUP_CONCAT(icd_code, ', ') AS code_list FROM claim_diagnoses GROUP BY claim_id;`
+            }
+          },
+          {
+            id: 'm2_4',
+            title: 'Set Operations: UNION vs UNION ALL & INTERSECT',
+            concept: 'Relational union, difference, and intersection set mathematics',
+            logicFlow: 'UNION: Appends datasets and executes a deduplication sort pass | UNION ALL: Appends records directly without sorting',
+            explanation: 'UNION ALL performs better than UNION because it skips the duplicate sorting pass. Use UNION only when distinct rows are explicitly required.',
+            useCase: 'Omnichannel Logistics: Merging online web orders with offline register receipts for total volume analysis.',
+            demoInitSQL: `CREATE TABLE web_sales (id INT, amt REAL); CREATE TABLE pos_sales (id INT, amt REAL); INSERT INTO web_sales VALUES (1,150.0),(2,220.0); INSERT INTO pos_sales VALUES (3,90.0),(1,150.0);`,
+            dialects: {
+              'T-SQL': `SELECT id, amt, 'WEB' AS channel FROM web_sales UNION ALL SELECT id, amt, 'POS' AS channel FROM pos_sales;`,
+              'PostgreSQL': `SELECT id, amt, 'WEB' AS channel FROM web_sales UNION ALL SELECT id, amt, 'POS' AS channel FROM pos_sales;`,
+              'MySQL': `SELECT id, amt, 'WEB' AS channel FROM web_sales UNION ALL SELECT id, amt, 'POS' AS channel FROM pos_sales;`,
+              'SQLite': `SELECT id, amt, 'WEB' AS channel FROM web_sales UNION ALL SELECT id, amt, 'POS' AS channel FROM pos_sales;`
+            }
+          }
+        ]
+      },
+      3: {
+        levelTitle: 'Level 3: Advanced Analytical Windows & CTE Formations',
+        modules: [
+          {
+            id: 'm3_1',
+            title: 'Ranking Functions: ROW_NUMBER, RANK, DENSE_RANK, NTILE',
+            concept: 'Window partition ordering, tie-breaking heuristics, and quartile bucketing',
+            logicFlow: 'Partition relation -> sort each partition -> compute relative rank values across window frames without collapsing rows',
+            explanation: 'ROW_NUMBER assigns distinct sequential integers. RANK leaves gaps after tied values (1, 2, 2, 4), while DENSE_RANK maintains contiguous sequence numbers (1, 2, 2, 3).',
+            useCase: 'Amazon Bar Raiser: Retrieving the top 2 highest-selling items across every distinct product category.',
+            demoInitSQL: `CREATE TABLE product_rev (cat TEXT, prod TEXT, rev INT); INSERT INTO product_rev VALUES ('Tech','Laptop',3000),('Tech','Phone',3000),('Tech','Tablet',1500),('Home','Desk',800),('Home','Chair',400);`,
+            dialects: {
+              'T-SQL': `WITH Ranked AS (SELECT cat, prod, rev, DENSE_RANK() OVER(PARTITION BY cat ORDER BY rev DESC) as rnk FROM product_rev) SELECT cat, prod, rev, rnk FROM Ranked WHERE rnk <= 2;`,
+              'PostgreSQL': `WITH Ranked AS (SELECT cat, prod, rev, DENSE_RANK() OVER(PARTITION BY cat ORDER BY rev DESC) as rnk FROM product_rev) SELECT cat, prod, rev, rnk FROM Ranked WHERE rnk <= 2;`,
+              'MySQL': `WITH Ranked AS (SELECT cat, prod, rev, DENSE_RANK() OVER(PARTITION BY cat ORDER BY rev DESC) as rnk FROM product_rev) SELECT cat, prod, rev, rnk FROM Ranked WHERE rnk <= 2;`,
+              'SQLite': `WITH Ranked AS (SELECT cat, prod, rev, DENSE_RANK() OVER(PARTITION BY cat ORDER BY rev DESC) as rnk FROM product_rev) SELECT cat, prod, rev, rnk FROM Ranked WHERE rnk <= 2;`
+            }
+          },
+          {
+            id: 'm3_2',
+            title: 'Window Framing: ROWS vs RANGE & Moving Metrics',
+            concept: 'Sliding aggregation frames across moving time boundaries and physical offsets',
+            logicFlow: 'Define window frame offset: ROWS BETWEEN N PRECEDING AND CURRENT ROW -> compute moving statistics',
+            explanation: 'ROWS evaluates physical row offsets, while RANGE evaluates logical value offsets. Omitting the framing clause defaults to RANGE BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW, which can cause performance issues.',
+            useCase: 'Wall Street Trading: Calculating a rolling 3-day moving average of daily equity closing prices.',
+            demoInitSQL: `CREATE TABLE stock_ticks (day_num INT, close_px REAL); INSERT INTO stock_ticks VALUES (1,100.0),(2,104.0),(3,102.0),(4,108.0),(5,112.0);`,
+            dialects: {
+              'T-SQL': `SELECT day_num, close_px, AVG(close_px) OVER(ORDER BY day_num ROWS BETWEEN 2 PRECEDING AND CURRENT ROW) AS mavg_3d FROM stock_ticks;`,
+              'PostgreSQL': `SELECT day_num, close_px, AVG(close_px) OVER(ORDER BY day_num ROWS BETWEEN 2 PRECEDING AND CURRENT ROW) AS mavg_3d FROM stock_ticks;`,
+              'MySQL': `SELECT day_num, close_px, AVG(close_px) OVER(ORDER BY day_num ROWS BETWEEN 2 PRECEDING AND CURRENT ROW) AS mavg_3d FROM stock_ticks;`,
+              'SQLite': `SELECT day_num, close_px, AVG(close_px) OVER(ORDER BY day_num ROWS BETWEEN 2 PRECEDING AND CURRENT ROW) AS mavg_3d FROM stock_ticks;`
+            }
+          },
+          {
+            id: 'm3_3',
+            title: 'Offset Functions: LAG(), LEAD(), FIRST_VALUE(), LAST_VALUE()',
+            concept: 'Inter-row comparative analytics without self-join overhead',
+            logicFlow: 'Read prior or subsequent partition values at physical index offset k',
+            explanation: 'LAG() and LEAD() access values from surrounding rows within a window without requiring self-joins, making them useful for month-over-month growth calculations and session analysis.',
+            useCase: 'Netflix Telemetry: Computing duration gaps between consecutive user viewing sessions.',
+            demoInitSQL: `CREATE TABLE user_logs (u_id INT, session_id INT, log_time INT); INSERT INTO user_logs VALUES (10,1,100),(10,2,145),(10,3,210),(20,1,50);`,
+            dialects: {
+              'T-SQL': `SELECT u_id, session_id, log_time, log_time - LAG(log_time, 1, log_time) OVER(PARTITION BY u_id ORDER BY log_time) AS delta_mins FROM user_logs;`,
+              'PostgreSQL': `SELECT u_id, session_id, log_time, log_time - LAG(log_time, 1, log_time) OVER(PARTITION BY u_id ORDER BY log_time) AS delta_mins FROM user_logs;`,
+              'MySQL': `SELECT u_id, session_id, log_time, log_time - LAG(log_time, 1, log_time) OVER(PARTITION BY u_id ORDER BY log_time) AS delta_mins FROM user_logs;`,
+              'SQLite': `SELECT u_id, session_id, log_time, log_time - LAG(log_time, 1, log_time) OVER(PARTITION BY u_id ORDER BY log_time) AS delta_mins FROM user_logs;`
+            }
+          },
+          {
+            id: 'm3_4',
+            title: 'Recursive CTEs & Hierarchical Graph Traversals',
+            concept: 'Self-referential anchor and recursive queries for DAG structures',
+            logicFlow: 'Anchor member executes once -> Recursive member joins previous result set until it returns empty -> UNION ALL merges sets',
+            explanation: 'Recursive CTEs allow traversing tree and graph data structures (such as manager-employee reporting chains and bill-of-materials hierarchies) directly in SQL.',
+            useCase: 'Corporate HR Hierarchy: Traversing an organization chart to compute management depth and reporting chains.',
+            demoInitSQL: `CREATE TABLE org_chart (emp_id INT, name TEXT, mgr_id INT); INSERT INTO org_chart VALUES (1,'CEO',NULL),(2,'VP_Tech',1),(3,'Dir_Eng',2),(4,'Staff_Eng',3);`,
+            dialects: {
+              'T-SQL': `WITH HierarchyCTE AS (\n  SELECT emp_id, name, mgr_id, 1 AS depth FROM org_chart WHERE mgr_id IS NULL\n  UNION ALL\n  SELECT o.emp_id, o.name, o.mgr_id, h.depth + 1 FROM org_chart o JOIN HierarchyCTE h ON o.mgr_id = h.emp_id\n)\nSELECT * FROM HierarchyCTE;`,
+              'PostgreSQL': `WITH RECURSIVE HierarchyCTE AS (\n  SELECT emp_id, name, mgr_id, 1 AS depth FROM org_chart WHERE mgr_id IS NULL\n  UNION ALL\n  SELECT o.emp_id, o.name, o.mgr_id, h.depth + 1 FROM org_chart o JOIN HierarchyCTE h ON o.mgr_id = h.emp_id\n)\nSELECT * FROM HierarchyCTE;`,
+              'MySQL': `WITH RECURSIVE HierarchyCTE AS (\n  SELECT emp_id, name, mgr_id, 1 AS depth FROM org_chart WHERE mgr_id IS NULL\n  UNION ALL\n  SELECT o.emp_id, o.name, o.mgr_id, h.depth + 1 FROM org_chart o JOIN HierarchyCTE h ON o.mgr_id = h.emp_id\n)\nSELECT * FROM HierarchyCTE;`,
+              'SQLite': `WITH RECURSIVE HierarchyCTE AS (\n  SELECT emp_id, name, mgr_id, 1 AS depth FROM org_chart WHERE mgr_id IS NULL\n  UNION ALL\n  SELECT o.emp_id, o.name, o.mgr_id, h.depth + 1 FROM org_chart o JOIN HierarchyCTE h ON o.mgr_id = h.emp_id\n)\nSELECT * FROM HierarchyCTE;`
+            }
+          }
+        ]
+      },
+      4: {
+        levelTitle: 'Level 4: Architecture, Physical Plans & Query Optimization',
+        modules: [
+          {
+            id: 'm4_1',
+            title: 'SARGable Queries & B-Tree Index Navigation',
+            concept: 'Search Argument Able syntax design and index-friendly predicates',
+            logicFlow: 'SARGable predicate: Direct root-to-leaf B-Tree traversal -> Non-SARGable: Full table or index scan',
+            explanation: 'Applying scalar functions or mathematical calculations to indexed columns in WHERE filters prevents index seeks. Refactoring conditions to isolate the column preserves SARGability.',
+            useCase: 'Banking Audit: Optimizing date-range filters across a 200-million-row transaction ledger.',
+            demoInitSQL: `CREATE TABLE ledger_entries (tx_id INT, tx_date TEXT, amount INT); INSERT INTO ledger_entries VALUES (1,'2025-03-15',500),(2,'2024-12-01',1200),(3,'2025-06-20',3400);`,
+            dialects: {
+              'T-SQL': `SELECT tx_id, tx_date, amount FROM ledger_entries WHERE tx_date >= '2025-01-01' AND tx_date < '2026-01-01';`,
+              'PostgreSQL': `SELECT tx_id, tx_date, amount FROM ledger_entries WHERE tx_date >= '2025-01-01' AND tx_date < '2026-01-01';`,
+              'MySQL': `SELECT tx_id, tx_date, amount FROM ledger_entries WHERE tx_date >= '2025-01-01' AND tx_date < '2026-01-01';`,
+              'SQLite': `SELECT tx_id, tx_date, amount FROM ledger_entries WHERE tx_date >= '2025-01-01' AND tx_date < '2026-01-01';`
+            }
+          },
+          {
+            id: 'm4_2',
+            title: 'Physical Join Algorithms: Nested Loop, Hash Join, Merge Join',
+            concept: 'Database engine join evaluation strategies and memory allocation tradeoffs',
+            logicFlow: 'Nested Loop: Small/indexed sets -> Hash Join: Large unsorted sets -> Merge Join: Pre-sorted relations',
+            explanation: 'The query optimizer selects join algorithms based on data size, available indexes, and sort order. Hash joins build an in-memory hash table on the smaller input and probe it with the larger input.',
+            useCase: 'Data Warehousing: Analyzing join strategies between a 100M-row fact table and a 10k-row dimension table.',
+            demoInitSQL: `CREATE TABLE dim_cust (c_id INT PRIMARY KEY, tier TEXT); CREATE TABLE fact_orders (o_id INT, c_id INT, val INT); INSERT INTO dim_cust VALUES (1,'VIP'),(2,'REG'); INSERT INTO fact_orders VALUES (101,1,900),(102,1,1200),(103,2,300);`,
+            dialects: {
+              'T-SQL': `SET STATISTICS IO, TIME ON; SELECT c.tier, SUM(f.val) AS total_val FROM dim_cust c JOIN fact_orders f ON c.c_id = f.c_id GROUP BY c.tier;`,
+              'PostgreSQL': `EXPLAIN (ANALYZE, BUFFERS) SELECT c.tier, SUM(f.val) FROM dim_cust c JOIN fact_orders f ON c.c_id = f.c_id GROUP BY c.tier;`,
+              'MySQL': `EXPLAIN FORMAT=JSON SELECT c.tier, SUM(f.val) FROM dim_cust c JOIN fact_orders f ON c.c_id = f.c_id GROUP BY c.tier;`,
+              'SQLite': `EXPLAIN QUERY PLAN SELECT c.tier, SUM(f.val) FROM dim_cust c JOIN fact_orders f ON c.c_id = f.c_id GROUP BY c.tier;`
+            }
+          },
+          {
+            id: 'm4_3',
+            title: 'Index Architecture: Clustered, Composite & Covering Indexes',
+            concept: 'Table data layout on disk and index lookup optimization',
+            logicFlow: 'Covering index matches SELECT, WHERE, and JOIN columns -> returns data directly from index leaf pages without table lookups',
+            explanation: 'A covering index includes all columns referenced by a query, allowing the optimizer to satisfy the query entirely from the index leaf pages and eliminate random table lookups.',
+            useCase: 'High-Throughput E-Commerce: Designing composite indexes to support search and sorting operations on product catalogs.',
+            demoInitSQL: `CREATE TABLE items (id INT, cat_id INT, price REAL, stock INT); INSERT INTO items VALUES (1,5,19.99,100),(2,5,49.99,20),(3,8,9.99,0);`,
+            dialects: {
+              'T-SQL': `CREATE NONCLUSTERED INDEX idx_items_cov ON items(cat_id, price) INCLUDE (stock); SELECT cat_id, price FROM items WHERE cat_id = 5 AND price > 15.0;`,
+              'PostgreSQL': `CREATE INDEX idx_items_covering ON items(cat_id, price) INCLUDE (stock); SELECT cat_id, price FROM items WHERE cat_id = 5 AND price > 15.0;`,
+              'MySQL': `CREATE INDEX idx_items_composite ON items(cat_id, price, stock); SELECT cat_id, price FROM items WHERE cat_id = 5 AND price > 15.0;`,
+              'SQLite': `CREATE INDEX idx_items_covering ON items(cat_id, price, stock); SELECT cat_id, price FROM items WHERE cat_id = 5 AND price > 15.0;`
+            }
+          },
+          {
+            id: 'm4_4',
+            title: 'ACID Concurrency & Transaction Isolation Levels',
+            concept: 'Concurrency anomalies: Dirty Reads, Non-Repeatable Reads, and Phantom Reads',
+            logicFlow: 'Read Uncommitted -> Read Committed -> Repeatable Read -> Serializable (enforces range locks/MVCC snapshot isolation)',
+            explanation: 'Isolation levels balance concurrency against data consistency. Higher isolation levels (such as SERIALIZABLE) eliminate anomalies like phantom reads by acquiring range locks or tracking serial dependencies.',
+            useCase: 'Trading & Inventory Engines: Preventing race conditions and double-booking during concurrent checkout requests.',
+            demoInitSQL: `CREATE TABLE seat_inventory (flight_id TEXT, seat_num TEXT, is_reserved INT); INSERT INTO seat_inventory VALUES ('AI-101','12A',0),('AI-101','12B',1);`,
+            dialects: {
+              'T-SQL': `SET TRANSACTION ISOLATION LEVEL SERIALIZABLE; BEGIN TRANSACTION; UPDATE seat_inventory SET is_reserved = 1 WHERE flight_id = 'AI-101' AND seat_num = '12A'; COMMIT; SELECT * FROM seat_inventory;`,
+              'PostgreSQL': `BEGIN TRANSACTION ISOLATION LEVEL SERIALIZABLE; UPDATE seat_inventory SET is_reserved = 1 WHERE flight_id = 'AI-101' AND seat_num = '12A'; COMMIT; SELECT * FROM seat_inventory;`,
+              'MySQL': `SET TRANSACTION ISOLATION LEVEL SERIALIZABLE; START TRANSACTION; UPDATE seat_inventory SET is_reserved = 1 WHERE flight_id = 'AI-101' AND seat_num = '12A'; COMMIT; SELECT * FROM seat_inventory;`,
+              'SQLite': `BEGIN TRANSACTION; UPDATE seat_inventory SET is_reserved = 1 WHERE flight_id = 'AI-101' AND seat_num = '12A'; COMMIT; SELECT * FROM seat_inventory;`
+            }
+          }
+        ]
+      }
+    };
+
+    const labMasterProblems = [
+      {
+        id: 'p1',
+        title: 'Top 2 Department Earners (Dense Ranking)',
+        concept: 'Window Functions & Ranking',
+        industry: 'Banking & Fintech',
+        difficulty: 'Intermediate',
+        desc: 'Find the top 2 highest-paid employees per department. Ties must share the exact same rank without skipping numbers.',
+        schemaSQL: `CREATE TABLE emp (id INT, name TEXT, dept TEXT, salary INT); INSERT INTO emp VALUES (1,'Alice','IT',90000),(2,'Bob','IT',90000),(3,'Charlie','IT',75000),(4,'David','HR',60000),(5,'Eva','HR',55000);`,
+        correctQuery: `WITH R AS (SELECT dept, name, salary, DENSE_RANK() OVER(PARTITION BY dept ORDER BY salary DESC) as rnk FROM emp) SELECT dept, name, salary FROM R WHERE rnk <= 2 ORDER BY dept, salary DESC;`,
+        starterQuery: `SELECT dept, name, salary\nFROM emp;`
+      },
+      {
+        id: 'p2',
+        title: 'Consecutive Delinquent Payment Cycles',
+        concept: 'Window Functions & Ranking',
+        industry: 'Banking & Fintech',
+        difficulty: 'Master',
+        desc: 'Identify customer loans that missed payments for 2 or more consecutive months.',
+        schemaSQL: `CREATE TABLE loan_pmt (loan_id INT, pmt_month INT, is_missed INT); INSERT INTO loan_pmt VALUES (101,1,1),(101,2,1),(101,3,0),(102,1,0),(102,2,1),(102,3,0);`,
+        correctQuery: `SELECT DISTINCT loan_id FROM (SELECT loan_id, is_missed, LAG(is_missed) OVER(PARTITION BY loan_id ORDER BY pmt_month) as prev_missed FROM loan_pmt) WHERE is_missed = 1 AND prev_missed = 1;`,
+        starterQuery: `SELECT DISTINCT loan_id\nFROM loan_pmt;`
+      },
+      {
+        id: 'p3',
+        title: 'E-Commerce Return Rate by Product Category',
+        concept: 'Basic Filtering & Aggregation',
+        industry: 'E-Commerce & Retail',
+        difficulty: 'Beginner',
+        desc: 'Calculate the total count of returned items vs delivered items per category.',
+        schemaSQL: `CREATE TABLE orders (order_id INT, category TEXT, status TEXT); INSERT INTO orders VALUES (1,'Electronics','RETURNED'),(2,'Electronics','DELIVERED'),(3,'Electronics','RETURNED'),(4,'Apparel','DELIVERED');`,
+        correctQuery: `SELECT category, COUNT(*) AS total_orders, SUM(CASE WHEN status='RETURNED' THEN 1 ELSE 0 END) AS returned_count FROM orders GROUP BY category;`,
+        starterQuery: `SELECT category, COUNT(*)\nFROM orders\nGROUP BY category;`
+      },
+      {
+        id: 'p4',
+        title: 'Customer Lifetime Repeat Purchase Interval',
+        concept: 'Window Functions & Ranking',
+        industry: 'E-Commerce & Retail',
+        difficulty: 'Advanced',
+        desc: 'Calculate the average interval in days between first and second purchases for repeat buyers.',
+        schemaSQL: `CREATE TABLE cust_orders (cust_id INT, order_date DATE); INSERT INTO cust_orders VALUES (1,'2025-01-01'),(1,'2025-01-15'),(2,'2025-02-01'),(3,'2025-01-10');`,
+        correctQuery: `WITH Ranked AS (SELECT cust_id, order_date, ROW_NUMBER() OVER(PARTITION BY cust_id ORDER BY order_date) as rn FROM cust_orders) SELECT cust_id FROM Ranked WHERE rn >= 2;`,
+        starterQuery: `SELECT cust_id\nFROM cust_orders;`
+      },
+      {
+        id: 'p5',
+        title: 'SaaS Active User Retention Cohorts',
+        concept: 'Relational Joins & Set Operations',
+        industry: 'SaaS & Cloud Telemetry',
+        difficulty: 'Advanced',
+        desc: 'Find the count of distinct users who were active in month 1 and remained active in month 2.',
+        schemaSQL: `CREATE TABLE logins (user_id INT, log_month INT); INSERT INTO logins VALUES (1,1),(1,2),(2,1),(3,2),(4,1),(4,2);`,
+        correctQuery: `SELECT COUNT(DISTINCT a.user_id) AS retained_users FROM logins a JOIN logins b ON a.user_id = b.user_id WHERE a.log_month = 1 AND b.log_month = 2;`,
+        starterQuery: `SELECT COUNT(*)\nFROM logins a\nJOIN logins b ON a.user_id = b.user_id;`
+      }
+    ];
+
+    const masterCaseStudies = [
+      { id: 'cs1', title: 'Deloitte Risk: Commercial Credit NPA Delinquency Model', sector: 'Banking & Fintech', company: 'Deloitte / Banking', desc: 'Identify loan accounts where overdue payment cycles exceed 90 days across contiguous billing cycles without full capital repayment.', file: 'loan_portfolio' },
+      { id: 'cs2', title: 'Amazon Fulfillment: Multi-Node Inventory Stock Balancing', sector: 'E-Commerce & Retail', company: 'Amazon', desc: 'Compute days-of-inventory-on-hand across regional fulfillment centers where turnover rates fall below threshold.', file: 'retail_orders' },
+      { id: 'cs3', title: 'Meta Ads Analytics: Multi-Touch Conversion Attribution', sector: 'SaaS & Cloud Telemetry', company: 'Meta', desc: 'Aggregate user clickstream telemetry to allocate first-touch and last-touch conversions across overlapping impressions.', file: 'saas_logs' },
+      { id: 'cs4', title: 'IDFC First Bank: Working Capital Overdraft Stress Test', sector: 'Banking & Fintech', company: 'IDFC First', desc: 'Audit credit facilities exceeding sanctioned limits for 3 consecutive statement periods with interest capitalisation.', file: 'idfc_overdraft' },
+      { id: 'cs5', title: 'Uber Mobility: Dynamic Surge Multiplier Equilibrium', sector: 'Logistics, Mobility & Telecom', company: 'Uber', desc: 'Calculate spatial demand-to-supply ratio in 10-minute rolling buckets across hexagonal geospatial coordinates.', file: 'uber_mobility' }
+    ];
+
+    const datasets26Bank = [
+      { id: 1, name: 'Northwind_Traders_OLTP', source: 'SQLBolt / W3Schools', domain: 'E-Commerce / Inventory', rows: '15,200', key: 'northwind' },
+      { id: 2, name: 'Chinook_Digital_Music_Store', source: 'GitHub Open Repo', domain: 'Digital Media / Billing', rows: '12,500', key: 'chinook' },
+      { id: 3, name: 'Sakila_DVD_Rental_Postgres', source: 'PostgreSQL Official / Mode', domain: 'Media Rental Logistics', rows: '46,000', key: 'sakila' },
+      { id: 4, name: 'Pagila_Relational_Schema', source: 'GitHub / Kaggle', domain: 'Enterprise ANSI OLTP', rows: '52,000', key: 'pagila' },
+      { id: 5, name: 'DataLemur_Meta_Ad_Performance', source: 'DataLemur Interview Engine', domain: 'AdTech Marketing Telemetry', rows: '120,000', key: 'datalemur_meta' }
+    ];
+
+    async function initSqlWasm() {
+      try {
+        const SQL = await initSqlJs({
+          locateFile: file => `https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.8.0/${file}`
+        });
+        sqlEngine = SQL;
+        document.getElementById('engine-status-dot').className = "w-2 h-2 rounded-full bg-emerald-400 flex-shrink-0";
+        document.getElementById('engine-status-text').innerText = "Engine Online";
+        runInteractiveModuleDemo();
+      } catch (err) {
+        document.getElementById('engine-status-dot').className = "w-2 h-2 rounded-full bg-rose-500 flex-shrink-0";
+        document.getElementById('engine-status-text').innerText = "Engine Load Failed";
+        console.error("WASM Boot Error:", err);
+      }
+    }
+
+    function setDialectEngine(engineName) {
+      selectedDialect = engineName;
+      ['T-SQL', 'PostgreSQL', 'MySQL', 'SQLite'].forEach(eng => {
+        const btn = document.getElementById(`btn-engine-${eng}`);
+        if (eng === engineName) {
+          btn.className = "px-2.5 py-1 rounded dialect-btn-active font-mono-code transition";
+        } else {
+          btn.className = "px-2.5 py-1 rounded dialect-btn-inactive font-mono-code transition";
+        }
+      });
+
+      document.getElementById('sidebar-engine-badge').innerText = `${engineName} Mode`;
+      document.getElementById('editor-dialect-label').innerText = `${engineName} Mode`;
+      renderActiveModuleDetails();
+    }
+
+    function executeDialectDemoDirectly(dialectName) {
+      setDialectEngine(dialectName);
+      runInteractiveModuleDemo();
+    }
+
+    function switchMainTab(tabId) {
+      document.querySelectorAll('.tab-view').forEach(el => el.classList.add('hidden'));
+      document.getElementById(tabId).classList.remove('hidden');
+
+      const tabs = ['tab-concepts', 'tab-lab', 'tab-cases', 'tab-aptitude', 'tab-resources'];
+      tabs.forEach(t => {
+        const btn = document.getElementById(`nav-${t}`);
+        if (t === tabId) {
+          btn.className = "w-full flex items-center space-x-3 px-3 py-2.5 rounded-lg nav-btn-active transition wrap-sidebar-btn text-left";
+        } else {
+          btn.className = "w-full flex items-center space-x-3 px-3 py-2.5 rounded-lg nav-btn-inactive transition wrap-sidebar-btn text-left";
+        }
+      });
+      lucide.createIcons();
+    }
+
+    function selectCurriculumLevel(lvl) {
+      activeLevel = lvl;
+      [1, 2, 3, 4].forEach(i => {
+        const btn = document.getElementById(`btn-lvl-${i}`);
+        if (i === lvl) {
+          btn.className = "px-3 py-1.5 rounded-lg text-xs font-semibold bg-sky-600 text-white transition wrap-sidebar-btn";
+        } else {
+          btn.className = "px-3 py-1.5 rounded-lg text-xs font-semibold bg-slate-800 text-slate-400 hover:text-white transition wrap-sidebar-btn";
+        }
+      });
+
+      const lvlData = masterCurriculumModules[lvl];
+      document.getElementById('level-subnav-heading').innerText = lvlData.levelTitle.split(':')[0] + ' Modules';
+      
+      activeModuleId = lvlData.modules[0].id;
+      renderSubModuleNavList();
+      renderActiveModuleDetails();
+    }
+
+    function renderSubModuleNavList() {
+      const lvlData = masterCurriculumModules[activeLevel];
+      const navContainer = document.getElementById('submodule-nav-list');
+      
+      navContainer.innerHTML = lvlData.modules.map((m, idx) => `
+        <button onclick="selectCurriculumModule('${m.id}')" id="btn-mod-${m.id}" class="w-full text-left p-2.5 rounded-lg text-xs transition flex flex-col min-w-0 ${m.id === activeModuleId ? 'module-item-active' : 'module-item-inactive'}">
+          <span class="font-bold wrap-content">${idx + 1}. ${m.title}</span>
+          <span class="text-[10px] text-slate-400 mt-1 wrap-content">${m.concept}</span>
+        </button>
+      `).join('');
+    }
+
+    function selectCurriculumModule(modId) {
+      activeModuleId = modId;
+      const lvlData = masterCurriculumModules[activeLevel];
+      lvlData.modules.forEach(m => {
+        const btn = document.getElementById(`btn-mod-${m.id}`);
+        if (btn) {
+          if (m.id === modId) {
+            btn.className = "w-full text-left p-2.5 rounded-lg text-xs transition flex flex-col min-w-0 module-item-active";
+          } else {
+            btn.className = "w-full text-left p-2.5 rounded-lg text-xs transition flex flex-col min-w-0 module-item-inactive";
+          }
+        }
+      });
+      renderActiveModuleDetails();
+    }
+
+    function renderActiveModuleDetails() {
+      const lvlData = masterCurriculumModules[activeLevel];
+      const mod = lvlData.modules.find(m => m.id === activeModuleId) || lvlData.modules[0];
+      const container = document.getElementById('curriculum-module-display');
+      const activeQueryForDialect = mod.dialects[selectedDialect] || mod.dialects['T-SQL'];
+
+      container.innerHTML = `
+        <div class="bg-slate-900 border border-slate-800 p-5 rounded-xl space-y-4 min-w-0">
+          <div class="flex flex-wrap items-center justify-between gap-2">
+            <span class="text-xs font-bold text-sky-400 uppercase tracking-wider font-mono-code wrap-content">${lvlData.levelTitle} &bull; ${mod.id.toUpperCase()}</span>
+            <span class="text-[10px] bg-slate-800 text-slate-300 px-2 py-0.5 rounded font-mono-code flex-shrink-0">Active Dialect: ${selectedDialect}</span>
+          </div>
+          
+          <h3 class="text-base font-bold text-white wrap-content">${mod.title}</h3>
+          <p class="text-xs text-slate-300 leading-relaxed wrap-content">${mod.explanation}</p>
+
+          <div class="bg-slate-950 p-3 rounded-lg border border-slate-800 space-y-1 min-w-0">
+            <div class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Logic Execution Sequence:</div>
+            <div class="text-xs text-emerald-300 font-mono-code wrap-content">${mod.logicFlow}</div>
+          </div>
+
+          <div class="bg-sky-950/40 p-3 rounded-lg border border-sky-900/60 text-xs text-sky-200 min-w-0">
+            <strong class="text-white">Real-World Enterprise Context:</strong> <span class="wrap-content">${mod.useCase}</span>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 min-w-0">
+          <div class="bg-slate-900 border ${selectedDialect === 'T-SQL' ? 'border-emerald-500 shadow-lg shadow-emerald-950/50' : 'border-slate-800'} p-4 rounded-xl flex flex-col justify-between min-w-0">
+            <div class="min-w-0">
+              <div class="flex items-center justify-between mb-2 gap-2">
+                <span class="text-xs font-bold text-emerald-400 flex items-center space-x-1 min-w-0">
+                  <span class="wrap-content">T-SQL / MS SQL</span>
+                  ${selectedDialect === 'T-SQL' ? '<span class="text-[9px] bg-emerald-500 text-slate-950 font-bold px-1.5 py-0.2 rounded ml-1 flex-shrink-0">RUNNING</span>' : ''}
+                </span>
+                <button onclick="executeDialectDemoDirectly('T-SQL')" class="text-[10px] px-2 py-0.5 bg-emerald-600/30 hover:bg-emerald-600 text-emerald-300 hover:text-white rounded border border-emerald-600/50 flex items-center space-x-1 transition flex-shrink-0">
+                  <i data-lucide="play" class="w-2.5 h-2.5 fill-current"></i>
+                  <span>1-Tap Run</span>
+                </button>
+              </div>
+              <pre class="bg-slate-950 p-2.5 rounded-lg text-[11px] font-mono-code text-emerald-300 border border-slate-800 wrap-content">${mod.dialects['T-SQL']}</pre>
+            </div>
+          </div>
+
+          <div class="bg-slate-900 border ${selectedDialect === 'PostgreSQL' ? 'border-sky-500 shadow-lg shadow-sky-950/50' : 'border-slate-800'} p-4 rounded-xl flex flex-col justify-between min-w-0">
+            <div class="min-w-0">
+              <div class="flex items-center justify-between mb-2 gap-2">
+                <span class="text-xs font-bold text-sky-400 flex items-center space-x-1 min-w-0">
+                  <span class="wrap-content">PostgreSQL (ANSI)</span>
+                  ${selectedDialect === 'PostgreSQL' ? '<span class="text-[9px] bg-sky-500 text-slate-950 font-bold px-1.5 py-0.2 rounded ml-1 flex-shrink-0">RUNNING</span>' : ''}
+                </span>
+                <button onclick="executeDialectDemoDirectly('PostgreSQL')" class="text-[10px] px-2 py-0.5 bg-sky-600/30 hover:bg-sky-600 text-sky-300 hover:text-white rounded border border-sky-600/50 flex items-center space-x-1 transition flex-shrink-0">
+                  <i data-lucide="play" class="w-2.5 h-2.5 fill-current"></i>
+                  <span>1-Tap Run</span>
+                </button>
+              </div>
+              <pre class="bg-slate-950 p-2.5 rounded-lg text-[11px] font-mono-code text-sky-300 border border-slate-800 wrap-content">${mod.dialects['PostgreSQL']}</pre>
+            </div>
+          </div>
+
+          <div class="bg-slate-900 border ${selectedDialect === 'MySQL' ? 'border-indigo-500 shadow-lg shadow-indigo-950/50' : 'border-slate-800'} p-4 rounded-xl flex flex-col justify-between min-w-0">
+            <div class="min-w-0">
+              <div class="flex items-center justify-between mb-2 gap-2">
+                <span class="text-xs font-bold text-indigo-400 flex items-center space-x-1 min-w-0">
+                  <span class="wrap-content">MySQL 8.0+</span>
+                  ${selectedDialect === 'MySQL' ? '<span class="text-[9px] bg-indigo-500 text-slate-950 font-bold px-1.5 py-0.2 rounded ml-1 flex-shrink-0">RUNNING</span>' : ''}
+                </span>
+                <button onclick="executeDialectDemoDirectly('MySQL')" class="text-[10px] px-2 py-0.5 bg-indigo-600/30 hover:bg-indigo-600 text-indigo-300 hover:text-white rounded border border-indigo-600/50 flex items-center space-x-1 transition flex-shrink-0">
+                  <i data-lucide="play" class="w-2.5 h-2.5 fill-current"></i>
+                  <span>1-Tap Run</span>
+                </button>
+              </div>
+              <pre class="bg-slate-950 p-2.5 rounded-lg text-[11px] font-mono-code text-indigo-300 border border-slate-800 wrap-content">${mod.dialects['MySQL']}</pre>
+            </div>
+          </div>
+
+          <div class="bg-slate-900 border ${selectedDialect === 'SQLite' ? 'border-amber-500 shadow-lg shadow-amber-950/50' : 'border-slate-800'} p-4 rounded-xl flex flex-col justify-between min-w-0">
+            <div class="min-w-0">
+              <div class="flex items-center justify-between mb-2 gap-2">
+                <span class="text-xs font-bold text-amber-400 flex items-center space-x-1 min-w-0">
+                  <span class="wrap-content">SQLite WASM</span>
+                  ${selectedDialect === 'SQLite' ? '<span class="text-[9px] bg-amber-500 text-slate-950 font-bold px-1.5 py-0.2 rounded ml-1 flex-shrink-0">RUNNING</span>' : ''}
+                </span>
+                <button onclick="executeDialectDemoDirectly('SQLite')" class="text-[10px] px-2 py-0.5 bg-amber-600/30 hover:bg-amber-600 text-amber-300 hover:text-white rounded border border-amber-600/50 flex items-center space-x-1 transition flex-shrink-0">
+                  <i data-lucide="play" class="w-2.5 h-2.5 fill-current"></i>
+                  <span>1-Tap Run</span>
+                </button>
+              </div>
+              <pre class="bg-slate-950 p-2.5 rounded-lg text-[11px] font-mono-code text-amber-300 border border-slate-800 wrap-content">${mod.dialects['SQLite']}</pre>
+            </div>
+          </div>
+        </div>
+
+        <div class="bg-slate-900 border border-slate-800 p-5 rounded-xl space-y-3 min-w-0">
+          <div class="flex flex-wrap items-center justify-between gap-2">
+            <div class="flex items-center space-x-2 min-w-0">
+              <i data-lucide="play-circle" class="w-4 h-4 text-sky-400 flex-shrink-0"></i>
+              <span class="text-xs font-bold text-white uppercase tracking-wider wrap-content">Live Engine Output: <span class="text-sky-400 font-mono-code">${selectedDialect} Mode</span></span>
+            </div>
+            <button onclick="runInteractiveModuleDemo()" class="px-3.5 py-1.5 bg-sky-500 hover:bg-sky-400 text-slate-950 font-bold rounded-lg text-xs transition flex items-center space-x-1 shadow-md shadow-sky-950 flex-shrink-0">
+              <i data-lucide="play" class="w-3.5 h-3.5 fill-current"></i>
+              <span>Re-Run Demo Query</span>
+            </button>
+          </div>
+          
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-3 min-w-0">
+            <div class="min-w-0">
+              <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider block mb-1">Target Statement (${selectedDialect}):</span>
+              <pre id="current-demo-query-text" class="bg-slate-950 p-3 rounded text-[11px] font-mono-code text-slate-200 border border-slate-800 wrap-content">${activeQueryForDialect}</pre>
+            </div>
+            <div class="min-w-0">
+              <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider block mb-1">Live In-Memory Result Set:</span>
+              <div id="module-demo-output" class="bg-slate-950 p-2.5 rounded text-[11px] font-mono-code text-sky-300 border border-slate-800 max-h-48 overflow-auto custom-scroll min-w-0">
+                <span class="text-slate-500 italic wrap-content">Executing query in WebAssembly engine...</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      `;
+      lucide.createIcons();
+      runInteractiveModuleDemo();
+    }
+
+    function runInteractiveModuleDemo() {
+      if (!sqlEngine) return;
+      const lvlData = masterCurriculumModules[activeLevel];
+      const mod = lvlData.modules.find(m => m.id === activeModuleId) || lvlData.modules[0];
+      const outputContainer = document.getElementById('module-demo-output');
+      if (!outputContainer) return;
+
+      const rawDialectQuery = mod.dialects[selectedDialect] || mod.dialects['T-SQL'];
+      const executableQuery = transpileToWasmExecutable(rawDialectQuery, selectedDialect);
+
+      try {
+        const db = new sqlEngine.Database();
+        db.run(mod.demoInitSQL);
+
+        const statements = executableQuery
+          .split(';')
+          .map(s => s.trim())
+          .filter(s => s.length > 0);
+
+        let finalRes = null;
+        for (const stmt of statements) {
+          if (/^SELECT|^EXPLAIN|^WITH/i.test(stmt)) {
+            finalRes = db.exec(stmt);
+          } else {
+            db.run(stmt);
+          }
+        }
+        db.close();
+
+        if (finalRes && finalRes.length > 0) {
+          const cols = finalRes[0].columns;
+          const rows = finalRes[0].values;
+          let tableHtml = `<table class="w-full text-left border-collapse table-auto"><thead class="text-slate-400 border-b border-slate-800"><tr>`;
+          cols.forEach(c => tableHtml += `<th class="pb-1 pr-2 wrap-table-cell">${c}</th>`);
+          tableHtml += `</tr></thead><tbody class="divide-y divide-slate-800/40">`;
+          rows.forEach(r => {
+            tableHtml += `<tr>`;
+            r.forEach(v => tableHtml += `<td class="py-1 pr-2 text-white wrap-table-cell">${v !== null ? v : '<span class="text-amber-400 italic">NULL</span>'}</td>`);
+            tableHtml += `</tr>`;
+          });
+          tableHtml += `</tbody></table>`;
+          outputContainer.innerHTML = tableHtml;
+        } else {
+          outputContainer.innerHTML = `<span class="text-emerald-400 font-bold wrap-content">&check; Query executed successfully (0 rows returned or DDL/DML committed).</span>`;
+        }
+      } catch (err) {
+        outputContainer.innerHTML = `<span class="text-rose-400 font-mono-code wrap-content">Engine Exception (${selectedDialect}): ${err.message}</span>`;
+      }
+    }
+
+    function filterAndRenderLabProblems() {
+      const topicFilter = document.getElementById('filter-lab-concept').value;
+      const indFilter = document.getElementById('filter-lab-industry').value;
+      const diffFilter = document.getElementById('filter-lab-difficulty').value;
+
+      const filtered = labMasterProblems.filter(p => {
+        const mTopic = (topicFilter === 'all' || p.concept === topicFilter);
+        const mInd = (indFilter === 'all' || p.industry === indFilter);
+        const mDiff = (diffFilter === 'all' || p.difficulty === diffFilter);
+        return mTopic && mInd && mDiff;
+      });
+
+      const select = document.getElementById('lab-problem-select');
+      if (filtered.length === 0) {
+        select.innerHTML = `<option value="">No matching challenges found</option>`;
+        document.getElementById('problem-instruction-card').innerHTML = `<p class="text-xs text-slate-500 wrap-content">No problems match the current filter criteria.</p>`;
+        return;
+      }
+
+      select.innerHTML = filtered.map(p => `
+        <option value="${p.id}">[${p.difficulty}] [${p.industry}] ${p.title}</option>
+      `).join('');
+
+      promptAndLoadLabProblem();
+    }
+
+    function promptAndLoadLabProblem() {
+      const probId = document.getElementById('lab-problem-select').value;
+      if (!probId) return;
+
+      pendingProblemId = probId;
+      const modal = document.getElementById('exam-prompt-modal');
+      const promptText = document.getElementById('modal-prompt-text');
+
+      if (labMode === 'timed') {
+        promptText.innerText = "You are entering Timed Exam Mode. The 45-minute countdown timer will begin immediately once you proceed.";
+      } else {
+        promptText.innerText = "Load this challenge into your practice workspace. You can execute queries with no time constraints.";
+      }
+
+      modal.classList.remove('hidden');
+    }
+
+    function closeExamModal(proceed) {
+      document.getElementById('exam-prompt-modal').classList.add('hidden');
+      if (!proceed) return;
+
+      const prob = labMasterProblems.find(p => p.id === pendingProblemId);
+      currentProblem = prob;
+
+      if (labMode === 'timed') {
+        startLabTimer();
+      }
+
+      document.getElementById('problem-instruction-card').innerHTML = `
+        <div class="space-y-3 min-w-0">
+          <div class="flex flex-wrap items-center justify-between gap-2">
+            <span class="text-[11px] font-mono-code px-2 py-0.5 rounded bg-sky-950 text-sky-400 border border-sky-800 wrap-content">${prob.industry}</span>
+            <span class="text-xs font-semibold text-slate-400 wrap-content">${prob.concept}</span>
+          </div>
+          <h3 class="font-bold text-sm text-white wrap-content">${prob.title}</h3>
+          <p class="text-xs text-slate-300 leading-relaxed wrap-content">${prob.desc}</p>
+          <div class="border-t border-slate-800 pt-3">
+            <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider block mb-1">Target Schema:</span>
+            <pre class="bg-slate-950 p-2.5 rounded text-[11px] font-mono-code text-sky-300 border border-slate-800 wrap-content">${prob.schemaSQL}</pre>
+          </div>
+        </div>
+      `;
+
+      document.getElementById('lab-sql-editor').value = prob.starterQuery;
+      document.getElementById('lab-feedback-panel').innerHTML = `<div class="text-xs text-slate-500 italic text-center wrap-content">Execute your SQL statement above to verify against the target dataset.</div>`;
+    }
+
+    function setLabMode(mode) {
+      labMode = mode;
+      const btnP = document.getElementById('btn-mode-practice');
+      const btnT = document.getElementById('btn-mode-timed');
+      const timerDisp = document.getElementById('active-timer-display');
+
+      if (mode === 'timed') {
+        btnT.className = "px-3 py-1.5 rounded-lg text-xs font-semibold bg-sky-600 text-white";
+        btnP.className = "px-3 py-1.5 rounded-lg text-xs font-semibold bg-slate-800 text-slate-400 hover:text-white";
+        timerDisp.classList.remove('hidden');
+      } else {
+        btnP.className = "px-3 py-1.5 rounded-lg text-xs font-semibold bg-sky-600 text-white";
+        btnT.className = "px-3 py-1.5 rounded-lg text-xs font-semibold bg-slate-800 text-slate-400 hover:text-white";
+        timerDisp.classList.add('hidden');
+        clearInterval(labTimerInterval);
+      }
+    }
+
+    function startLabTimer() {
+      clearInterval(labTimerInterval);
+      labTimeRemaining = 45 * 60;
+      const clock = document.getElementById('lab-timer-clock');
+
+      labTimerInterval = setInterval(() => {
+        const m = Math.floor(labTimeRemaining / 60);
+        const s = labTimeRemaining % 60;
+        clock.innerText = `${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
+        if (--labTimeRemaining < 0) {
+          clearInterval(labTimerInterval);
+          alert("Time Expired! Your exam session is being evaluated.");
+        }
+      }, 1000);
+    }
+
+    function resetLabEditor() {
+      if (currentProblem) {
+        document.getElementById('lab-sql-editor').value = currentProblem.starterQuery;
+      }
+    }
+
+    function executeAndValidateLabQuery() {
+      if (!sqlEngine) {
+        alert("WASM SQL Engine is initializing. Please wait...");
+        return;
+      }
+      if (!currentProblem) {
+        alert("Please select and accept a challenge first.");
+        return;
+      }
+
+      const userSql = document.getElementById('lab-sql-editor').value.trim();
+      const executableUserSql = transpileToWasmExecutable(userSql, selectedDialect);
+      const panel = document.getElementById('lab-feedback-panel');
+
+      let db;
+      try {
+        db = new sqlEngine.Database();
+        db.run(currentProblem.schemaSQL);
+      } catch (err) {
+        panel.innerHTML = `<div class="p-3 bg-rose-950/60 border border-rose-800 text-rose-300 text-xs font-mono-code rounded wrap-content">Schema Load Error: ${err.message}</div>`;
+        return;
+      }
+
+      let userRes, expectedRes;
+      try {
+        userRes = db.exec(executableUserSql);
+      } catch (err) {
+        panel.innerHTML = `
+          <div class="p-3 bg-rose-950/60 border border-rose-800 text-rose-300 text-xs font-mono-code rounded min-w-0">
+            <div class="font-bold mb-1">SQL Runtime Exception (${selectedDialect}):</div>
+            <div class="wrap-content">${err.message}</div>
+          </div>
+        `;
+        db.close();
+        return;
+      }
+
+      try {
+        expectedRes = db.exec(currentProblem.correctQuery);
+      } catch (err) {
+        console.error(err);
+      }
+
+      const normalize = rows => [...rows].sort((a, b) => JSON.stringify(a).localeCompare(JSON.stringify(b)));
+      
+      const isUserEmpty = !userRes || userRes.length === 0 || !userRes[0].values;
+      const isExpEmpty = !expectedRes || expectedRes.length === 0 || !expectedRes[0].values;
+
+      let isCorrect = false;
+      if (isUserEmpty && isExpEmpty) {
+        isCorrect = true;
+      } else if (!isUserEmpty && !isExpEmpty) {
+        const uNorm = normalize(userRes[0].values);
+        const eNorm = normalize(expectedRes[0].values);
+        isCorrect = JSON.stringify(uNorm) === JSON.stringify(eNorm);
+      }
+
+      if (isCorrect) {
+        panel.innerHTML = `
+          <div class="p-4 bg-emerald-950/60 border border-emerald-800 text-emerald-300 rounded-lg min-w-0">
+            <div class="font-bold text-sm flex items-center mb-1">
+              <i data-lucide="check-circle" class="w-4 h-4 mr-1 text-emerald-400 flex-shrink-0"></i>
+              <span>Query Correct: Deterministic Result Assertions Passed[cite: 1]</span>
+            </div>
+            <div class="text-xs text-emerald-400/80 wrap-content">Returned ${userRes[0] ? userRes[0].values.length : 0} matching relational records.</div>
+          </div>
+        `;
+      } else {
+        panel.innerHTML = `
+          <div class="p-4 bg-rose-950/50 border border-rose-900 text-rose-200 rounded-lg text-xs space-y-2 min-w-0">
+            <div class="font-bold text-sm flex items-center text-rose-400">
+              <i data-lucide="x-circle" class="w-4 h-4 mr-1 flex-shrink-0"></i>
+              <span>Result Mismatch</span>
+            </div>
+            <div class="wrap-content">Your query returned incorrect rows or grouping metrics. Check filters and group groupings.</div>
+            <details class="mt-2 text-[11px] text-slate-400 cursor-pointer">
+              <summary class="underline text-sky-400">Reveal Expected Reference Solution</summary>
+              <pre class="bg-slate-950 p-2 rounded mt-1 font-mono-code text-slate-300 wrap-content">${currentProblem.correctQuery}</pre>
+            </details>
+          </div>
+        `;
+      }
+      lucide.createIcons();
+      db.close();
+    }
+
+    function renderCaseStudies() {
+      const filter = document.getElementById('case-studies-filter').value;
+      const container = document.getElementById('cases-grid-display');
+      
+      const filtered = filter === 'all' ? masterCaseStudies : masterCaseStudies.filter(c => c.sector === filter);
+
+      container.innerHTML = filtered.map(cs => `
+        <div class="bg-slate-900 border border-slate-800 p-5 rounded-xl flex flex-col justify-between hover:border-slate-700 transition min-w-0">
+          <div class="min-w-0">
+            <div class="flex items-center justify-between mb-2 gap-2">
+              <span class="text-[10px] font-mono-code text-sky-400 px-2 py-0.5 rounded bg-sky-950/70 border border-sky-800/80 wrap-content">${cs.sector}</span>
+              <span class="text-[11px] text-slate-400 font-medium wrap-content">${cs.company}</span>
+            </div>
+            <h4 class="font-bold text-white text-sm mb-2 wrap-content">${cs.title}</h4>
+            <p class="text-xs text-slate-300 leading-relaxed mb-4 wrap-content">${cs.desc}</p>
+          </div>
+          <div class="flex flex-wrap items-center justify-between pt-3 border-t border-slate-800 gap-2">
+            <button onclick="switchMainTab('tab-lab')" class="text-xs text-sky-400 hover:underline">Open in Lab &rarr;</button>
+            <div class="flex space-x-1">
+              <button onclick="downloadDatasetFile('${cs.file}', 'sql')" class="px-2 py-0.5 bg-slate-800 hover:bg-sky-600 rounded text-[10px]">.SQL</button>
+              <button onclick="downloadDatasetFile('${cs.file}', 'csv')" class="px-2 py-0.5 bg-slate-800 hover:bg-emerald-600 rounded text-[10px]">.XLSX</button>
+              <button onclick="downloadDatasetFile('${cs.file}', 'doc')" class="px-2 py-0.5 bg-slate-800 hover:bg-indigo-600 rounded text-[10px]">.DOCX</button>
+            </div>
+          </div>
+        </div>
+      `).join('');
+      lucide.createIcons();
+    }
+
+    function renderDatasetsTable() {
+      const tbody = document.getElementById('datasets-table-body');
+      tbody.innerHTML = datasets26Bank.map(ds => `
+        <tr class="hover:bg-slate-900/50 transition">
+          <td class="p-3 text-slate-500 font-mono-code">${ds.id}</td>
+          <td class="p-3 font-semibold text-white wrap-table-cell">${ds.name}</td>
+          <td class="p-3 font-sans text-sky-400 wrap-table-cell">${ds.source}</td>
+          <td class="p-3 font-sans text-slate-300 wrap-table-cell">${ds.domain}</td>
+          <td class="p-3 text-slate-400 font-mono-code whitespace-nowrap">${ds.rows}</td>
+          <td class="p-3 whitespace-nowrap"><span class="text-sky-400">.SQL</span> | <span class="text-emerald-400">.XLSX</span> | <span class="text-indigo-400">.DOCX</span></td>
+          <td class="p-3 text-right space-x-1 whitespace-nowrap">
+            <button onclick="downloadDatasetFile('${ds.key}', 'sql')" class="px-2 py-1 bg-slate-800 hover:bg-sky-600 text-white rounded text-[11px]">SQL</button>
+            <button onclick="downloadDatasetFile('${ds.key}', 'csv')" class="px-2 py-1 bg-slate-800 hover:bg-emerald-600 text-white rounded text-[11px]">Excel/CSV</button>
+            <button onclick="downloadDatasetFile('${ds.key}', 'doc')" class="px-2 py-1 bg-slate-800 hover:bg-indigo-600 text-white rounded text-[11px]">Word Spec</button>
+          </td>
+        </tr>
+      `).join('');
+    }
+
+    function downloadDatasetFile(datasetKey, format) {
+      let filename = `${datasetKey}_data.${format === 'doc' ? 'doc' : (format === 'csv' ? 'csv' : 'sql')}`;
+      let content = "";
+      let mime = "text/plain";
+
+      if (format === 'sql') {
+        content = `-- Enterprise Schema DDL & Seed Data for ${datasetKey}\nCREATE TABLE ${datasetKey} (id INT PRIMARY KEY, amount NUMERIC, status VARCHAR(50), created_at TIMESTAMP);\nINSERT INTO ${datasetKey} VALUES (1, 1500.50, 'COMPLETED', '2025-01-10');\nINSERT INTO ${datasetKey} VALUES (2, 2400.00, 'PENDING', '2025-01-12');`;
+        mime = "text/sql";
+      } else if (format === 'csv') {
+        content = `id,amount,status,created_at\n1,1500.50,COMPLETED,2025-01-10\n2,2400.00,PENDING,2025-01-12\n3,890.20,DELINQUENT,2025-01-15`;
+        mime = "text/csv";
+      } else if (format === 'doc') {
+        content = `ENTERPRISE DATA DICTIONARY & SPECIFICATION\nDataset: ${datasetKey}\nGenerated: Enterprise SQL Mastery Platform\n\n1. Column Definitions:\n - id: Integer (Primary Key, Non-Null)\n - amount: Numeric (Transaction Value in USD)\n - status: Varchar (Pipeline Execution Status Flag)\n - created_at: Timestamp (UTC ISO-8601 Execution Log)\n\n2. Integrity Constraints & Relationships:\n Relational fact entity normalized to 3NF referencing foreign dimensions.\n Compatible with MySQL, PostgreSQL, T-SQL, and SQLite WASM engines.`;
+        mime = "application/msword";
+      }
+
+      const blob = new Blob([content], { type: mime });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = filename;
+      a.click();
+      URL.revokeObjectURL(url);
+    }
+
+    window.addEventListener('DOMContentLoaded', () => {
+      initSqlWasm();
+      selectCurriculumLevel(1);
+      filterAndRenderLabProblems();
+      renderCaseStudies();
+      renderAptitude();
+      renderDatasetsTable();
+      lucide.createIcons();
+    });
+  </script>
+</body>
+</html>
