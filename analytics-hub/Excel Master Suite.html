@@ -2003,8 +2003,8 @@
                 });
                 alert(`Score: ${score}/20`);
             },
-            promptTimed: () => document.getElementById('exam-prompt-modal').classList.remove('hide-section'),
-            closeModal: (start) => { document.getElementById('exam-prompt-modal').classList.add('hide-section'); if (start)
+            promptTimed: () => { const modal = document.getElementById('exam-prompt-modal'); modal.classList.remove('hide-section'); modal.classList.remove('hidden'); },
+            closeModal: (start) => { const modal = document.getElementById('exam-prompt-modal'); modal.classList.add('hide-section'); modal.classList.add('hidden'); if (start)
                     AppTesting.startTimed(); },
             startTimed: () => {
                 document.getElementById('timed-exam-launcher').classList.add('hide-section');

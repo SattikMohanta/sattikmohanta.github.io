@@ -223,6 +223,7 @@ Unauthorized copying or plagiarism will be prosecuted.
             <div id="active-timer-display" class="hidden flex items-center space-x-2 bg-rose-950/60 border border-rose-800 text-rose-300 font-mono-code font-bold px-3 py-1.5 rounded-lg text-xs">
               <i data-lucide="timer" class="w-4 h-4"></i>
               <span id="lab-timer-clock">45:00</span>
+              <button onclick="submitLabExam()" id="lab-timed-submit" class="hidden ml-2 bg-rose-700 hover:bg-rose-600 text-white px-2 py-1 rounded text-[10px]">Submit Timed Exam</button>
             </div>
             <button onclick="setLabMode('practice')" id="btn-mode-practice" class="px-3 py-1.5 rounded-lg text-xs font-semibold bg-sky-600 text-white">Practice Sandbox</button>
             <button onclick="setLabMode('timed')" id="btn-mode-timed" class="px-3 py-1.5 rounded-lg text-xs font-semibold bg-slate-800 text-slate-400 hover:text-white">Timed Exam Mode</button>
@@ -1466,15 +1467,18 @@ Unauthorized copying or plagiarism will be prosecuted.
       const btnP = document.getElementById('btn-mode-practice');
       const btnT = document.getElementById('btn-mode-timed');
       const timerDisp = document.getElementById('active-timer-display');
+      const submitBtn = document.getElementById('lab-timed-submit');
 
       if (mode === 'timed') {
         btnT.className = "px-3 py-1.5 rounded-lg text-xs font-semibold bg-sky-600 text-white";
         btnP.className = "px-3 py-1.5 rounded-lg text-xs font-semibold bg-slate-800 text-slate-400 hover:text-white";
         timerDisp.classList.remove('hidden');
+        submitBtn.classList.remove('hidden');
       } else {
         btnP.className = "px-3 py-1.5 rounded-lg text-xs font-semibold bg-sky-600 text-white";
         btnT.className = "px-3 py-1.5 rounded-lg text-xs font-semibold bg-slate-800 text-slate-400 hover:text-white";
         timerDisp.classList.add('hidden');
+        submitBtn.classList.add('hidden');
         clearInterval(labTimerInterval);
       }
     }
@@ -1489,10 +1493,21 @@ Unauthorized copying or plagiarism will be prosecuted.
         const s = labTimeRemaining % 60;
         clock.innerText = `${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
         if (--labTimeRemaining < 0) {
-          clearInterval(labTimerInterval);
-          alert("Time Expired! Your exam session is being evaluated.");
+          submitLabExam(true);
         }
       }, 1000);
+    }
+
+    function submitLabExam(expired = false) {
+      clearInterval(labTimerInterval);
+      document.getElementById('lab-timed-submit').classList.add('hidden');
+      const panel = document.getElementById('lab-feedback-panel');
+      if (!currentProblem) {
+        panel.innerHTML = `<div class="p-3 bg-rose-950/60 border border-rose-800 text-rose-300 text-xs rounded">${expired ? 'Time expired.' : 'Timed session submitted.'} Select a challenge to receive a result.</div>`;
+        return;
+      }
+      executeAndValidateLabQuery();
+      panel.innerHTML = `<div class="p-3 mb-2 bg-amber-950/60 border border-amber-800 text-amber-300 text-xs rounded">${expired ? 'Time expired.' : 'Timed session submitted.'} Review the validation result below.</div>` + panel.innerHTML;
     }
 
     function resetLabEditor() {
