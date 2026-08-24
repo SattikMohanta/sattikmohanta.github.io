@@ -1,180 +1,158 @@
 # 🤖 AI Prompt Engineering - Analytics & Exam Suite Hub
 
-> **A Free, Ad-Free Learning Platform for Professional Development**
+> A free, ad-free learning platform for professional development — powered by prompt engineering and open web technologies.
 
 ---
 
-## 📋 Project Overview
+## Table of contents
 
-This repository hosts a unified **AI-powered Analytics & Exam Preparation Suite** built entirely using advanced prompt engineering techniques. The project demonstrates how artificial intelligence can be leveraged to create comprehensive educational content without paywalls or intrusive advertising.
-
-### 🎯 Mission
-
-To provide students, professionals, and learners with **high-quality, ad-free educational resources** for professional certifications and technical skill development—removing barriers to knowledge that excessive marketing and subscription models create.
-
----
-
-## 🌐 Live Applications
-
-Access the full platform here: **https://sattikmohanta.github.io**
-
-### Individual Project Sites:
-
-1. **[IIBA® ECBA™ Prep Engine](https://sattikmohanta.github.io/ecba/)**
-   - Certified Business Analyst preparation
-   - Interactive mock exams and study materials
-   - BABOK® framework coverage
-
-2. **[SQL Mastery Suite](https://sattikmohanta.github.io/sql/)**
-   - Comprehensive SQL learning platform
-   - Query optimization techniques
-   - Real-world database scenarios
-
-3. **[Power BI PL-300 Exam Engine](https://sattikmohanta.github.io/powerbi/)**
-   - Microsoft Power BI certification prep
-   - Data visualization best practices
-   - Dashboard design patterns
+- Project overview
+- Live applications
+- Technology stack
+- How it works (AI & prompt engineering)
+- Sources, accuracy & limitations
+- How to use
+- Contributing & permissions
+- License
+- Contact & acknowledgements
 
 ---
 
-## 🛠️ Development Methodology
+## 📋 Project overview
 
-### AI-Driven Content Creation
+This repository hosts a unified, open-source "Analytics & Exam Suite": a set of lightweight web apps and study engines built using HTML, Tailwind CSS, and vanilla JavaScript. The platform demonstrates how careful AI prompt engineering can be used to generate, validate, and present structured learning content, mock exams, and practice scenarios covering business analysis, SQL, and Power BI.
 
-This project showcases the power of **AI prompt engineering** in educational content development:
-
-- **Prompt Optimization**: Carefully engineered prompts guide AI models to generate structured, accurate, and pedagogically sound content
-- **Iterative Refinement**: Multiple prompt iterations ensure content quality, accuracy, and coherence
-- **Domain-Specific Engineering**: Specialized prompts for each subject matter area (Business Analysis, SQL, Power BI)
-- **Quality Assurance**: Strategic prompting techniques validate content against official frameworks and standards
-
-### Content Development Process
-
-1. **Research Phase**: Comprehensive analysis of official certification bodies, examination patterns, and industry standards
-2. **Prompt Engineering**: Crafting precise, context-rich prompts to generate educational material
-3. **Content Synthesis**: AI models generate structured learning content, mock exams, and practice scenarios
-4. **Validation**: Cross-referencing with official sources (IIBA BABOK®, Microsoft Learn, SQL documentation)
-5. **Interactive Implementation**: Converting content into engaging, interactive web interfaces
+Mission: make high-quality, ad-free educational resources available to learners worldwide — removing paywalls and marketing friction from professional development.
 
 ---
 
-## 📚 Knowledge Basis & Sources
+## 🌐 Live applications
 
-### Certification & Framework References
+Visit the unified hub: https://sattikmohanta.github.io
 
-- **IIBA BABOK® v3**: Business Analysis Body of Knowledge framework
-- **Microsoft Learn**: Official Power BI PL-300 learning paths
-- **SQL Standards**: ANSI SQL standards and best practices from major database vendors
-- **Industry Best Practices**: Compiled from professional certifications and standards organizations
+Individual project sites:
 
-### Research Foundation
+- IIBA® ECBA™ Prep Engine — https://sattikmohanta.github.io/ecba/
+  - Certified Business Analyst preparation, BABOK®-aligned content, interactive mock exams
 
-- Official certification exam guidelines and rubrics
-- Industry white papers and technical documentation
-- Peer-reviewed educational methodologies
-- Real-world case studies and scenario analysis
+- SQL Mastery Suite — https://sattikmohanta.github.io/sql/
+  - Hands-on SQL practice, query patterns, optimization examples, real-world scenarios
 
-### Why This Approach?
-
-Professional certifications and technical skills are often locked behind:
-- **Expensive Course Platforms**: $200-1000+ per certification course
-- **Aggressive Marketing**: Manipulative tactics creating artificial urgency
-- **Subscription Models**: Recurring costs for accessing existing information
-- **Paywalls**: Knowledge gatekeeping that serves profit over education
-
-**This project reimagines that model** by combining:
-- ✅ AI's capability to synthesize complex information
-- ✅ Open-source web technologies
-- ✅ GitHub Pages' free hosting
-- ✅ Ethical content distribution
+- Power BI PL-300 Exam Engine — https://sattikmohanta.github.io/powerbi/
+  - Power BI exam prep, visualization best practices, dashboard design
 
 ---
 
-## 🎓 Who This Is For
+## 💡 Technology stack
 
-- 📌 **Students** preparing for professional certifications
-- 👨‍💼 **Career Changers** seeking skill validation
-- 💼 **Professionals** wanting to expand their technical toolkit
-- 🌍 **Global Learners** without access to expensive training programs
-- 🚀 **Self-Taught Developers** pursuing structured learning
+- Frontend: HTML5, Tailwind CSS, Vanilla JavaScript
+- Hosting: GitHub Pages
+- Icons: Lucide Icons
+- Content generation: Prompt-engineered AI workflows (local/authoring) — see Sources & Accuracy
+- Responsive design and accessibility-minded UI
 
----
-
-## 💡 Technology Stack
-
-- **Frontend**: HTML5, Tailwind CSS, Vanilla JavaScript
-- **Hosting**: GitHub Pages (free, reliable, version-controlled)
-- **Icons**: Lucide Icons (lightweight, modern)
-- **AI Foundation**: Content engineered using advanced prompt optimization
-- **Responsive Design**: Mobile-first, accessible across all devices
+Note: repository is primarily HTML (visual/interactive static apps) with a small amount of JavaScript.
 
 ---
 
-## 📖 How to Use
+## 🧠 How it works — AI & prompt engineering
 
-### Primary Hub Interface
-Visit **https://sattikmohanta.github.io** for the unified dashboard with:
-- Tab-based navigation between all 3 apps
-- Integrated iframe viewing experience
-- "Open in New Tab" option for focused studying
+Content in this project is produced and refined through an iterative prompt-engineering process:
 
-### Direct Project Access
-Each project is independently accessible:
+1. Research official exam guides, frameworks, and reference documentation for the target certification.
+2. Create focused, context-rich prompts to generate structured learning content (concepts, examples, question banks).
+3. Iterate and refine prompts to improve clarity, accuracy, and pedagogical flow.
+4. Validate generated outputs against official sources and sample materials.
+5. Publish verified content to static web pages and interactive exam engines.
+
+This process helps scale content creation while keeping a human-in-the-loop for validation and quality control.
+
+---
+
+## 📚 Sources, accuracy & limitations
+
+- Primary references include: IIBA BABOK® v3, Microsoft Learn PL-300 learning paths, ANSI SQL documentation, and vendor-specific docs.
+- While AI-assisted authoring accelerates content production, it is NOT an official exam provider. Learners should cross-check with official certification resources before relying on this material for exam decisions.
+- If you find factual errors or outdated guidance, please open an issue so maintainers can review and correct the content.
+
+---
+
+## 📖 How to use
+
+Hub interface: open https://sattikmohanta.github.io for a dashboard-style navigation between the apps. Each app can also be opened directly:
+
 ```
 https://sattikmohanta.github.io/ecba/
 https://sattikmohanta.github.io/sql/
 https://sattikmohanta.github.io/powerbi/
 ```
 
----
+Tips:
+- Use the "Open in New Tab" option for focused study.
+- For best results, use a modern browser (Chrome, Firefox, Edge, Safari).
 
-## 🔐 Access & Permissions
+Local testing:
+- Because these are static pages, you can preview locally by serving the directory with a simple static server. Example (Python):
 
-This repository is **public with read-only access** for the community.
+  python3 -m http.server 8000
 
-**Write access** is restricted to authorized maintainers:
-- Sattik / Sattik Mohanta / SattikMohanta
-- Anik / Anik Mohanta / AnikMohanta
-- Anik Rexx / AnikRexx / Anik Rex
-
-Contributions: Community feedback is welcome via issues and discussions. Pull requests for improvements are reviewed by maintainers.
+Then open http://localhost:8000 in your browser.
 
 ---
 
-## 📈 Project Impact
+## 🔐 Access & permissions
 
-- **Zero Cost to Learners**: Ad-free, no subscriptions, no paywalls
-- **Scalable Content**: AI engineering allows rapid content expansion
-- **Always Accessible**: Version-controlled, permanently available
-- **Community-Driven**: Built with learner needs in mind
+- This repository is public and read-only for the community.
+- Write access is limited to authorized maintainers: Sattik Mohanta and listed project maintainers.
+- Community contributions are welcome via issues and pull requests; maintainers will review and merge based on quality and alignment with the project's goals.
 
 ---
 
-## 🚀 Future Enhancements
+## 🤝 Contributing
 
-- [ ] Additional certification courses (AWS, Azure, GCP)
-- [ ] Interactive quizzes and progress tracking
-- [ ] Flashcard systems for retention
-- [ ] Study group collaboration features
-- [ ] Multilingual content support
-- [ ] Offline download capability
+Contributions that improve accuracy, accessibility, or pedagogy are highly valued. Recommended contribution flow:
+
+1. Open an issue describing the change or bug.
+2. Submit a focused pull request with a clear description and why it improves the content.
+3. Include references for factual changes (links to official docs, learning paths, or vendor guidance).
+
+Contributor tips:
+- Keep changes atomic and well-documented.
+- For content updates, include the source or reasoning for edits.
+
+---
+
+## 📈 Project impact & roadmap
+
+Why this matters: learners get access to ad-free study materials and practice engines without subscription barriers. The platform is designed to scale with additional certification topics.
+
+Planned enhancements:
+- Additional certification tracks (AWS, Azure, GCP)
+- Interactive quizzes with performance tracking
+- Flashcards and spaced-repetition features
+- Collaboration/study groups and multilingual content
+- Offline export of study materials
 
 ---
 
 ## 📝 License
 
-This project is provided as-is for educational purposes. See [LICENSE](./LICENSE) for details.
+This project is provided for educational purposes. See [LICENSE](./LICENSE) for full terms.
 
 ---
 
-## 💬 Support & Feedback
+## 💬 Support & contact
 
-Have questions or suggestions? Open an issue or discussion in this repository.
+Have feedback or found an issue? Please open an issue or discussion in this repository.
 
-**Remember**: This platform exists because knowledge should be accessible to everyone, regardless of financial circumstances.
+Maintained by: Sattik Mohanta — https://github.com/SattikMohanta
 
 ---
 
-**Built with ❤️ using AI Prompt Engineering | Maintained by Sattik Mohanta**
+## Acknowledgements
 
-*Last Updated: August 2026*
+Built with care using prompt engineering techniques and open web tooling. Special thanks to community reviewers and contributors who help keep the content accurate and useful.
+
+---
+
+Last updated: 2026-08-24
