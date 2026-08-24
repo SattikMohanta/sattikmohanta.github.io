@@ -4,12 +4,27 @@
 
 ---
 
+<!-- Badges: software & tools covered -->
+
+![Python](https://img.shields.io/badge/Python-3.x-blue)
+![SQL](https://img.shields.io/badge/SQL-ANSI%20%2F%20Postgres-orange)
+![Power%20BI](https://img.shields.io/badge/Power%20BI-PL300-yellow)
+![Excel](https://img.shields.io/badge/Excel-Advanced-green)
+![TailwindCSS](https://img.shields.io/badge/TailwindCSS-HTML%20%2B%20CSS-teal)
+![GitHub Pages](https://img.shields.io/badge/GitHub%20Pages-Hosting-black)
+![AI Prompting](https://img.shields.io/badge/AI-Prompt%20Engineering-purple)
+![JavaScript](https://img.shields.io/badge/JavaScript-Vanilla-yellowgreen)
+
+---
+
 ## Table of contents
 
 - Project overview
 - Live applications
 - Technology stack
 - How it works (AI & prompt engineering)
+- Python (BA / DA) notes
+- Financial Analyst notes
 - Sources, accuracy & limitations
 - How to use
 - Contributing & permissions
@@ -20,7 +35,7 @@
 
 ## 📋 Project overview
 
-This repository hosts a unified, open-source "Analytics & Exam Suite": a set of lightweight web apps and study engines built using HTML, Tailwind CSS, and vanilla JavaScript. The platform demonstrates how careful AI prompt engineering can be used to generate, validate, and present structured learning content, mock exams, and practice scenarios covering business analysis, SQL, and Power BI.
+This repository hosts a unified, open-source "Analytics & Exam Suite": a set of lightweight web apps and study engines built using HTML, Tailwind CSS, and vanilla JavaScript. The platform demonstrates how careful AI prompt engineering can be used to generate, validate, and present structured learning content, mock exams, and practice scenarios covering business analysis, SQL, Power BI, and additional analyst tracks.
 
 Mission: make high-quality, ad-free educational resources available to learners worldwide — removing paywalls and marketing friction from professional development.
 
@@ -69,9 +84,62 @@ This process helps scale content creation while keeping a human-in-the-loop for 
 
 ---
 
+## 🐍 Python (Business Analyst / Data Analyst) — Notes
+
+Purpose: provide a practical Python primer and study notes oriented to BA/DA tasks: data ingestion, cleaning, EDA, basic modeling, and reporting.
+
+Key topics covered & recommended tools:
+
+- Core libraries: pandas (dataframes, joins, groupby), numpy (numerical ops), matplotlib / seaborn (visualization), plotly (interactive charts)
+- Data ingestion & integration: CSV, Excel, JSON, SQL connectors (psycopg2/sqlalchemy), APIs
+- Data cleaning & validation: missing data strategies, type-casting, outlier handling, normalization
+- Exploratory Data Analysis (EDA): summary statistics, pivot tables, correlation analysis, visual patterns
+- Feature engineering: date/time features, categorical encoding, aggregation, text tokenization for simple NLP
+- Basic modeling: scikit-learn workflows (train/test split, pipelines), simple regression/classification models, evaluation metrics
+- Time series basics: resampling, rolling aggregates, trend/seasonality decomposition
+- Reproducible notebooks: Jupyter / JupyterLab, VS Code interactive windows
+- Versioning & deployment: lightweight packaging, reproducible environments (venv/pip/conda), Docker for portability
+
+Suggested study flow:
+1. Master pandas and EDA on sample datasets
+2. Practice SQL <> pandas integration for real-world joins and aggregate queries
+3. Build small end-to-end projects (data ingestion → cleaning → EDA → simple model → dashboard)
+
+Notes & cautions:
+- Focus on robust data validation and reproducibility for analyst work.
+- When using AI-assisted content, always cross-check code snippets for API changes and library versions.
+
+---
+
+## 📊 Financial Analyst — Notes
+
+Purpose: concise study notes to orient learners to core financial analysis skills, tools, and practical workflows.
+
+Core competencies & tools:
+
+- Spreadsheet mastery: Excel (pivot tables, advanced formulas, Power Query), financial functions
+- Financial modeling: building income statement, balance sheet, cash flow projections, scenario analysis
+- Valuation techniques: DCF (discounted cash flow), comparable company analysis, precedent transactions
+- Reporting & visualization: Power BI for dashboards, Excel + Power Query for ETL
+- Python for finance: pandas for time series, yfinance / pandas-datareader for market data, statsmodels for econometrics
+- KPI & ratio analysis: liquidity, profitability, leverage, efficiency ratios, trend analysis
+- Forecasting basics: ARIMA, exponential smoothing — understand assumptions and diagnostics
+- Risk & sensitivity: monte-carlo basics, sensitivity tables, scenario stress-testing
+
+Suggested study flow:
+1. Solidify accounting fundamentals (reading financial statements)
+2. Build simple models in Excel and re-implement core workflows in Python
+3. Create interactive dashboards (Power BI) that combine model outputs and visual KPIs
+
+Notes & cautions:
+- Financial calculations are sensitive to assumptions — document them clearly and include sensitivity checks.
+- Regulatory or exam-specific guidance (e.g., CFA) should be consulted when preparing for formal credentials.
+
+---
+
 ## 📚 Sources, accuracy & limitations
 
-- Primary references include: IIBA BABOK® v3, Microsoft Learn PL-300 learning paths, ANSI SQL documentation, and vendor-specific docs.
+- Primary references include: IIBA BABOK® v3, Microsoft Learn PL-300 learning paths, ANSI SQL documentation, and vendor-specific docs. Financial topics reference common financial modelling best practices and public resources.
 - While AI-assisted authoring accelerates content production, it is NOT an official exam provider. Learners should cross-check with official certification resources before relying on this material for exam decisions.
 - If you find factual errors or outdated guidance, please open an issue so maintainers can review and correct the content.
 
