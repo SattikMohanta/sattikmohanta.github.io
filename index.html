@@ -1,0 +1,348 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Umu Jalloh | Detection and Security Automation</title>
+<meta name="description" content="Umu Jalloh, seeking SOC and security analyst roles. Splunk investigations and an AI triage agent that escalates security incidents from helpdesk tickets.">
+<link rel="canonical" href="https://umujalloh.github.io/">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://umujalloh.github.io/">
+<meta property="og:title" content="Umu Jalloh | Detection and Security Automation">
+<meta property="og:description" content="Seeking SOC and security analyst roles. Splunk investigations and an AI triage agent that escalates security incidents from helpdesk tickets.">
+<meta property="og:image" content="https://umujalloh.github.io/images/slack-alert.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="color-scheme" content="dark">
+<style>
+  @font-face { font-family: "IBM Plex Sans"; src: url("fonts/ibm-plex-sans-400.woff2") format("woff2"); font-weight: 400; font-display: swap; }
+  @font-face { font-family: "IBM Plex Sans"; src: url("fonts/ibm-plex-sans-500.woff2") format("woff2"); font-weight: 500; font-display: swap; }
+  @font-face { font-family: "IBM Plex Sans"; src: url("fonts/ibm-plex-sans-600.woff2") format("woff2"); font-weight: 600; font-display: swap; }
+  @font-face { font-family: "IBM Plex Sans"; src: url("fonts/ibm-plex-sans-700.woff2") format("woff2"); font-weight: 700; font-display: swap; }
+  @font-face { font-family: "IBM Plex Mono"; src: url("fonts/ibm-plex-mono-400.woff2") format("woff2"); font-weight: 400; font-display: swap; }
+
+  :root {
+    --bg: #0b0f14;
+    --surface: #121922;
+    --border: #233041;
+    --text: #e6edf3;
+    --muted: #9fb0c0;
+    --accent: #2dd4bf;
+    --accent-ink: #04201c;
+    --mono: "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    font: 16px/1.6 "IBM Plex Sans", system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  }
+  a { color: var(--accent); text-underline-offset: 3px; }
+  a:focus-visible, .btn:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+  code { font-family: var(--mono); font-size: .9em; color: var(--text); }
+  img { max-width: 100%; height: auto; display: block; }
+
+  .wrap { max-width: 64rem; margin: 0 auto; padding: 0 1rem; }
+
+  /* Top bar */
+  .topbar {
+    position: sticky; top: 0; z-index: 10;
+    background: rgba(11, 15, 20, .92);
+    border-bottom: 1px solid var(--border);
+    backdrop-filter: blur(6px);
+  }
+  .topbar .wrap {
+    display: flex; align-items: center; justify-content: space-between;
+    gap: 1rem; min-height: 3.25rem;
+  }
+  .brand { color: var(--text); font-weight: 700; text-decoration: none; }
+  .topbar nav { display: flex; gap: 1.25rem; font-size: 1rem; }
+  .topbar nav a { color: var(--accent); text-decoration: none; font-weight: 500; }
+  .topbar nav a:hover { color: var(--text); text-decoration: underline; }
+
+  /* Hero */
+  .hero { padding: 4.5rem 0 3.5rem; }
+  .hero h1 { margin: 0; font-size: clamp(2rem, 5vw, 2.75rem); line-height: 1.1; }
+  .headline { margin: .75rem 0 0; color: var(--accent); font-size: 1.125rem; font-weight: 600; }
+  .lede { margin: 1rem 0 0; max-width: 52rem; }
+  .meta { margin: .75rem 0 0; color: var(--muted); }
+
+  .badges { display: flex; flex-wrap: wrap; gap: .5rem; margin: 1.25rem 0 0; padding: 0; list-style: none; }
+  .badges li {
+    font-family: var(--mono); font-size: .8rem;
+    border: 1px solid var(--border); border-radius: 999px;
+    padding: .2rem .7rem; color: var(--muted); background: var(--surface);
+  }
+  .hero .badges li { color: var(--text); border-color: var(--accent); }
+  .hero .badges a { color: inherit; text-decoration: none; }
+  .hero .badges li:hover { background: var(--accent); }
+  .hero .badges li:hover a { color: var(--accent-ink); }
+
+  .actions { display: flex; flex-wrap: wrap; gap: .75rem; margin-top: 1.75rem; }
+  .btn {
+    display: inline-block; padding: .55rem 1.1rem; border-radius: 8px;
+    border: 1px solid var(--border); color: var(--text); text-decoration: none;
+    font-weight: 600; font-size: .95rem;
+  }
+  .btn:hover { border-color: var(--accent); }
+  .btn.primary { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); }
+
+  /* Sections */
+  section { padding: 3rem 0; border-top: 1px solid var(--border); }
+  h2 {
+    margin: 0 0 1.5rem; font-size: .85rem; letter-spacing: .12em;
+    text-transform: uppercase; color: var(--muted);
+  }
+  h3 { margin: 0; font-size: 1.375rem; line-height: 1.25; }
+  h4 { margin: 2rem 0 .75rem; font-size: 1.05rem; }
+  p { margin: .75rem 0 0; }
+
+  /* What I bring */
+  .cards { display: grid; grid-template-columns: 1fr; gap: 1rem; }
+  @media (min-width: 640px) { .cards { grid-template-columns: repeat(2, 1fr); } }
+  @media (min-width: 960px) { .cards { grid-template-columns: repeat(3, 1fr); } }
+  .card {
+    background: var(--surface); border: 1px solid var(--border);
+    border-top: 3px solid var(--accent); border-radius: 8px;
+    padding: 1.1rem 1.1rem 1.25rem; display: flex; flex-direction: column;
+  }
+  .card strong { display: block; font-size: 1.02rem; line-height: 1.35; }
+  .card p { color: #c3cfda; font-size: .95rem; flex: 1; }
+  .card .evidence { margin-top: .9rem; font-size: .88rem; }
+
+  /* Projects */
+  .project + .project { margin-top: 3rem; padding-top: 3rem; border-top: 1px solid var(--border); }
+  .summary { color: #c3cfda; }
+  .summary strong { color: var(--text); }
+  .project .badges { margin: .75rem 0 0; }
+  .note {
+    margin: 1.25rem 0 0; padding: .75rem 1rem;
+    border-left: 3px solid var(--border); background: var(--surface);
+    color: var(--muted); font-size: .95rem; border-radius: 0 6px 6px 0;
+  }
+  figure { margin: 1.75rem 0 0; }
+  figure a {
+    display: block; background: var(--surface); border: 1px solid var(--border);
+    border-radius: 8px; padding: .5rem;
+  }
+  figure a:hover { border-color: var(--accent); }
+  figure img { border-radius: 4px; margin: 0 auto; }
+  figcaption { margin-top: .6rem; color: var(--muted); font-size: .92rem; }
+  figcaption strong { color: var(--text); }
+  ul.points { margin: 0; padding-left: 1.2rem; color: #c3cfda; }
+  ul.points strong { color: var(--text); }
+  ul.points li + li { margin-top: .6rem; }
+  .project .actions { margin-top: 1.5rem; }
+
+  /* Experience */
+  .role {
+    display: flex; flex-wrap: wrap; justify-content: space-between;
+    align-items: baseline; gap: .25rem 1rem;
+  }
+  .role h3 { font-size: 1.2rem; }
+  .role .when { color: var(--muted); font-size: .95rem; }
+  .exp ul { margin: 1rem 0 0; padding-left: 1.2rem; color: #c3cfda; }
+  .exp li + li { margin-top: .55rem; }
+  .leadership { margin-top: 2.5rem; }
+
+  /* Footer */
+  footer { padding: 3rem 0 2.5rem; border-top: 1px solid var(--border); }
+  footer .small { margin-top: 2rem; color: var(--muted); font-size: .85rem; }
+
+  @media (max-width: 520px) {
+    .topbar nav { gap: .9rem; font-size: .88rem; }
+    .brand { font-size: .95rem; }
+  }
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <div class="wrap">
+    <a class="brand" href="#top">Umu Jalloh</a>
+    <nav aria-label="Sections">
+      <a href="#projects">Projects</a>
+      <a href="#experience">Experience</a>
+      <a href="#contact">Contact</a>
+    </nav>
+  </div>
+</header>
+
+<main id="top">
+  <div class="wrap">
+
+    <div class="hero">
+      <h1>Umu Jalloh</h1>
+      <p class="headline">Detection and security automation. Seeking SOC and security analyst roles.</p>
+      <p class="lede">I investigate incidents in Splunk and build security automation designed to hold up under attack.</p>
+      <ul class="badges" aria-label="Certifications">
+        <li><a href="https://www.credly.com/badges/1a322ef9-c8e5-427e-bca9-75b2b2adf935/public_url">CompTIA Security+</a></li>
+        <li><a href="https://www.credly.com/badges/b39bc0e5-9895-41d3-91d4-72a1442f2201/public_url">CompTIA Network+</a></li>
+        <li><a href="https://www.credly.com/badges/abf8ca4c-5b38-489a-a494-24d0b7faef74/public_url">AWS Certified Solutions Architect Associate</a></li>
+      </ul>
+      <p class="meta">Cybersecurity and Computer Forensics, Stark State College. Graduating December 2026, 4.0 GPA. Based in Akron, Ohio.</p>
+      <div class="actions">
+        <a class="btn primary" href="#projects">See my projects</a>
+        <a class="btn" href="https://www.linkedin.com/in/umu-jalloh-546368353/">LinkedIn</a>
+        <a class="btn" href="https://github.com/umujalloh">GitHub</a>
+      </div>
+    </div>
+
+    <section aria-labelledby="bring">
+      <h2 id="bring">What I bring</h2>
+      <div class="cards">
+        <div class="card">
+          <strong>Traced a cryptomining attack to its root cause</strong>
+          <p>Worked through 1.9 million Splunk events, tied a 26-minute mining session to one workstation, and traced the compromise to a publicly writable S3 bucket.</p>
+          <a class="evidence" href="https://github.com/umujalloh/Splunk-SIEM-Lab-v2">See the evidence</a>
+        </div>
+        <div class="card">
+          <strong>Wrote detection rules with false positive analysis</strong>
+          <p>Proposed three SPL rules mapped to MITRE ATT&amp;CK. Rated browser CPU alone as high false positive risk, so I paired it with a mining DNS lookup within 10 minutes.</p>
+          <a class="evidence" href="https://github.com/umujalloh/Splunk-SIEM-Lab-v2/blob/main/IOCs.md#detection-recommendations">See the evidence</a>
+        </div>
+        <div class="card">
+          <strong>Built an AI agent that escalates security incidents from helpdesk tickets, threat modeled against eight attacks</strong>
+          <p>Claude only classifies each ticket. A fixed action table decides the ticket note, priority, Slack alert and PagerDuty page, so a manipulated label can only trigger actions the table already allows.</p>
+          <a class="evidence" href="https://github.com/umujalloh/osticket-triage-agent/blob/main/docs/action-table.md">See the evidence</a>
+        </div>
+        <div class="card">
+          <strong>Attacked my own design and closed the gaps</strong>
+          <p>Found that an anonymous submitter could point my triage agent's Splunk search at someone else's activity. Proved the fix with two identical tickets: guest 0 events, signed-in user 20.</p>
+          <a class="evidence" href="https://github.com/umujalloh/osticket-triage-agent/blob/main/docs/verification.md#authentication-gate">See the evidence</a>
+        </div>
+        <div class="card">
+          <strong>Caught and fixed a missed CFO wire fraud attack</strong>
+          <p>In my triage agent's evaluation, a test ticket impersonating the CFO raised no alert. After I rewrote the rubric, the latest nine runs show no dangerous misses across 18 attack tickets.</p>
+          <a class="evidence" href="https://github.com/umujalloh/osticket-triage-agent/blob/main/docs/evaluation.md#how-prompt-changes-are-validated">See the evidence</a>
+        </div>
+        <div class="card">
+          <strong>Briefed local government leaders across Ohio on cyber threats</strong>
+          <p>Briefed officials at five local government entities on attack scenarios and past incidents, and presented a discussion-based ransomware scenario on how their organization should respond.</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="projects" aria-labelledby="projects-title">
+      <h2 id="projects-title">Projects</h2>
+
+      <article class="project">
+        <h3>osTicket AI Triage Agent</h3>
+        <ul class="badges" aria-label="Tools">
+          <li>Python</li><li>FastAPI</li><li>Claude API</li><li>osTicket</li>
+          <li>Splunk</li><li>Docker</li><li>Slack</li><li>PagerDuty</li>
+        </ul>
+        <p>Helpdesk queues mix routine IT requests with early signs of real incidents. A compromised account or phishing report can sit unread behind printer tickets. This agent classifies each new ticket as it arrives, enriches critical incidents with related events from Splunk, and escalates security incidents to a human responder.</p>
+        <p class="note">Built and tested in a lab, using BOTSv3 training data and fictional users. It has not run on a real helpdesk.</p>
+
+        <figure>
+          <a href="images/slack-alert.png"><img src="images/slack-alert.png" width="948" height="210" loading="lazy" alt="Slack alert from the triage agent: @here, critical security_incident, Ticket 283973, high confidence, paged WAKE, 20 related events, with a link to the ticket."></a>
+          <figcaption><strong>The Slack alert:</strong> What the agent decided, where it paged and how many related events turned up, with a link to the ticket.</figcaption>
+        </figure>
+
+        <figure>
+          <a href="images/ticket-note.png"><img src="images/ticket-note.png" width="1174" height="508" loading="lazy" alt="Internal note posted by the Triage Agent in osTicket: security_incident, critical, high_confidence, 20 events from 2018, sign-in outcomes, source addresses, accounts, applications, error codes, sources and the Splunk search used."></a>
+          <figcaption><strong>The note on the ticket:</strong> The Splunk enrichment and the search that found it, visible only to staff. The events date from 2018 because they come from the BOTSv3 training data.</figcaption>
+        </figure>
+
+        <figure>
+          <a href="images/architecture.svg"><img src="images/architecture.svg" width="980" height="568" loading="lazy" alt="Architecture diagram: a ticket flows from the submitter through osTicket and its plugin to the agent, which verifies it, has Claude classify it, looks up the action table and carries out the actions. osTicket, the agent and Splunk sit inside the trust zone, and Claude, Slack, PagerDuty and alert email sit outside it."></a>
+          <figcaption><strong>The architecture:</strong> How a ticket moves through the system, and where the trust boundary sits.</figcaption>
+        </figure>
+
+        <h4>How it handles failure</h4>
+        <ul class="points">
+          <li><strong>The page goes first.</strong> The PagerDuty page goes out before any call to Splunk, since Splunk can be struggling during the same incident. With Splunk hanging in a test, the page was accepted 0.5 seconds after classification.</li>
+          <li><strong>Pages are confirmed.</strong> PagerDuty accepts pages through dead routing keys and opens no incident, so the agent checks that each page opened one and reports any that didn't.</li>
+          <li><strong>It never invents a label.</strong> A ticket Claude can't classify goes to the review Slack channel with the failure type and no classification label, because a guessed label could quietly mark an incident as routine.</li>
+          <li><strong>It survives a crash.</strong> A SQLite store records each ticket and every finished action, so a restarted agent runs only what's left. I tested it by killing the agent with <code>SIGKILL</code> mid&#8209;ticket, and it finished the ticket with no new delivery.</li>
+        </ul>
+
+        <p class="summary"><strong>Tested:</strong> 35 of 36 labeled test tickets in each of nine runs, plus 398 verification checks, 228 of them run in CI on every push.</p>
+
+        <div class="actions">
+          <a class="btn primary" href="https://github.com/umujalloh/osticket-triage-agent">View the repo</a>
+          <a class="btn" href="https://github.com/umujalloh/osticket-triage-agent/blob/main/docs/architecture.md#4-threat-model">Threat model</a>
+          <a class="btn" href="https://github.com/umujalloh/osticket-triage-agent/blob/main/docs/known-limitations.md">Known limitations</a>
+        </div>
+      </article>
+
+      <article class="project">
+        <h3>Splunk SIEM Lab: CoinMiner Investigation</h3>
+        <ul class="badges" aria-label="Tools and frameworks">
+          <li>Splunk</li><li>SPL</li><li>MITRE ATT&amp;CK</li><li>NIST CSF</li>
+          <li>NIST 800-53</li><li>CIS Controls v8</li><li>CyberChef</li>
+        </ul>
+        <p>Investigated a drive-by cryptomining attack in Splunk, working from 1.9 million events across 107 sourcetypes. Traced it to a trusted industry forum serving a CoinHive miner, identified the one workstation that mined for 26 minutes, and found the root cause in a publicly writable AWS S3 bucket.</p>
+        <p class="note">Built on BOTSv3, Splunk's public training dataset about a fictional brewing company.</p>
+
+        <figure>
+          <a href="images/cpu-mining-session.png"><img src="images/cpu-mining-session.png" width="1100" height="694" loading="lazy" alt="Splunk column chart of Chrome CPU on the affected workstation from 9:00 to 11:30, showing a dense block at 100 percent from about 9:37 to 10:04 and one isolated spike near 11:00."></a>
+          <figcaption><strong>The mining session:</strong> Chrome CPU on the affected workstation. The solid block is the 26-minute mining session, and the spike near 11:00 is one final isolated event.</figcaption>
+        </figure>
+
+        <figure>
+          <a href="images/postmortem-decoded.png"><img src="images/postmortem-decoded.png" width="1537" height="974" loading="lazy" alt="CyberChef decoding a base64 email body. The output reads: Well, I messed up! I had a open public bucket accidentally, and malicious people added a coinminer to the site's code."></a>
+          <figcaption><strong>The root cause:</strong> The forum admin's postmortem email, base64-encoded in the logs and decoded in CyberChef, admitting to an "open public bucket".</figcaption>
+        </figure>
+
+        <h4>How I investigated</h4>
+        <ul class="points">
+          <li><strong>I ruled out a false lead.</strong> The busiest DNS domain looked like beaconing from 14 hosts. Follow-up didn't tie it to the attack, so I pivoted to a CPU spike, which led to the miner.</li>
+          <li><strong>I turned a 10-second gap into a detection recommendation.</strong> Symantec blocked the miner on one host at 09:37:40. Ten seconds later, Chrome on a workstation with no Symantec detections hit 100% CPU. I recommended treating one host's block as a warning for other hosts that visited the same site.</li>
+          <li><strong>I worked around a visibility gap.</strong> Process CPU data existed only for the affected workstation, so I checked every host's DNS instead. No other host contacted the mining service.</li>
+        </ul>
+
+        <p class="summary"><strong>Delivered:</strong> 21 documented SPL queries, three proposed detection rules each rated for false positive risk, findings mapped to MITRE ATT&amp;CK, NIST CSF, NIST 800-53 and CIS Controls v8, an IOC file with current threat context, and a business impact analysis covering possible PCI DSS and HIPAA exposure.</p>
+
+        <div class="actions">
+          <a class="btn primary" href="https://github.com/umujalloh/Splunk-SIEM-Lab-v2">View the repo</a>
+          <a class="btn" href="https://github.com/umujalloh/Splunk-SIEM-Lab-v2/blob/main/IOCs.md">IOCs and detections</a>
+          <a class="btn" href="https://github.com/umujalloh/Splunk-SIEM-Lab-v2/tree/main/queries">All queries</a>
+        </div>
+      </article>
+    </section>
+
+    <section id="experience" class="exp" aria-labelledby="experience-title">
+      <h2 id="experience-title">Experience</h2>
+      <div class="role">
+        <h3>PCCIP Intern, Ohio Cyber Range Institute</h3>
+        <span class="when">Remote. April to August 2026</span>
+      </div>
+      <ul>
+        <li>Lead and point of contact for five local government entities across Ohio, working with officials ranging from a public librarian and township trustees to a police chief as they moved through cybersecurity training.</li>
+        <li>Briefed officials on why cybersecurity mattered to their work, walking through attack scenarios and past incidents at other Ohio government entities, and encouraged each entity to join and complete the training.</li>
+        <li>Presented a discussion-based ransomware scenario, walking officials through a simulated attack and how their organization should respond.</li>
+        <li>Ran the meetings that took each entity from a signed MOU to a training launch, including scheduling and staff participation.</li>
+        <li>Improved the email drafts, meeting agendas and scripts, and the spreadsheet used to track each entity's progress through onboarding.</li>
+        <li>Competed on a team of six in the April 2026 OCRI Statewide CTF and placed third at our site, with challenges in network forensics with Wireshark, Linux command-line forensics, threat hunting, cryptography, web exploitation and AI exploitation.</li>
+      </ul>
+
+      <div class="leadership">
+        <h2>Leadership</h2>
+        <ul>
+          <li>Secretary, High Technology Cyber Investigation Association (HTCIA), Stark State College</li>
+          <li>Co-presented an AI security, ethics and privacy workshop for the Stark State and Kent State Student Leadership Academy.</li>
+        </ul>
+      </div>
+    </section>
+
+  </div>
+</main>
+
+<footer id="contact">
+  <div class="wrap">
+    <h2>Get in touch</h2>
+    <p>Open to SOC and security analyst roles. Email is the fastest way to reach me.</p>
+    <div class="actions">
+      <a class="btn primary" href="mailto:umujalloh726@gmail.com">Email</a>
+      <a class="btn" href="https://www.linkedin.com/in/umu-jalloh-546368353/">LinkedIn</a>
+      <a class="btn" href="https://github.com/umujalloh">GitHub</a>
+    </div>
+    <p class="small">&copy; 2026 Umu Jalloh</p>
+  </div>
+</footer>
+
+</body>
+</html>
